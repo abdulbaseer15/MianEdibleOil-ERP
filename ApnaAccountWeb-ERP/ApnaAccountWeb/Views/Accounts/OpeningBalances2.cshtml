@@ -1,0 +1,145 @@
+﻿@*<script src="~/Content/js/jquery.min.js"></script>*@
+<link rel="stylesheet" href="~/Content/css/uniform.css" />
+<link rel="stylesheet" href="~/Content/css/select2.css" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script>
+    $(document).ready(function () {
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+    });
+    function SaveDVoucher() {
+        var detail = [];
+        var debitsum = 0;
+        var creditsum = 0;
+        $('#mytable tbody tr').each(function () {
+            var $row = $(this), $tds = $row.find("td");
+            var t1debit = parseFloat($('.debit', this).val());
+            var t1credit = parseFloat($('.credit', this).val());
+            if (isNaN(t1debit))
+                t1debit = 0;
+            if (isNaN(t1credit)) {
+                t1credit = 0;
+            }
+            debitsum = debitsum + t1debit;
+            creditsum = creditsum + t1credit;
+            detail.push({
+                Accountid: $tds[0].innerText,
+                title: $tds[1].innerText,
+                odebit: $('.debit', this).val(),
+                ocredit: $('.credit', this).val(),
+            });
+        });
+        var diff = debitsum - creditsum;
+        if (debitsum != creditsum) {
+            var answer = confirm("Sum of debit and credit should be equal,otherwise your trial will be out with the amount " + diff + ".Do You want to continue ?");
+            if (answer) {
+                $.ajax({
+                    url: "/Accounts/SaveOpening",
+                    type: "POST",
+                    data: JSON.stringify({ detail: detail }),
+                    dataType: 'text json',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response != null && response.success) {
+                            alert(response.responseText);
+                            window.location.reload();
+                        }
+                        else {
+                            alert(response.responseText);
+                        }
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        }
+        else {
+            $.ajax({
+                url: "/Accounts/SaveOpening",
+                type: "POST",
+                data: JSON.stringify({ detail: detail }),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success) {
+                        alert(response.responseText);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    }
+</script>
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span11">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Opening Balances</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="OpeningBalance" method="Post" enctype="multipart/form-data" class="form-horizontal">
+               @*<div class="span12" style="overflow-y: auto; height:90%;">*@
+                 <table class="table table-bordered data-table" id="mytable">
+            <thead>
+                             <tr>
+                                 <th>AccountCode</th>
+                                 <th>Title</th>
+                                 <th>Debit</th>
+                                 <th>Credit</th>
+                             </tr>
+                         </thead>
+              <tbody>
+                  @if (null != ViewBag.AccCodeDetails)
+                  {
+                       foreach (var Acc in ViewBag.AccCodeDetails)
+                          {
+                  <tr>
+                      <td>@Acc.AccountId</td>
+                      <td>@Acc.title</td>
+                      <td><input type="number" class="span11 debit" id="txtDebit" name="txtDebit" required value="@Convert.ToInt32(Acc.ODebit)"  /></td>
+                      <td><input type="number" class="span11 credit" id="txtCredit" name="txtCredit" required value="@Convert.ToInt32(Acc.OCredit)" /></td>
+                  </tr>
+                          }
+                  }
+              </tbody>
+            </table>
+           @*  </div>*@
+         <center style="margin-top:4px;margin-bottom:4px">
+                <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+         </center>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="~/Content/js/jquery.min.js"></script> 
+<script src="~/Content/js/jquery.ui.custom.js"></script>
+<script src="~/Content/js/jquery.uniform.js"></script> 
+<script src="~/Content/js/select2.min.js"></script> 
+<script src="~/Content/js/jquery.dataTables.min.js"></script> 
+<script src="~/Content/js/maruti.js"></script>
+<script src="~/Content/js/maruti.tables.js"></script>
+               

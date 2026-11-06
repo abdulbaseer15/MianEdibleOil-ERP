@@ -1,0 +1,687 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+
+    tr.highlighted td {
+        color: white;
+        background-color: red;
+    }
+</style>
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $('#txtAccCode').focus();
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        //$('#dtpDatefrom').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDatefrom').datepicker('setDate', 'now');
+        //$('#dtpDateto').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDateto').datepicker('setDate', 'now');
+        $('#ddlTitle').change(function () {
+            var selectedVal = $('#ddlTitle option:selected').attr('value');
+            $('#txtAccCode').val(selectedVal);
+            var e = document.getElementById("ddlTitle");
+            var title = e.options[e.selectedIndex].text;
+            $('#title').val(title);
+        });
+        $('#txtAccCode').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder();
+                $('#myModal').modal('show');
+                $('#myModal a:first-child').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                $('#tblPopup tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtAccCode').val($tds[0].innerText);
+                    $('#ddlTitle').val($tds[0].innerText);
+                    $('#ddlTitle').focus();
+                    $('#myModal').modal('hide');
+                });
+            }
+        });
+    });
+    function forOrder() {
+        var flag = true;
+        var trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtAccCode').val($tds[0].innerText);
+                                $('#ddlTitle').val($tds[0].innerText);
+                                $('#myInput').val("");
+                                $('#myModal').modal('hide');
+                                isTrue = 1;
+                                $('#dtpDatefrom').focus();
+                                //$('#txtunit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtAccCode').val($tds[0].innerText);
+                                $('#ddlTitle').val($tds[0].innerText);
+                                $('#myInput').val("");
+                                $('#myModal').modal('hide');
+                                isTrue = 1;
+                                $('#dtpDatefrom').focus();
+                                // $('#txtunit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopup)
+                            $tds = row.find("td");
+                            $('#txtAccCode').val($tds[0].innerText);
+                            $('#ddlTitle').val($tds[0].innerText);
+                            $('#myInput').val("");
+                            $('#myModal').modal('hide');
+                            isTrue = 1;
+                            $('#dtpDatefrom').focus();
+                            //$('#txtunit').focus();
+                            //alert(countrow);
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function ViewClicked() {
+        var dtpDateto = $('#dtpDateto').val();
+        var dtpDatefrom = $('#dtpDatefrom').val();
+        var txtAccCode = $('#txtAccCode').val();
+        //var title = $('#title').val();
+        var e = document.getElementById("ddlTitle");
+        var title = e.options[e.selectedIndex].text;
+        var rtype = $('#rtype').val();
+         var string = "rtype=" + rtype + "&dtpDatefrom=" + dtpDatefrom + "&dtpDateto=" + dtpDateto + "&txtAccCode=" + txtAccCode + "&title=" + title + "&group=" + "2" + "";
+        var url = '@(Url.Action("Report", "IReports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                </div>
+                <div class="span5">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Outward Gate Pass Mix Party Wise Report</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <input type="hidden" id="rtype" name="rtype" value="rptOutGatePassMixPartyWise" />
+                                <input type="hidden" id="title" name="title" />
+                                <div class="control-group">
+                                    <label class="control-label">Code:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" id="txtAccCode" name="txtAccCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Title:</label>
+                                    <div class="controls">
+                                        @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                AccCodelist.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Acc.AccountId,
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitle", Name = "ddlTitle", @class = "span11 ddl" })
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">From:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDatefrom" name="dtpDatefrom" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">To:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDateto" name="dtpDateto" />
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <input type="button" value="View" id="btnSearch" class="btn btn-success" onclick='ViewClicked();' />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Outward Gate Pass Mix Party Wise Report</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <input type="hidden" id="rtype" name="rtype" value="rptOutGatePassMixPartyWise" />
+                            <input type="hidden" id="title" name="title" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Code:</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtAccCode" name="txtAccCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Title:</label>
+                                        @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                AccCodelist.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Acc.AccountId,
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitle", Name = "ddlTitle", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>From:</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDatefrom" name="dtpDatefrom" />
+                                            <div class="input-group-append" id="dtpDatefromIcon" data-target="#dtpDatefrom" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>To:</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDateto" name="dtpDateto" />
+                                            <div class="input-group-append" id="dtpDatetoIcon" data-target="#dtpDateto" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6 col-sm-6 col-2">
+                                    <input type="button" value="View" id="btnSearch" class="btn btn-sm btn-success" onclick='ViewClicked();' />
+                                </div>
+                                @*<div class="col-md-6 col-sm-6 col-10">
+                                        <div class="text-right">
+                                            <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-sm btn-primary" onclick='ExportExcel();'>
+                                        </div>
+                                    </div>*@
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@*<div id="myModal" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Account</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Accounts List</h5>
+                            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for title.." style="float:right;">
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopup" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>AccountCode</th>
+                                        <th>Title</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var Acc in ViewBag.AccCodeDetails)
+                                    {
+                                        <tr>
+                                            <td>@Acc.AccountId</td>
+                                            <td>@Acc.Title</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+@*Code Field Modal*@
+<div id="myModal" class="modal hide fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search Account</h5>
+                <button data-dismiss="modal" class="close" type="button">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <b>Accounts List</b>
+                                <input type="text" class="form-control form-control-sm" id="myInput" onkeyup="myFunction()" placeholder="Search for product.." style="float:right;">
+                            </div>
+                            <div class="card-body">
+                                <table id="tblPopup" class="table table-bordered" tabindex="-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Account Code</th>
+                                            <th>Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var Acc in ViewBag.AccCodeDetails)
+                                        {
+                                            <tr>
+                                                <td>@Acc.AccountId</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*Code Field Modal End*@
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<script>
+    var keys = {};
+    $(document).keydown(function (e) {
+        keys[e.which] = true;
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    $(document).keyup(function (e) {
+        delete keys[e.which];
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    function printKeys() {
+        var html = '';
+        for (var i in keys) {
+            if (!keys.hasOwnProperty(i)) continue;
+            html += i;
+        }
+        //home start
+        if (html == '72') {
+            keys = {};
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+        //home end
+        //accounts start
+        if (html == '7486') {
+            keys = {};
+            window.location.href = '@Url.Action("JVoucher", "JVoucher")';
+        }
+        if (html == '6886') {
+            keys = {};
+            window.location.href = '@Url.Action("DVoucher", "DVoucher")';
+        }
+        if (html == '6786') {
+            keys = {};
+            window.location.href = '@Url.Action("CVoucher", "CVoucher")';
+        }
+        if (html == '666886') {
+            keys = {};
+            window.location.href = '@Url.Action("BankDJVoucher", "BankDJVoucher")';
+        }
+        if (html == '666774') {
+            keys = {};
+            window.location.href = '@Url.Action("BankCJVoucher", "BankCJVoucher")';
+        }
+        if (html == '748086') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseJVoucher", "PurchaseJVoucher")';
+        }
+        if (html == '748386') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleJVoucher", "SaleJVoucher")';
+        }
+        if (html == '86') {
+            keys = {};
+            window.location.href = '@Url.Action("Verify", "VouchersVerification")';
+        }
+        //accounts end
+        //coding start
+        if (html == '6567') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountCoding", "Accounts")';
+        }
+        if (html == '656679') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningBalances", "Accounts")';
+        }
+        if (html == '678085') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductUnit", "ProductUnit")';
+        }
+        if (html == '677180') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductGroup", "ProductGroup")';
+        }
+        if (html == '678083') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductSubGroup", "ProductSubGroup")';
+        }
+        if (html == '6780') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProduct", "Product")';
+        }
+        if (html == '6783') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterStores", "Stores")';
+        }
+        if (html == '7983') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningStock", "ProductsOpening")';
+        }
+        if (html == '1667') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterCity", "City")';
+        }
+        //coding end
+        //invoice start
+        if (html == '7380') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseInvoice", "PurchaseInvoice")';
+        }
+        if (html == '8082') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoicePurchaseReturn", "InvoicePurchaseReturn")';
+        }
+        if (html == '7383') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleInvoice", "SaleInvoice")';
+        }
+        if (html == '8283') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoiceSaleReturn", "InvoiceSaleReturn")';
+        }
+        //invoice end
+        //accounts report start
+        if (html == '656782') {
+            keys = {};
+            var string = "rtype=ChartofAccount";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+        if (html == '657682') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountLedger", "Reports")';
+        }
+        if (html == '666782') {
+            keys = {};
+            window.location.href = '@Url.Action("Cashbook", "Reports")';
+        }
+        if (html == '677082') {
+            keys = {};
+            window.location.href = '@Url.Action("CashFlow", "Reports")';
+        }
+        if (html == '668284') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalance", "Reports")';
+        }
+        if (html == '666884') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalanceBetweenDates", "Reports")';
+        }
+        if (html == '6884') {
+            keys = {};
+            window.location.href = '@Url.Action("DetailTrial", "Reports")';
+        }
+        if (html == '7184') {
+            keys = {};
+            window.location.href = '@Url.Action("GroupTrial", "Reports")';
+        }
+        if (html == '8384') {
+            keys = {};
+            window.location.href = '@Url.Action("SixColumnTrial", "Reports")';
+        }
+        //accounts report end
+        //inventory report start
+        if (html == '6880') {
+            keys = {};
+            window.location.href = '@Url.Action("DailyPurchase", "IReports")';
+        }
+        if (html == '6883') {
+            keys = {};
+            window.location.href = '@Url.Action("DailySale", "IReports")';
+        }
+        if (html == '7683') {
+            keys = {};
+            window.location.href = '@Url.Action("StockLedger", "IReports")';
+        }
+        if (html == '7283') {
+            keys = {};
+            window.location.href = '@Url.Action("StockInHand", "IReports")';
+        }
+        //inventory report end
+        //system start
+        if (html == '85') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterUser", "User")';
+        }
+        if (html == '1682') {
+            keys = {};
+            window.location.href = '@Url.Action("UserRights", "User")';
+        }
+        if (html == '657683') {
+            keys = {};
+            window.location.href = '@Url.Action("AddLevel", "AccountsLevel")';
+        }
+        if (html == '656877') {
+            keys = {};
+            window.location.href = '@Url.Action("DeleteCoding", "Accounts")';
+        }
+        @*if (html == '17') {
+            keys = {};
+            window.location.href = '@Url.Action("Add", "ControlAccounts")';
+        }*@
+        //system end
+    }
+</script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#dtpDatefrom').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDateto').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDatefromIcon').click(function () {
+                $('#dtpDatefrom').datepicker('show');
+            });
+            $('#dtpDatetoIcon').click(function () {
+                $('#dtpDateto').datepicker('show');
+            });
+            $('#dtpDatefrom').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDatefrom').datepicker('setDate', 'now');
+
+            $('#dtpDateto').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDateto').datepicker('setDate', 'now');
+        });
+    </script>
+}  

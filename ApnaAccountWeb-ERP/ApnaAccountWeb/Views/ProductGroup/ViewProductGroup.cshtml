@@ -1,0 +1,251 @@
+﻿@model IEnumerable<ApnaAccountWeb.Models.ProductGroup>
+<link rel="stylesheet" href="~/Content/css/uniform.css" />
+<link rel="stylesheet" href="~/Content/css/select2.css" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+       alert("@TempData["message"]");
+    </script>
+}
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+          <a href="@Url.Action("RegisterProductGroup", "ProductGroup", new {@class="btn btn-primary" })" style="float:right">Add Product Group</a>
+        <div class="widget-box">
+          <div class="widget-title">
+             <span class="icon"><i class="icon-th"></i></span> 
+            <h5>Products Groups List</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered data-table" @*style="width:100%"*@>
+              <thead>
+                <tr>
+                  <th>Serial</th>
+                  <th>Title</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                  @{
+                  int i=1;
+                  }
+                @foreach (var item in Model) {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                                            <td>@Html.ActionLink("Edit", "Edit", new { id=@item.PG_Id }) |@Html.ActionLink("Delete", "Delete", new { id=@item.PG_Id })</td>
+                                        </tr>
+                    i++;
+                                        }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="~/Content/js/jquery.min.js"></script> 
+<script src="~/Content/js/jquery.ui.custom.js"></script>
+<script src="~/Content/js/jquery.uniform.js"></script> 
+<script src="~/Content/js/select2.min.js"></script> 
+<script src="~/Content/js/jquery.dataTables.min.js"></script> 
+<script src="~/Content/js/maruti.js"></script>
+<script src="~/Content/js/maruti.tables.js"></script>
+<script>
+    var keys = {};
+    $(document).keydown(function (e) {
+        keys[e.which] = true;
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    $(document).keyup(function (e) {
+        delete keys[e.which];
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    function printKeys() {
+        var html = '';
+        for (var i in keys) {
+            if (!keys.hasOwnProperty(i)) continue;
+            html += i;
+        }
+        //home start
+        if (html == '72') {
+            keys = {};
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+        //home end
+        //accounts start
+        if (html == '7486') {
+            keys = {};
+            window.location.href = '@Url.Action("JVoucher", "JVoucher")';
+        }
+        if (html == '6886') {
+            keys = {};
+            window.location.href = '@Url.Action("DVoucher", "DVoucher")';
+        }
+        if (html == '6786') {
+            keys = {};
+            window.location.href = '@Url.Action("CVoucher", "CVoucher")';
+        }
+        if (html == '666886') {
+            keys = {};
+            window.location.href = '@Url.Action("BankDJVoucher", "BankDJVoucher")';
+        }
+        if (html == '666774') {
+            keys = {};
+            window.location.href = '@Url.Action("BankCJVoucher", "BankCJVoucher")';
+        }
+        if (html == '748086') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseJVoucher", "PurchaseJVoucher")';
+        }
+        if (html == '748386') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleJVoucher", "SaleJVoucher")';
+        }
+        if (html == '86') {
+            keys = {};
+            window.location.href = '@Url.Action("Verify", "VouchersVerification")';
+        }
+        //accounts end
+        //coding start
+        if (html == '6567') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountCoding", "Accounts")';
+        }
+        if (html == '656679') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningBalances", "Accounts")';
+        }
+        if (html == '678085') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductUnit", "ProductUnit")';
+        }
+        if (html == '677180') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductGroup", "ProductGroup")';
+        }
+        if (html == '678083') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductSubGroup", "ProductSubGroup")';
+        }
+        if (html == '6780') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProduct", "Product")';
+        }
+        if (html == '6783') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterStores", "Stores")';
+        }
+        if (html == '7983') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningStock", "ProductsOpening")';
+        }
+        if (html == '1667') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterCity", "City")';
+        }
+        //coding end
+        //invoice start
+        if (html == '7380') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseInvoice", "PurchaseInvoice")';
+        }
+        if (html == '8082') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoicePurchaseReturn", "InvoicePurchaseReturn")';
+        }
+        if (html == '7383') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleInvoice", "SaleInvoice")';
+        }
+        if (html == '8283') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoiceSaleReturn", "InvoiceSaleReturn")';
+        }
+        //invoice end
+        //accounts report start
+        if (html == '656782') {
+            keys = {};
+            var string = "rtype=ChartofAccount";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+        if (html == '657682') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountLedger", "Reports")';
+        }
+        if (html == '666782') {
+            keys = {};
+            window.location.href = '@Url.Action("Cashbook", "Reports")';
+        }
+        if (html == '677082') {
+            keys = {};
+            window.location.href = '@Url.Action("CashFlow", "Reports")';
+        }
+        if (html == '668284') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalance", "Reports")';
+        }
+        if (html == '666884') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalanceBetweenDates", "Reports")';
+        }
+        if (html == '6884') {
+            keys = {};
+            window.location.href = '@Url.Action("DetailTrial", "Reports")';
+        }
+        if (html == '7184') {
+            keys = {};
+            window.location.href = '@Url.Action("GroupTrial", "Reports")';
+        }
+        if (html == '8384') {
+            keys = {};
+            window.location.href = '@Url.Action("SixColumnTrial", "Reports")';
+        }
+        //accounts report end
+        //inventory report start
+        if (html == '6880') {
+            keys = {};
+            window.location.href = '@Url.Action("DailyPurchase", "IReports")';
+        }
+        if (html == '6883') {
+            keys = {};
+            window.location.href = '@Url.Action("DailySale", "IReports")';
+        }
+        if (html == '7683') {
+            keys = {};
+            window.location.href = '@Url.Action("StockLedger", "IReports")';
+        }
+        if (html == '7283') {
+            keys = {};
+            window.location.href = '@Url.Action("StockInHand", "IReports")';
+        }
+        //inventory report end
+        //system start
+        if (html == '85') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterUser", "User")';
+        }
+        if (html == '1682') {
+            keys = {};
+            window.location.href = '@Url.Action("UserRights", "User")';
+        }
+        if (html == '657683') {
+            keys = {};
+            window.location.href = '@Url.Action("AddLevel", "AccountsLevel")';
+        }
+        if (html == '656877') {
+            keys = {};
+            window.location.href = '@Url.Action("DeleteCoding", "Accounts")';
+        }
+        @*if (html == '17') {
+            keys = {};
+            window.location.href = '@Url.Action("Add", "ControlAccounts")';
+        }*@
+        //system end
+    }
+</script>

@@ -1,0 +1,277 @@
+﻿@model ApnaAccountWeb.Models.Product
+<script src="~/Content/js/jquery.min.js"></script>
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script>
+    $(document).ready(function (e) {
+        $('#ddlpgroup').change(function () {
+            LoadAllProducts();
+        });
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                calculateAmount();
+                var curIndex = document.activeElement.tabIndex; //get current elements tab index
+                var tabbables = document.querySelectorAll("input, textarea, button"); //get all tabable elements
+                for (var i = 0; i < tabbables.length; i++) { //loop through each element
+                    if (tabbables[i].tabIndex == (curIndex + 1)) { //check the tabindex to see if it's the element we want
+                        tabbables[i].focus(); //if it's the one we want, focus it and exit the loop
+                        break;
+                    }
+                }
+            }
+        });
+    });
+    function calculateAmount() {
+        $('#mytable tbody tr').each(function () {
+            var $row = $(this), $tds = $row.find("td");
+            var UnitWt = parseFloat($('.debit', this).val());
+            var UnitRate = parseFloat($('.credit', this).val());
+            var TAmount = UnitWt * UnitRate;
+            $('.amount', this).html(TAmount);
+        });
+    }
+    $(function () {
+        var focusedElement;
+        $(document).on('focus', 'input', function () {
+            if (focusedElement == this) return; //already focused, return so user can now place cursor at specific point in input.
+            focusedElement = this;
+            setTimeout(function () { focusedElement.select(); }, 50); //select all text in any field on focus for easy re-entry. Delay sightly to allow focus to "stick" before selecting.
+        });
+    });
+    function LoadAllProducts() {
+        var dvid = $("#ddlpgroup option:selected").attr('value');
+        {
+            $('#mytable tbody tr').remove();
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/ProductsOpening/SearchProducts",
+                data: { VId: dvid },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        var new_row;
+                        var n = 0;
+                        var j = 1;
+                        $.each(result, function (i, item) {
+                            j = n + 1;
+                            new_row += "<tr id='row" + i + "' ><td class='span2 accCode'>" + item.Productid + "</td><td class='span6 title'>" + item.ProductName + "</td><td><input type='number' class='span11 unitqty' id='unitqty' name='unitqty' required value='" + item.UnitQty + "' tabindex='" + n + "'/></td><td><input type='number' class='span11 debit' id='unitwt' name='unitwt' required value='" + item.UnitWt + "' tabindex='" + n + "'/></td><td class='span4'><input type='number' class='span11 credit' value='" + item.UnitRate + "' id='unitrate' name='unitrate' tabindex='" + j + "' /></td><td class='span2 amount'>" + item.Amounts + "</td></tr>";
+                            n = n + 2;
+                        });
+                        $('#mytable tbody').append(new_row);
+                    }
+                    else {
+                        alert("No record found");
+                        window.location.reload();
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    }
+    function SaveDVoucher() {
+        var detail = [];
+        $('#mytable tbody tr').each(function () {
+            var $row = $(this), $tds = $row.find("td");
+            detail.push({
+                Productid: $tds[0].innerText,
+                ProductName: $tds[1].innerText,
+                UnitWt: $('.debit', this).val(),
+                UnitQty: $('.unitqty', this).val(),
+                UnitRate: $('.credit', this).val(),
+            });
+        });
+        $.ajax({
+            url: "/ProductsOpening/SaveOpeningStock",
+            type: "POST",
+            data: JSON.stringify({ detail: detail }),
+            dataType: 'text json',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response != null && response.success) {
+                    alert(response.responseText);
+                    window.location.reload();
+                }
+                else {
+                    alert(response.responseText);
+                }
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+<!--<div id="content">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span11">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"> <i class="icon-align-justify"></i> </span>
+                        <h5>Opening Stock</h5>
+                        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for Product.." style="float:right;">
+                        <div class="span4">
+                            @*@{List<SelectListItem> AccCodelist2 = new List<SelectListItem>();
+                                foreach (var Acc in ViewBag.pgroupDetails)
+                                {
+                                    AccCodelist2.Add(new SelectListItem
+                                    {
+                                        Text = Acc.Title,
+                                        Value = Convert.ToString(Acc.Code),
+                                    });
+                                }
+                            }
+                            @Html.DropDownListFor(u => u.PG_ID, AccCodelist2, "Select Product Group", new { id = "ddlpgroup", @class = "span11 ddl" })*@
+                        </div>
+                    </div>
+                    <div class="widget-content nopadding">
+                        <form action="OpeningBalance" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="span12" style="overflow-y: auto; height:400px;">
+                                <table class="table table-bordered data-table" id="mytable">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Title</th>
+                                            <th>Unit Qty</th>
+                                            <th>Unit Wt</th>
+                                            <th>Unit Rate</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        Already Commented Code-->
+@*@if (null != ViewBag.AccCodeDetails)
+    {
+        var i = 0;
+         foreach (var Acc in ViewBag.AccCodeDetails)
+            {
+                var j = i + 1;
+    <tr>
+        <td>@Acc.Productid</td>
+        <td>@Acc.ProductName</td>
+        <td><input type="number" class="span11 debit" id="unitqty" tabindex="@i" name="unitqty" required value="@Acc.UnitQty"  /></td>
+        <td><input type="number" class="span11 credit" id="unitrate" tabindex="@j" name="unitrate" required value="@Acc.UnitRate" /></td>
+        <td class="amount">@Acc.Amounts</td>
+    </tr>
+                i = i + 2;
+            }
+    }*@
+<!--Already Commented Code
+        </tbody>
+    </table>
+</div>
+Already Commented Code-->
+@* <center style="margin-top:4px;margin-bottom:4px">
+           <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+    </center>*@
+<!--Already Commented Code
+                            <div class="form-actions">
+                                <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<div id="content">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="OpeningBalance" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-3">
+                                <b>Opening Stock</b>
+                            </div>
+                            <div class="col-md-4 col-sm-4 sm-mb-3">
+                                @{List<SelectListItem> AccCodelist2 = new List<SelectListItem>();
+                                    foreach (var Acc in ViewBag.pgroupDetails)
+                                    {
+                                        AccCodelist2.Add(new SelectListItem
+                                        {
+                                            Text = Acc.Title,
+                                            Value = Convert.ToString(Acc.Code),
+                                        });
+                                    }
+                                }
+                                @Html.DropDownListFor(u => u.PG_ID, AccCodelist2, "Select Product Group", new { id = "ddlpgroup", @class = "form-control form-control-sm" })
+                            </div>
+                            <div class="col-md-4 col-sm-5">
+                                <input type="text" class="form-control form-control-sm" id="myInput" onkeyup="myFunction()" placeholder="Search for Product">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div style="overflow: auto; height: calc(100vh - 305px)">
+                            <table class="table table-bordered" id="mytable">
+                                <thead>
+                                    <tr class="fixed-thead">
+                                        <th>Code</th>
+                                        <th>Title</th>
+                                        <th>Unit Qty</th>
+                                        <th>Unit Wt</th>
+                                        <th>Unit Rate</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @*@if (null != ViewBag.AccCodeDetails)
+                                        {
+                                            var i = 0;
+                                             foreach (var Acc in ViewBag.AccCodeDetails)
+                                                {
+                                                    var j = i + 1;
+                                        <tr>
+                                            <td>@Acc.Productid</td>
+                                            <td>@Acc.ProductName</td>
+                                            <td><input type="number" class="span11 debit" id="unitqty" tabindex="@i" name="unitqty" required value="@Acc.UnitQty"  /></td>
+                                            <td><input type="number" class="span11 credit" id="unitrate" tabindex="@j" name="unitrate" required value="@Acc.UnitRate" /></td>
+                                            <td class="amount">@Acc.Amounts</td>
+                                        </tr>
+                                                    i = i + 2;
+                                                }
+                                        }*@
+                                </tbody>
+                            </table>
+                        </div>
+                        @* <center style="margin-top:4px;margin-bottom:4px">
+                                   <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                            </center>*@
+                    </div>
+                    <div class="card-footer">
+                        <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("mytable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

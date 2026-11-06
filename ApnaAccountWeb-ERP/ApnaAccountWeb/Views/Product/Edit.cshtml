@@ -1,0 +1,474 @@
+﻿@model ApnaAccountWeb.Models.Product
+<script src="~/Content/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#ProductName').focus();
+        $('#ddlTitlesup').change(function () {
+            var selectedVal = $('#ddlTitlesup option:selected').attr('value');
+            $('#StrCol1').val(selectedVal);
+        });
+        $('#ddlTitlepur').change(function () {
+            var selectedVal = $('#ddlTitlepur option:selected').attr('value');
+            $('#StrCol2').val(selectedVal);
+        });
+        $('#ddlTitlesupdis').change(function () {
+            var selectedVal = $('#ddlTitlesupdis option:selected').attr('value');
+            $('#StrCol3').val(selectedVal);
+        });
+
+        $('input, select').keydown(function (e) {
+            var key = e.which || e.keyCode;
+            if (key == 13) { // Enter key
+                e.preventDefault();
+                var inputs = $(this).closest('form').find(':input:visible');
+                inputs.eq(inputs.index(this) + 1).focus();
+            }
+        });
+
+        $('#ddlpgroup').keydown(function (e) {
+            if (e.which == 13) { // Enter key
+                e.preventDefault();
+                $('#ddlmaker').focus();
+            }
+        });
+
+        $('#ddlmaker').keydown(function (e) {
+            if (e.which == 13) { // Enter key
+                e.preventDefault();
+                $('#SMW').focus();
+            }
+        });
+        // function submitForm() {
+        $("#btnSave").button().click(function () {
+            debugger;
+            if ($('#ProductName').val() == "" || $('#ProductName').val() == null) {
+                alert("Product Name can't be Null");
+                $('#ProductName').focus();
+                return;
+            }
+            if ($('#ddlpgroup').val() == "" || $('#ddlpgroup').val() == null) {
+                alert("Product Group can't be Null");
+                $('#ddlpgroup').focus();
+                return;
+            }
+            if ($('#ddlmaker').val() == "" || $('#ddlmaker').val() == null) {
+                alert("Product Sub Group can't be Null");
+                $('#ddlmaker').focus();
+                return;
+            }
+
+            if ($('#SMW').val() == "" || $('#SMW').val() == null) {
+                alert("Sale Mond Weight  can't be Null");
+                $('#SMW').focus();
+                return;
+            }
+            if ($('#PMW').val() == "" || $('#PMW').val() == null) {
+                alert("Purchase Mond Weight  can't be Null");
+                $('#PMW').focus();
+                return;
+            }
+            //if ($('#StWt').val() == "" || $('#StWt').val() == null) {
+            //    alert("Weight Per Unit  can't be Null");
+            //    $('#StWt').focus();
+            //    return;
+            //}
+            //if ($('#OpeningQty').val() == "" || $('#OpeningQty').val() == null) {
+            //    alert("No of Pieces/Carton  can't be Null");
+            //    $('#OpeningQty').focus();
+            //    return;
+            //}
+            if ($('#PurchasePrice').val() == "" || $('#PurchasePrice').val() == null) {
+                alert("Purchase Price  can't be Null");
+                $('#PurchasePrice').focus();
+                return;
+            }
+            if ($('#SalePrice').val() == "" || $('#SalePrice').val() == null) {
+                alert("Sale Price  can't be Null");
+                $('#SalePrice').focus();
+                return;
+            }
+
+            if ($('#RateCalc1').val() == "" || $('#RateCalc1').val() == null) {
+                alert("Rate Calculation 1 can't be Null");
+                $('#RateCalc1').focus();
+                return;
+            }
+
+            if ($('#ReorderLevel').val() == "" || $('#ReorderLevel').val() == null) {
+                $('#ReorderLevel').val(0);
+            }
+            if ($('#PurchasePrice').val() == "" || $('#PurchasePrice').val() == null) {
+                $('#PurchasePrice').val(0);
+            }
+
+            SaveProduct();
+            $('#frm1').submit();
+        }
+        );
+        function SaveProduct() {
+            debugger;
+            var ProductName = $('#ProductName').val();
+            var ProductID = $('#ProductId').val();
+            if (ProductName == "" || ProductName == null) {
+                alert("ProductName can not be null");
+            }
+            else {
+                var GroupId = $("#ddlpgroup option:selected").attr('value');
+                var SubGroup = $("#ddlmaker option:selected").attr('value');
+                // var StWt = $("#StWt").val();
+                var SMW = $("#SMW").val();
+                var PMW = $("#PMW").val();
+                var GstRate = $("#GstRate").val();
+                //  var GstRate = $("#GstRate").val();
+                //  var UnitId = $("#ddlpunit option:selected").attr('value');
+                var PurchasePrice = $("#PurchasePrice").val();
+                var SalePrice = $("#SalePrice").val();
+                var Reorder = $("#ReorderLevel").val();
+                var RateCalc1 = $("#RateCalc1 option:selected").text();
+                var StrCol3 = $("#ddlTitlesupdis option:selected").attr('value');
+                var StrCol1 = $("#ddlTitlesup option:selected").attr('value');
+                var StrCol2 = $("#ddlTitlepur option:selected").attr('value');
+                var Remarks = $("#Remarks").val();
+                // var GstRate = $("#GstRate").val();
+                debugger;
+                if ((SalePrice == "" || SalePrice == null)) {
+                    alert("Sale Price Can't Be Null...");
+                    $('#SalePrice').focus();
+                    return;
+                }
+                else {
+                    var rowCount = $('#mytable tbody tr').length;
+                    var answer = confirm("Do You really want to Save this?");
+                    if (answer) {
+                        //var detail = [];
+                        //if (rowCount >= 0) {
+
+                        //    $('#mytable tbody tr').each(function () {
+                        //        var $row = $(this), $tds = $row.find("td");
+                        //        detail.push({
+                        //            Barcode: $tds[0].innerText,
+                        //        });
+
+                        //    });
+                        //}
+                        var model = {
+                            ProductId: ProductID,         // Assuming ProductID is a variable holding the Product ID
+                            ProductName: ProductName,     // Assuming ProductName is a variable holding the Product Name
+                            ItemDetail: ProductName,      // Setting ItemDetail to the same value as ProductName (if needed)
+                            PG_ID: GroupId,
+                            GstRate: GstRate,// Group ID (maps to PG_ID in Product class)
+                            SalePrice: SalePrice,         // Sale Price of the product
+                            PurchasePrice: PurchasePrice, // Purchase Price of the product
+                            RateCalc1: RateCalc1,         // Opening Weight of the product
+                            ReorderLevel: Reorder,        // Reorder level threshold
+                            Remarks: Remarks,             // Any remarks or comments about the product           // GST (Goods and Services Tax) rate for the product
+                            PT_ID: SubGroup,              // Sub Group ID (maps to PT_ID in Product class)              // FBR Tax value                    // Assuming PMW stands for something specific (like Pack Measurement Weight)
+                            // BagTypeId: UnitId,
+                            // StWt: StWt,                   // Standard Weight
+                            SMW: SMW,                   // Standard Weight
+                            PMW: PMW,                   // Standard Weight
+                            StrCol1: StrCol1,             // Custom string column 1
+                            StrCol2: StrCol2,             // Custom string column 2
+                            StrCol3: StrCol3,             // Custom string column 3           // Flag to indicate if the operation is an update or not
+                            // detail: detail                // Additional product details
+                        };
+                        debugger;
+                        $.ajax({
+                            url: "/Product/Edit",
+                            type: "POST",
+                            data: JSON.stringify({ p: model }),
+                            dataType: 'json', // Correct data type to 'json'
+                            async: false,
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (response) {
+                                if (response != null && response.success) {
+                                    alert(response.message); // Display success message
+                                    window.location.reload(); // Reload the page
+                                } else {
+                                    alert(response.message); // Display error message
+                                    window.location.reload();
+                                }
+                            },
+                            error: function (response) {
+                                //alert("An error occurred: " + response.responseText);
+                                window.location.reload();
+                            }
+                        });
+
+                        // $('#btnSave').disable(false);
+
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+
+<div id="content">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <a href="@Url.Action("ViewProducts", "Product", new {@class="btn btn-primary" })" style="float:right">View Products</a>
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"> <i class="icon-align-justify"></i> </span>
+                        <h5><label>Edit Product</label></h5>
+                    </div>
+                    <div class="widget-content nopadding">
+                        <form action="Edit" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <input type="hidden" id="ProductId" name="ProductId" class="form-control form-control-sm" value="@Model.ProductID" />
+                            <input type="hidden" id="OpeningQty" name="OpeningQty" class="form-control form-control-sm" value="@Model.OpeningQty" />
+                            <input type="hidden" id="OpeningRate" name="OpeningRate" class="form-control form-control-sm" value="@Model.OpeningRate" />
+                            <table class="table table-bordered data-table">
+                                <tbody>
+                                    <tr>
+                                        <td><label>Product Name</label><input type="text" class="form-control form-control-sm" id="ProductName" required name="ProductName" value="@Model.ProductName" /></td>
+                                        <td>
+                                            <label>
+                                                Group
+                                            </label>
+                                            @{List<SelectListItem> AccCodelist2 = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.pgroupDetails)
+                                            {
+                                                AccCodelist2.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Convert.ToString(Acc.Code),
+                                                });
+                                            }
+                                            }
+                                            @Html.DropDownListFor(u => u.PG_ID, AccCodelist2, new { id = "ddlpgroup", @class = "form-control form-control-sm" })
+                                        </td>
+                                        <td>
+                                            <label>
+                                                Type
+                                            </label>
+                                            @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.makerDetails)
+                                            {
+                                                AccCodelist.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Convert.ToString(Acc.Code),
+                                                });
+                                            }
+                                            }
+                                            @Html.DropDownListFor(u => u.PT_ID, AccCodelist, new { id = "ddlmaker", @class = "form-control form-control-sm" })
+                                        </td>
+                                        @*<td>
+                                                Product Unit
+                                                @{List<SelectListItem> AccCodelist3 = new List<SelectListItem>();
+                                                  foreach (var Acc in ViewBag.punitDetails)
+                                                {
+                                                    AccCodelist3.Add(new SelectListItem
+                                                    {
+                                                        Text = Acc.Title,
+                                                        Value = Convert.ToString(Acc.Code),
+                                                    });
+                                                }
+                                                }
+                                                @Html.DropDownListFor(u => u.PU_ID, AccCodelist3, new { id = "ddlpunit", @class = "span11 ddl" })
+                                            </td>*@
+                                    </tr>
+                                    <tr>
+                                        <td><label>Sale Mond Weight</label><input type="number" class="form-control form-control-sm" id="SMW" name="SMW" value="@Model.SMW" /></td>
+                                        <td><label>Pur Mond Weight</label><input type="number" class="form-control form-control-sm" id="PMW" name="PMW" value="@Model.PMW" /></td>
+                                        <td><label>Gst Rate</label><input type="number" class="form-control form-control-sm" id="GstRate" name="GstRate" value="@Model.GstRate" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Sale Price</label><input type="number" class="form-control form-control-sm" id="SalePrice" name="SalePrice" value="@Model.SalePrice" required /></td>
+                                        <td><label>Purchase Price</label><input type="number" class="form-control form-control-sm" id="PurchasePrice" name="PurchasePrice" value="@Model.PurchasePrice" required /></td>
+                                        <td><label>Reorder level</label><input type="number" class="form-control form-control-sm" id="ReorderLevel" name="ReorderLevel" value="@Model.ReorderLevel" required /></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>
+                                                Rate Calculation 1
+                                            </label><br />
+                                            <select id="RateCalc1" name="RateCalc1" class="form-control form-control-sm">
+                                                @if (Model.RateCalc1 == "Bags")
+                                                {
+                                                    <option></option>
+                                                    <option selected>Bags</option>
+                                                    <option>Kg</option>
+                                                    <option>Mond</option>
+                                                    <option>PIECES</option>
+                                                    <option>METER</option>
+                                                    <option>FEET</option>
+                                                }
+                                                else if (Model.RateCalc1 == "Kg")
+                                                {
+                                                    <option></option>
+                                                    <option>Bags</option>
+                                                    <option selected>Kg</option>
+                                                    <option>Mond</option>
+                                                    <option>PIECES</option>
+                                                    <option>METER</option>
+                                                    <option>FEET</option>
+                                                }
+                                                else if (Model.RateCalc1 == "Mond")
+                                                {
+                                                    <option></option>
+                                                    <option>Bags</option>
+                                                    <option>Kg</option>
+                                                    <option selected>Mond</option>
+                                                    <option>PIECES</option>
+                                                    <option>METER</option>
+                                                    <option>FEET</option>
+                                                }
+                                                else if (Model.RateCalc1 == "PIECES")
+                                                {
+                                                    <option></option>
+                                                    <option>Bags</option>
+                                                    <option>Kg</option>
+                                                    <option>Mond</option>
+                                                    <option selected>PIECES</option>
+                                                    <option>METER</option>
+                                                    <option>FEET</option>
+                                                }
+                                                else if (Model.RateCalc1 == "METER")
+                                                {
+                                                    <option></option>
+                                                    <option>Bags</option>
+                                                    <option>Kg</option>
+                                                    <option>Mond</option>
+                                                    <option>PIECES</option>
+                                                    <option selected>METER</option>
+                                                    <option>FEET</option>
+                                                }
+                                                else if (Model.RateCalc1 == "FEET")
+                                                {
+                                                    <option></option>
+                                                    <option>Bags</option>
+                                                    <option>Kg</option>
+                                                    <option>Mond</option>
+                                                    <option>PIECES</option>
+                                                    <option>METER</option>
+                                                    <option selected>FEET</option>
+                                                }
+                                                else
+                                                {
+                                                    <option></option>
+                                                    <option>Bags</option>
+                                                    <option>Kg</option>
+                                                    <option>Mond</option>
+                                                    <option>PIECES</option>
+                                                    <option>METER</option>
+                                                    <option>FEET</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <label>
+                                                Rate Calculation 2
+                                            </label> <br />
+                                            <select id="RateCalc2" name="RateCalc2" class="form-control form-control-sm">
+                                                @if (Model.RateCalc2 == "Purchase Price")
+                                                {
+                                                    <option></option>
+                                                    <option selected>Purchase Price</option>
+                                                    <option>Sale Price</option>
+                                                }
+                                                else if (Model.RateCalc2 == "Sale Price")
+                                                {
+                                                    <option></option>
+                                                    <option>Purchase Price</option>
+                                                    <option selected>Sale Price</option>
+                                                }
+                                                else
+                                                {
+                                                    <option></option>
+                                                    <option>Purchase Price</option>
+                                                    <option>Sale Price</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td><label>Discount Account</label><input type="text" class="form-control form-control-sm" id="StrCol3" name="StrCol3" data-toggle="tooltip" title="Press enter and select account code" value="@Model.StrCol3" /></td>
+                                        <td>
+                                            <label>
+                                                Discount Title
+                                            </label>
+                                            @{List<SelectListItem> AccCodelistdis = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodelistdis1)
+                                            {
+                                                AccCodelistdis.Add(new SelectListItem
+                                               {
+                                                   Text = Acc.Title,
+                                                   Value = Acc.AccountId
+                                               });
+                                            }
+                                            }
+                                            @Html.DropDownListFor(u => u.StrCol3, AccCodelistdis, "-- Select Account --", new { id = "ddlTitlesupdis", @class = "form-control form-control-sm" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Purchase Account</label><input type="text" class="form-control form-control-sm" id="StrCol1" name="StrCol1" data-toggle="tooltip" title="Press enter and select account code" value="@Model.StrCol1" /></td>
+                                        <td>
+                                            <label>
+                                                Purchase Title
+                                            </label>
+                                            @{List<SelectListItem> AccCodelistpur = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodelistpur1)
+                                            {
+                                                AccCodelistpur.Add(new SelectListItem
+                                               {
+                                                   Text = Acc.Title,
+                                                   Value = Acc.AccountId
+                                               });
+                                            }
+                                            }
+                                            @Html.DropDownListFor(u => u.StrCol1, AccCodelistpur, "-- Select Account --", new { id = "ddlTitlesup", @class = "form-control form-control-sm" })
+                                        </td>
+                                        <td><label>Sale Account</label><input type="text" class="form-control form-control-sm" id="StrCol2" name="StrCol2" data-toggle="tooltip" title="Press enter and select account code" value="@Model.StrCol2" /></td>
+                                        <td>
+                                            <label>
+                                                Sale Title
+                                            </label>
+                                            @{List<SelectListItem> AccCodelistSale = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodelistSale1)
+                                            {
+                                                AccCodelistSale.Add(new SelectListItem
+                                               {
+                                                   Text = Acc.Title,
+                                                   Value = Acc.AccountId
+                                               });
+                                            }
+                                            }
+                                            @Html.DropDownListFor(u => u.StrCol2, AccCodelistSale, "-- Select Account --", new { id = "ddlTitlepur", @class = "form-control form-control-sm" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <label>
+                                                Remarks
+                                            </label>
+                                            <textarea name="Remarks" id="Remarks" class="form-control form-control-sm">@Model.Remarks</textarea>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="form-actions">
+                                <input type="button" value="Update" id="btnSave" class="btn btn-success" />
+                                 @*<button type="submit" id="btnSave" class="btn btn-success">Update</button>*@
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><hr>
+    </div>
+</div>
+<script>
+    var d = parseFloat($('#KgPerMund').val());
+    if (isNaN(d))
+        d = 0;
+    if (d == 0) {
+        $('#mund').hide();
+    }
+    else {
+        $(':checkbox').prop('checked', true);
+    }
+</script>

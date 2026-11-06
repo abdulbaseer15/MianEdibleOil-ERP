@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ApnaAccount</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    @*<link rel="stylesheet" href="~/Content/plugins/fontawesome-free/css/all.min.css">*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @*Checkbox*@
+    @*<link rel="stylesheet" href="~/Content/plugins/icheck-bootstrap/icheck-bootstrap.min.css">*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css" integrity="sha512-8vq2g5nHE062j3xor4XxPeZiPjmRDh6wlufQlfC6pdQ/9urJkU07NM0tEREeymP++NczacJ/Q59ul+/K2eYvcg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- jQuery CSS (for UI elements) -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    @*<link rel="stylesheet" href="~/Content/css/jquery-ui.min.css">*@
+    <!-- Theme style -->
+    @*<link rel="stylesheet" href="~/Content/dist/css/adminlte.min.css">*@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+    @*Custom Styling*@
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    @RenderSection("Style", required: false)
+</head>
+@*<body class="hold-transition layout-fixed sidebar-mini dropdown-legacy nav-compact nav-collapse-hide-child navbar-dark">*@
+<body class="hold-transition layout-fixed layout-navbar-fixed text-sm sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        @Html.Partial("_AdminLTENavbar")
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        @Html.Partial("_AdminLTEAside")
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid pt-3">
+                    @RenderBody()
+                </div>
+            </section>
+        </div>
+        <!-- Main footer -->
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>Copyright &copy; 1989-2024 <a href="https://www.iagsoft.com.pk/">IAG Soft</a>.</strong> All rights reserved.
+        </footer>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    @*<script src="~/Content/plugins/jquery/jquery.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    @*<script src="~/Content/js/jquery-ui.min.js"></script>*@
+    <!-- Bootstrap 4 -->
+    @*<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <!-- AdminLTE App -->
+    @*<script src="~/Content/dist/js/adminlte.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/Content/dist/js/demo.js"></script>
+    <script>
+        //$(document).ready(function () {
+        //    // Get current path
+        //    var currentPath = window.location.pathname.toLowerCase();
+        //    // Find the current link and add 'active' class
+        //    $('a.nav-link').each(function () {
+        //        var link = $(this).attr('href').toLowerCase();
+        //        if (currentPath === link) {
+        //            $(this).addClass('active'); // Add active class to current link
+        //            $(this).parents('.nav-item').addClass('menu-open'); // Open parent menu items
+        //        }
+        //    });
+        //});
+        var url = window.location;
+        // for single sidebar menu
+        $('ul.nav-sidebar a').filter(function () {
+            return this.href == url;
+        }).addClass('active');
+        // for sidebar menu and treeview
+        $('ul.nav-treeview a').filter(function () {
+            return this.href == url;
+        }).parentsUntil(".nav-sidebar > .nav-treeview")
+            .css({ 'display': 'block' })
+            .addClass('menu-open').prev('a')
+            .addClass('active');
+
+
+
+
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

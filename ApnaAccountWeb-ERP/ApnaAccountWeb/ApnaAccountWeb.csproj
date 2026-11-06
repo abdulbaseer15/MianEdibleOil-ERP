@@ -1,0 +1,2878 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{82869564-907C-4ED2-9F62-F609A1BB7BF0}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ApnaAccountWeb</RootNamespace>
+    <AssemblyName>ApnaAccountWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.ClientDoc.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommLayer, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.CommLayer.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommonControls, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.CommonControls.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.CommonObjectModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.CommonObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.Controllers, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.Controllers.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.CubeDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.CubeDefModel.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.DataDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.DataDefModel.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.DataSetConversion, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.DataSetConversion.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ObjectFactory, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.ObjectFactory.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.Prompting, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.Prompting.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ReportDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.ReportDefModel.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.XmlSerialize, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportAppServer.XmlSerialize.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.ReportSource.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Agri Liaquatpur\ApnaAccountWeb\ApnaAccountWeb\bin\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.5.5.13.3\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\BankCJVoucherController.cs" />
+    <Compile Include="Controllers\BankDJVoucherController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\CVoucherController.cs" />
+    <Compile Include="Controllers\dbBackupController.cs" />
+    <Compile Include="Controllers\DVoucherController.cs" />
+    <Compile Include="Controllers\FOCVoucherController.cs" />
+    <Compile Include="Controllers\FODVoucherController.cs" />
+    <Compile Include="Controllers\GuestGatePass.cs" />
+    <Compile Include="Controllers\IssueInvoiceController.cs" />
+    <Compile Include="Controllers\FOJVoucherController.cs" />
+    <Compile Include="Controllers\JVoucherController.cs" />
+    <Compile Include="Controllers\PurchaseJVoucherController.cs" />
+    <Compile Include="Controllers\GRNController.cs" />
+    <Compile Include="Controllers\ReceiveController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\ReturnableInward.cs" />
+    <Compile Include="Controllers\EmployGatePass.cs" />
+    <Compile Include="Controllers\ReturnableOutward.cs" />
+    <Compile Include="Controllers\BardanaTypeController.cs" />
+    <Compile Include="Controllers\GPParties.cs" />
+    <Compile Include="Controllers\IndividualFormulaAdjustment.cs" />
+    <Compile Include="Controllers\BardanaIssueReceived.cs" />
+    <Compile Include="Controllers\InwardGatePassMixController.cs" />
+    <Compile Include="Controllers\OutwardGatePassMixController.cs" />
+    <Compile Include="Controllers\OutwardGatePassFGController.cs" />
+    <Compile Include="Controllers\IReportsController.cs" />
+    <Compile Include="Controllers\PCGatePass.cs" />
+    <Compile Include="Controllers\IndividualFormulaFG.cs" />
+    <Compile Include="Controllers\PCEmployee.cs" />
+    <Compile Include="Controllers\PurchaseGSTInvoiceController.cs" />
+    <Compile Include="Controllers\InwardGatePassRMController.cs" />
+    <Compile Include="Controllers\PurchaseRInvoiceController.cs" />
+    <Compile Include="Controllers\PurchaseReturnGSTController.cs" />
+    <Compile Include="Controllers\SaleJVoucherController.cs" />
+    <Compile Include="Controllers\SaleReturnGSTController.cs" />
+    <Compile Include="Controllers\SaleGSTInvoiceController.cs" />
+    <Compile Include="Controllers\SaleInvoiceController.cs" />
+    <Compile Include="Controllers\SaleOrderController.cs" />
+    <Compile Include="Controllers\SaleReturnController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="Controllers\PartyRegisterationController.cs" />
+    <Compile Include="Controllers\AccountsLevelController.cs" />
+    <Compile Include="Controllers\PartyFarmController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductGroupController.cs" />
+    <Compile Include="Controllers\ProductsOpeningController.cs" />
+    <Compile Include="Controllers\ProductSubGroupController.cs" />
+    <Compile Include="Controllers\ProductUnitController.cs" />
+    <Compile Include="Controllers\PurchaseInvoiceController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
+    <Compile Include="Controllers\VehicleTypeController.cs" />
+    <Compile Include="Controllers\PlantController.cs" />
+    <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\ControlAccountsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\DeliveryChallanController.cs" />
+    <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\VouchersVerificationController.cs" />
+    <Compile Include="DataSets\dsAccount.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsAccount.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsAccountLedger.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsAccountLedger.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsAccountReconcilation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsAccountReconcilation.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsAging.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsAging.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsBardana.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsBardana.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsBardana2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsBardana2.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsbardana3.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsbardana3.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsCashBookDayBookDetail.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsCashBookDayBookDetail.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsCoa.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsCoa.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsCreditLimit.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsCreditLimit.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsDailyGross.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsDailyGross.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsDayBookRecovered.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsDayBookRecovered.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsEmpGatePass.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsEmpGatePass.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsGatePass.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsGatePass.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsGPEmployee.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsGPEmployee.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsGRN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsGRN.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsGstRegister.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsGstRegister.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsigpMix.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsigpMix.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsInOut.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsInOut.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsInvoices.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsInvoices.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsOGM.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsOGM.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsOut.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsOut.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsPartyLedger.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsPartyLedger.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsPartyLedgersummary.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsPartyLedgersummary.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsPartywisePurchase.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsPartywisePurchase.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsProcess.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsProcess.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsProduction1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsProduction1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsProduction2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsProduction2.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsProductList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsProductList.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsProductListGroup.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsProductListGroup.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsProductPosition.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsProductPosition.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsPurchase.cs">
+      <DependentUpon>dsPurchase.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsPurchase.Designer.cs">
+      <DependentUpon>dsPurchase.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="DataSets\dsPurchaseOrder.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsPurchaseOrder.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsPurchaseRate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsPurchaseRate.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsPurchaseSaleLedger.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsPurchaseSaleLedger.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsReceivablePayable.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReceivablePayable.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsRecovery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsRecovery.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsSale.cs">
+      <DependentUpon>dsSale.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsSale.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsSale.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsSaleOrder.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsSaleOrder.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsSalePurchaseDetailed.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsSalePurchaseDetailed.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsStockInHand.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsStockInHand.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsStockLedger.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsStockLedger.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsStockValueWise.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsStockValueWise.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsVoucherLog.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsVoucherLog.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\dsVouchers.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsVouchers.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataSets\igpds.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>igpds.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="IReports\rptArrivalSummary.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptArrivalSummary.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptBardanaDaily.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptBardanaDaily.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptBardanaLedger.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptBardanaLedger.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptBardanaPartyWise.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptBardanaPartyWise.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptBardanaSummaryPartyWise.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptBardanaSummaryPartyWise.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptDailyGrossProfit.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDailyGrossProfit.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptDailyGrossProfit2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDailyGrossProfit2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptDailyProduction.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDailyProduction.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptDailyPurchase.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDailyPurchase.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptDailySale.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDailySale.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptEmployGatePass.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptEmployGatePass.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptGatePassCommercial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGatePassCommercial.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptGatePassFinish.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGatePassFinish.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptGRNBetweenDateReport.cs">
+      <DependentUpon>rptGRNBetweenDateReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IReports\rptGroupWiseProductPurchase.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGroupWiseProductPurchase.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptGroupWiseProductSale.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGroupWiseProductSale.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptGstInvoice.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGstInvoice.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptGstRegister.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGstRegister.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptIndividualFormulaRunReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptIndividualFormulaRunReport.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptInvoice2Cash.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvoice2Cash.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptInvoice2CashSub.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvoice2CashSub.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptInvoicePur2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvoicePur2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptInvoiceSaleNew.cs">
+      <DependentUpon>rptInvoiceSaleNew.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IReports\rptInvoiceSaleNew2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvoiceSaleNew2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptInWardGatePass.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInWardGatePass.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptInwardMixed.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInwardMixed.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptInWardOutRetunable.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInWardOutRetunable.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptOutWardGatePassFinish.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptOutWardGatePassFinish.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptOutWardGatePassFinishP.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptOutWardGatePassFinishP.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptOutwardMixedNew.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptOutwardMixedNew.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptOverLimit.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptOverLimit.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptPartyLedger.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyLedger.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptPartyLedgerNew.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyLedgerNew.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptPartyPurchase.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyPurchase.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptPartySale.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartySale.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptPartyWiseProductPurchase.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyWiseProductPurchase.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptPartyWiseProductSale.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyWiseProductSale.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptPartyWisePurchase.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyWisePurchase.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptPartyWiseSale.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyWiseSale.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptProductList.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptProductList.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptProductListGroupWise.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptProductListGroupWise.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptPendingPOReport.cs">
+      <DependentUpon>rptPendingPOReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IReports\rptPurchaseOrder.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPurchaseOrder.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptPurchaseRateReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPurchaseRateReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptPurOrder2.cs">
+      <DependentUpon>rptPurOrder2.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IReports\rptPurOrder4.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPurOrder4.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptPurOrder5.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPurOrder5.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptPurSale.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPurSale.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptPurSaleDetailed.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPurSaleDetailed.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptRecovery.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptRecovery.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptReportMixedProductWise.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptReportMixedProductWise.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptreportPartyWise.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptreportPartyWise.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptSaleBardanaPurchi.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptSaleBardanaPurchi.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptsaleOrder.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptsaleOrder.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptStockInHand.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptStockInHand.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptStockInHand1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptStockInHand1.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptStockInHandValueWise.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptStockInHandValueWise.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptStockLedger.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptStockLedger.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptStockLedgerByQty.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptStockLedgerByQty.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptStockLedgerByWeight.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptStockLedgerByWeight.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\rptStoreWiseStockInhand.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptStoreWiseStockInhand.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\rptGRNBetweenDate.cs">
+      <DependentUpon>rptGRNBetweenDate.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IReports\rptVoucherReceipt1.cs">
+      <DependentUpon>rptVoucherReceipt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="IReports\StockInHand.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StockInHand.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IReports\StockInHandwv.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StockInHandwv.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Models\Account.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountingLevel.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Accounts1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountsOpening.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ApnaAccount.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApnaAccount.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ApnaAccount.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ApnaAccount.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApnaAccount.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Arrival.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Bardana.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BardanaType.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\City.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Clients_Credit_Limit.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Company.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Contact.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Contract.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContractsModeCalculation.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ControllAccount.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Employ.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmployGatepass.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Farm.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\F_GetUnapprovedVouchers_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Gate.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Gate3.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GRN1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GRN2.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GstInvoice1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GstInvoice2.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GuestGatePass.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IniApnaAccount.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IniApnaAccount.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IniApnaAccount.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IniApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IniApnaAccount.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IniApnaAccount.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ini_Company.cs">
+      <DependentUpon>IniApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InOutWord.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InvoiceDetailDelivaryChallan.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InvoiceMasterDelivaryChallan.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IssueDetailProduction.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IssueMasterProduction.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NetWeight.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PartiesGatePass.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Plant.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Process1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Process4.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Process5.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Product.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductGatepass.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductGroup.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductSubGroup.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductUnit.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Purchase1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Purchase2.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PurchaseOrder1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PurchaseOrder2.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryAvgPurchaseRate.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryBardanaRegister.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryCreditLimit.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryCreditLimit1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryGstBook.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryInvBook.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryInvBookFinalWeight.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryInvBookPurSaleAccount.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qrySaleOrderStatu.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qrySaleOrderStatus_WDC.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryVoucherBook.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryVoucherBook2.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryVoucherBookLimit.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryVoucherBookWEB.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\qryVoucherBook_New.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReceiveDetailProduction.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReceiveMasterProduction.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sale1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sale2.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SaleOrder1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SaleOrder2.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetAccountLedgervb_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetAccountLedger_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetAccountList_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetCashBook2_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetCashBook_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetCashFlow_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetDayBook_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetJournalBook_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetOpeningvb_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetOpening_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPRW_GetReceivablePayable_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPSW_GetAccountData_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPSW_GetAccountIdvb_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPSW_GetCtrlGrpDetailAccountsVB_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPSW_GetCtrlGrpDetailAccounts_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SPSW_GetDetailAccounts_JV_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_NVNo_Result.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Store.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StoreIssueDetail.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StoreIssueMaster.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\store_suppliers.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp_VoucherSaving.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UrduLable.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserRight.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VehicleType.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Voucher.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vouchers1.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vouchers2.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vouchers3.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vouchers4.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VouchersDetail.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vouchers_Bank.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\V_VouchersDetail.cs">
+      <DependentUpon>ApnaAccount.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helpers\TreeView.cs" />
+    <Compile Include="IReports\rptPurOrder.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPurOrder.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Reports\rptOutwardGateMixedNew.cs">
+      <DependentUpon>rptOutwardGateMixedNew.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptPurOrder3.cs">
+      <DependentUpon>rptPurOrder3.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptVoucherLog.cs">
+      <DependentUpon>rptVoucherLog.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptLogInsert.cs">
+      <DependentUpon>rptLogInsert.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptAccountLedger1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptAccountLedger.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptAccountsReconciliation.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptAccountsReconciliation.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptAging1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptAging.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptBalancesheet.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptBalancesheet.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptBalancesheet2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptBalancesheet2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptCashBook2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptCashBook2.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptCashFlow.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptCashFlow.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptDayBook.cs">
+      <DependentUpon>rptDayBook.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptCashBook.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptCashBook.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptChartofaccount1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptChartofaccount.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptDayBookInvDetail.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDayBookInvDetail.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptDetailTrial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptDetailTrial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGatePassEmployee1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGatePassEmployee.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGeneralReceivable.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGeneralReceivable.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGroupTrialOld2343.cs">
+      <DependentUpon>rptGroupTrialOld2343.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptGroupTrial2.cs">
+      <DependentUpon>rptGroupTrial2.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptGroupTrial22.cs">
+      <DependentUpon>rptGroupTrial22.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\rptGroupTrial%28Old%29.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGroupTrial%28Old%29.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptGroupTrial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptGroupTrial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptInvoicePur21.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvoicePur2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptJournalBook1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptJournalBook.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Reports\rptJVReceipt1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptJVReceipt.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Reports\rptPartyLedger.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyLedger.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptPartyLedgerNew.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyLedgerNew.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptPartyLedgerSummary.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptPartyLedgerSummary.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptProfitAndLoss21.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptProfitAndLoss2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptProfitLoss.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptProfitLoss.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptProfitLoss2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptProfitLoss2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptRecPay1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptRecPay.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptSixColumnTrial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptSixColumnTrial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptTrialBalance.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptTrialBalance.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptTrialBalance2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptTrialBalance2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptTrialBalanceBetween.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptTrialBalanceBetween.rpt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptVoucherReceipt1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptVoucherReceipt.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ViewModels\Account.cs" />
+    <Compile Include="ViewModels\CompanyInfo.cs" />
+    <Compile Include="ViewModels\DbConection.cs" />
+    <Compile Include="ViewModels\DetailList.cs" />
+    <Compile Include="ViewModels\InvoiceViewModel.cs" />
+    <Compile Include="ViewModels\OBViewModel.cs" />
+    <Compile Include="ViewModels\OBViewModel2.cs" />
+    <Compile Include="ViewModels\OpStock.cs" />
+    <Compile Include="ViewModels\POModel1.cs" />
+    <Compile Include="ViewModels\qryPurOrderStatu.cs" />
+    <Compile Include="ViewModels\SOModel.cs" />
+    <Compile Include="ViewModels\UserRightViewModel.cs" />
+    <Compile Include="ViewModels\VouchersVerification.cs" />
+    <Compile Include="ViewModels\VViewModel.cs" />
+    <Compile Include="ViewModels\POModel.cs" />
+    <Compile Include="ViewModels\GroupAccounts.cs" />
+    <Compile Include="ViewModels\VDetailViewModel.cs" />
+    <Compile Include="ViewModels\VoucherViewModel.cs" />
+    <Compile Include="Controllers\DetailTransferController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\Contactcss\style.css" />
+    <Content Include="Content\css\bootstrap-responsive.min.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\colorpicker.css" />
+    <Content Include="Content\css\datepicker.css" />
+    <Content Include="Content\css\fullcalendar.css" />
+    <Content Include="Content\css\jquery.gritter.css" />
+    <Content Include="Content\css\maruti-login.css" />
+    <Content Include="Content\css\maruti-media.css" />
+    <Content Include="Content\css\maruti-media2.css" />
+    <Content Include="Content\css\maruti-style.css" />
+    <Content Include="Content\css\maruti-style2.css" />
+    <Content Include="Content\css\select2.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\css\uniform.css" />
+    <Content Include="Content\Datepicker\bootstrap-datepicker.js" />
+    <Content Include="Content\Datepicker\datepicker.css" />
+    <Content Include="Content\images\backgrounds\bodyBg.png" />
+    <Content Include="Content\images\backgrounds\default.jpg" />
+    <Content Include="Content\images\backgrounds\titleRowBg.png" />
+    <Content Include="Content\images\Detail.png" />
+    <Content Include="Content\images\Group.png" />
+    <Content Include="Content\images\Group2.png" />
+    <Content Include="Content\images\letter_M_red-32.png" />
+    <Content Include="Content\images\Master.png" />
+    <Content Include="Content\images\minus-32.png" />
+    <Content Include="Content\images\next.png" />
+    <Content Include="Content\images\plus-32.png" />
+    <Content Include="Content\images\view_tree.png" />
+    <Content Include="Content\img\1.png" />
+    <Content Include="Content\img\2.png" />
+    <Content Include="Content\img\3.png" />
+    <Content Include="Content\img\apnalogo4.gif" />
+    <Content Include="Content\img\apnalogo.gif" />
+    <Content Include="Content\img\apnalogo2.gif" />
+    <Content Include="Content\img\favicon-a.png" />
+    <Content Include="Content\img\apnalogo3.gif" />
+    <Content Include="Content\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\home2.png" />
+    <Content Include="Content\img\iaglogo.png" />
+    <Content Include="Content\img\iaglogo2.png" />
+    <Content Include="Content\img\line.png" />
+    <Content Include="Content\img\login-logo.png" />
+    <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\logo2.png" />
+    <Content Include="Content\img\logoaa.png" />
+    <Content Include="Content\img\urduapna.png" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\jquery.dataTables.min.js" />
+    <Content Include="Content\js\jquery.min.js" />
+    <Content Include="Content\js\jquery.ui.custom.js" />
+    <Content Include="Content\js\jquery.uniform.js" />
+    <Content Include="Content\js\maruti.dashboard.js" />
+    <Content Include="Content\js\maruti.form_common.js" />
+    <Content Include="Content\js\maruti.js" />
+    <Content Include="Content\js\maruti.login.js" />
+    <Content Include="Content\js\maruti.tables.js" />
+    <Content Include="Content\js\select2.min.js" />
+    <Content Include="Global.asax" />
+    <Content Include="Views\City\Edit.cshtml" />
+    <Content Include="Views\City\RegisterCity.cshtml" />
+    <Content Include="Views\City\ViewCity.cshtml" />
+    <Content Include="DataSets\dsVouchers.xsc">
+      <DependentUpon>dsVouchers.xsd</DependentUpon>
+    </Content>
+    <Content Include="Content\img\Thumbs.db" />
+    <Content Include="DataSets\dsAccount.xsc">
+      <DependentUpon>dsAccount.xsd</DependentUpon>
+    </Content>
+    <Content Include="App_Code\TreeView.cshtml" />
+    <None Include="DataSets\dsAccount.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsAccount.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsAccount.xss">
+      <DependentUpon>dsAccount.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsInvoices.xsc">
+      <DependentUpon>dsInvoices.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsBardana.xsc">
+      <DependentUpon>dsBardana.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsAging.xsc">
+      <DependentUpon>dsAging.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsAccountReconcilation.xsc">
+      <DependentUpon>dsAccountReconcilation.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsAccountReconcilation.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsAccountReconcilation.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsAccountReconcilation.xss">
+      <DependentUpon>dsAccountReconcilation.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsAging.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsAging.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsAging.xss">
+      <DependentUpon>dsAging.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsBardana.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsBardana.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsBardana.xss">
+      <DependentUpon>dsBardana.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsGPEmployee.xsc">
+      <DependentUpon>dsGPEmployee.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsDailyGross.xsc">
+      <DependentUpon>dsDailyGross.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsCreditLimit.xsc">
+      <DependentUpon>dsCreditLimit.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsBardana2.xsc">
+      <DependentUpon>dsBardana2.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsBardana2.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsBardana2.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsBardana2.xss">
+      <DependentUpon>dsBardana2.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsbardana3.xsc">
+      <DependentUpon>dsbardana3.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsbardana3.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsbardana3.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsbardana3.xss">
+      <DependentUpon>dsbardana3.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsCashBookDayBookDetail.xsc">
+      <DependentUpon>dsCashBookDayBookDetail.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsCashBookDayBookDetail.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsCashBookDayBookDetail.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsCashBookDayBookDetail.xss">
+      <DependentUpon>dsCashBookDayBookDetail.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsCreditLimit.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsCreditLimit.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsCreditLimit.xss">
+      <DependentUpon>dsCreditLimit.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsDailyGross.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDailyGross.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsDailyGross.xss">
+      <DependentUpon>dsDailyGross.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsGatePass.xsc">
+      <DependentUpon>dsGatePass.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsEmpGatePass.xsc">
+      <DependentUpon>dsEmpGatePass.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsDayBookRecovered.xsc">
+      <DependentUpon>dsDayBookRecovered.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsDayBookRecovered.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDayBookRecovered.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsDayBookRecovered.xss">
+      <DependentUpon>dsDayBookRecovered.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsEmpGatePass.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsEmpGatePass.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsEmpGatePass.xss">
+      <DependentUpon>dsEmpGatePass.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsGatePass.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsGatePass.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsGatePass.xss">
+      <DependentUpon>dsGatePass.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsGPEmployee.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsGPEmployee.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsGPEmployee.xss">
+      <DependentUpon>dsGPEmployee.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsGstRegister.xsc">
+      <DependentUpon>dsGstRegister.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsGRN.xsc">
+      <DependentUpon>dsGRN.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsGRN.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsGRN.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsGRN.xss">
+      <DependentUpon>dsGRN.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsGstRegister.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsGstRegister.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsGstRegister.xss">
+      <DependentUpon>dsGstRegister.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsInOut.xsc">
+      <DependentUpon>dsInOut.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsigpMix.xsc">
+      <DependentUpon>dsigpMix.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsigpMix.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsigpMix.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsigpMix.xss">
+      <DependentUpon>dsigpMix.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsInOut.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsInOut.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsInOut.xss">
+      <DependentUpon>dsInOut.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsInvoices.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsInvoices.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsInvoices.xss">
+      <DependentUpon>dsInvoices.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsSale.xsc">
+      <DependentUpon>dsSale.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsPurchase.xsc">
+      <DependentUpon>dsPurchase.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsPartywisePurchase.xsc">
+      <DependentUpon>dsPartywisePurchase.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsPartyLedger.xsc">
+      <DependentUpon>dsPartyLedger.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsOut.xsc">
+      <DependentUpon>dsOut.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsOGM.xsc">
+      <DependentUpon>dsOGM.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsOGM.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsOGM.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsOGM.xss">
+      <DependentUpon>dsOGM.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsOut.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsOut.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsOut.xss">
+      <DependentUpon>dsOut.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsPartyLedger.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPartyLedger.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsPartyLedger.xss">
+      <DependentUpon>dsPartyLedger.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsPartyLedgersummary.xsc">
+      <DependentUpon>dsPartyLedgersummary.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsPartyLedgersummary.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPartyLedgersummary.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsPartyLedgersummary.xss">
+      <DependentUpon>dsPartyLedgersummary.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsPartywisePurchase.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPartywisePurchase.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsPartywisePurchase.xss">
+      <DependentUpon>dsPartywisePurchase.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsProductPosition.xsc">
+      <DependentUpon>dsProductPosition.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsProductList.xsc">
+      <DependentUpon>dsProductList.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsProduction1.xsc">
+      <DependentUpon>dsProduction1.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsProcess.xsc">
+      <DependentUpon>dsProcess.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsProcess.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsProcess.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsProcess.xss">
+      <DependentUpon>dsProcess.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsProduction1.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsProduction1.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsProduction1.xss">
+      <DependentUpon>dsProduction1.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsProduction2.xsc">
+      <DependentUpon>dsProduction2.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsProduction2.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsProduction2.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsProduction2.xss">
+      <DependentUpon>dsProduction2.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsProductList.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsProductList.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsProductList.xss">
+      <DependentUpon>dsProductList.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsProductListGroup.xsc">
+      <DependentUpon>dsProductListGroup.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsProductListGroup.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsProductListGroup.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsProductListGroup.xss">
+      <DependentUpon>dsProductListGroup.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsProductPosition.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsProductPosition.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsProductPosition.xss">
+      <DependentUpon>dsProductPosition.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsPurchase.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPurchase.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsPurchase.xss">
+      <DependentUpon>dsPurchase.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsPurchaseRate.xsc">
+      <DependentUpon>dsPurchaseRate.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsPurchaseOrder.xsc">
+      <DependentUpon>dsPurchaseOrder.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsPurchaseOrder.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPurchaseOrder.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsPurchaseOrder.xss">
+      <DependentUpon>dsPurchaseOrder.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsPurchaseRate.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPurchaseRate.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsPurchaseRate.xss">
+      <DependentUpon>dsPurchaseRate.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsPurchaseSaleLedger.xsc">
+      <DependentUpon>dsPurchaseSaleLedger.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsPurchaseSaleLedger.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPurchaseSaleLedger.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsPurchaseSaleLedger.xss">
+      <DependentUpon>dsPurchaseSaleLedger.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsReceivablePayable.xsc">
+      <DependentUpon>dsReceivablePayable.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsReceivablePayable.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReceivablePayable.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsReceivablePayable.xss">
+      <DependentUpon>dsReceivablePayable.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsRecovery.xsc">
+      <DependentUpon>dsRecovery.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsRecovery.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsRecovery.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsRecovery.xss">
+      <DependentUpon>dsRecovery.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsSale.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsSale.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsSale.xss">
+      <DependentUpon>dsSale.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsStockLedger.xsc">
+      <DependentUpon>dsStockLedger.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsSalePurchaseDetailed.xsc">
+      <DependentUpon>dsSalePurchaseDetailed.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsSaleOrder.xsc">
+      <DependentUpon>dsSaleOrder.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsSaleOrder.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsSaleOrder.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsSaleOrder.xss">
+      <DependentUpon>dsSaleOrder.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsSalePurchaseDetailed.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsSalePurchaseDetailed.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsSalePurchaseDetailed.xss">
+      <DependentUpon>dsSalePurchaseDetailed.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsStockInHand.xsc">
+      <DependentUpon>dsStockInHand.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsStockInHand.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsStockInHand.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsStockInHand.xss">
+      <DependentUpon>dsStockInHand.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsStockLedger.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsStockLedger.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="DataSets\dsStockLedger.xss">
+      <DependentUpon>dsStockLedger.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsStockValueWise.xsc">
+      <DependentUpon>dsStockValueWise.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsStockValueWise.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsStockValueWise.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsStockValueWise.xss">
+      <DependentUpon>dsStockValueWise.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsVoucherLog.xsc">
+      <DependentUpon>dsVoucherLog.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsVoucherLog.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsVoucherLog.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsVoucherLog.xss">
+      <DependentUpon>dsVoucherLog.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsVouchers.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsVouchers.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsVouchers.xss">
+      <DependentUpon>dsVouchers.xsd</DependentUpon>
+    </Content>
+    <Content Include="Views\Request\RequestList.cshtml" />
+    <Content Include="Views\Request\Details.cshtml" />
+    <EntityDeploy Include="Models\IniApnaAccount.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>IniApnaAccount.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\IniApnaAccount.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>IniApnaAccount.edmx</DependentUpon>
+      <LastGenOutput>IniApnaAccount.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\IniApnaAccount.edmx.diagram">
+      <DependentUpon>IniApnaAccount.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\IniApnaAccount.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>IniApnaAccount.edmx</DependentUpon>
+      <LastGenOutput>IniApnaAccount.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\User\UserRights.cshtml" />
+    <Content Include="Views\Shared\_Layout2.cshtml" />
+    <Content Include="Views\Reports_Olld\TrialBalanceBetweenDates.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <EntityDeploy Include="Models\ApnaAccount.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ApnaAccount.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ApnaAccount.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ApnaAccount.edmx</DependentUpon>
+      <LastGenOutput>ApnaAccount.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\ApnaAccount.edmx.diagram">
+      <DependentUpon>ApnaAccount.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\ApnaAccount.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ApnaAccount.edmx</DependentUpon>
+      <LastGenOutput>ApnaAccount.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Reports_Olld\Daybook.cshtml" />
+    <Content Include="Views\Reports_Olld\Journalbook.cshtml" />
+    <Content Include="Views\Reports_Olld\BalanceSheet.cshtml" />
+    <Content Include="Views\DeliveryChallan\DeliveryChallan.cshtml" />
+    <Content Include="Views\Plant\Edit.cshtml" />
+    <Content Include="Views\Plant\RegisterPlant.cshtml" />
+    <Content Include="Views\Plant\ViewPlant.cshtml" />
+    <Content Include="Views\VehicleType\Edit.cshtml" />
+    <Content Include="Views\VehicleType\RegisterVehicleType.cshtml" />
+    <Content Include="Views\VehicleType\ViewVehicleType.cshtml" />
+    <Content Include="Views\PartyFarm\Edit.cshtml" />
+    <Content Include="Views\PartyFarm\RegisterPartyFarm.cshtml" />
+    <Content Include="Views\PartyFarm\ViewPartyFarm.cshtml" />
+    <Content Include="Views\PartyRegisteration\AccountCoding.cshtml" />
+    <Content Include="Views\PartyRegisteration\DeleteCoding.cshtml" />
+    <Content Include="Views\PartyRegisteration\OpeningBalances.cshtml" />
+    <Content Include="Views\PartyRegisteration\OpeningBalances2.cshtml" />
+    <Content Include="Views\PurchaseOrder\PurchaseOrder_old.cshtml" />
+    <Content Include="Views\ProductGroup\Edit.cshtml" />
+    <Content Include="Views\ProductGroup\RegisterProductGroup.cshtml" />
+    <Content Include="Views\ProductGroup\ViewProductGroup.cshtml" />
+    <Content Include="Views\ProductsOpening\OpeningStock.cshtml" />
+    <Content Include="Views\ProductSubGroup\Edit.cshtml" />
+    <Content Include="Views\ProductSubGroup\RegisterProductSubGroup.cshtml" />
+    <Content Include="Views\ProductSubGroup\ViewProductSubGroup.cshtml" />
+    <Content Include="Views\ProductUnit\Edit.cshtml" />
+    <Content Include="Views\ProductUnit\RegisterProductUnit.cshtml" />
+    <Content Include="Views\ProductUnit\ViewProductUnit.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\Product\RegisterProduct.cshtml" />
+    <Content Include="Views\Product\ViewProducts.cshtml" />
+    <Content Include="Views\PurchaseInvoice\PurchaseInvoice_old.cshtml" />
+    <Content Include="Views\Store\Edit.cshtml" />
+    <Content Include="Views\Store\RegisterStore.cshtml" />
+    <Content Include="Views\Store\ViewStore.cshtml" />
+    <Content Include="Views\SaleInvoice\SaleInvoice.cshtml" />
+    <Content Include="Views\SaleOrder\SaleOrder.cshtml" />
+    <Content Include="Views\SaleReturn\SaleReturn.cshtml" />
+    <Content Include="Views\SaleGSTInvoice\SaleGSTInvoice.cshtml" />
+    <Content Include="Views\SaleReturnGST\SaleReturnGST.cshtml" />
+    <Content Include="Views\PurchaseGSTInvoice\PurchaseGSTInvoice.cshtml" />
+    <Content Include="Views\PurchaseReturnGST\PurchaseReturnGST.cshtml" />
+    <Content Include="Views\PurchaseRInvoice\PurchaseRInvoice.cshtml" />
+    <Content Include="Views\PurchaseInvoice\PurchaseInvoice.cshtml" />
+    <Content Include="Views\IndividualFormulaFG\IndividualFormulaFG.cshtml" />
+    <Content Include="Views\PCGatePass\Edit.cshtml" />
+    <Content Include="Views\PCGatePass\RegisterGatePass.cshtml" />
+    <Content Include="Views\PCGatePass\ViewGatePass.cshtml" />
+    <Content Include="Views\PCEmployee\Edit.cshtml" />
+    <Content Include="Views\PCEmployee\RegisterPCEmployee.cshtml" />
+    <Content Include="Views\PCEmployee\ViewPCEmployee.cshtml" />
+    <Content Include="Views\GPParties\Edit.cshtml" />
+    <Content Include="Views\GPParties\RegisterGPParties.cshtml" />
+    <Content Include="Views\GPParties\ViewGPParties.cshtml" />
+    <Content Include="Views\InwardGatePassRM\InwardGatePassRM.cshtml" />
+    <Content Include="Views\PurchaseOrder\PurchaseOrder.cshtml" />
+    <Content Include="Views\IReports\DailyGrossProfit.cshtml" />
+    <Content Include="Views\IReports\DailyGrossProfitParty.cshtml" />
+    <Content Include="Views\IReports\DailyPurchase.cshtml" />
+    <Content Include="Views\IReports\DailySale.cshtml" />
+    <Content Include="Views\IReports\GroupWiseProductPurchase.cshtml" />
+    <Content Include="Views\IReports\GroupWiseProductSale.cshtml" />
+    <Content Include="Views\IReports\PurchaseLedgerInvoiceWise.cshtml" />
+    <Content Include="Views\IReports\PartyWiseProductSale.cshtml" />
+    <Content Include="Views\IReports\PartyWisePurchase.cshtml" />
+    <Content Include="Views\IReports\PartyWisePurchaseOverall.cshtml" />
+    <Content Include="Views\IReports\PartyWiseSale.cshtml" />
+    <Content Include="Views\IReports\PartyWiseSaleOverall.cshtml" />
+    <Content Include="Views\IReports\Report.cshtml" />
+    <Content Include="Views\IReports\StockInHand.cshtml" />
+    <Content Include="Views\IReports\StockLedger.cshtml" />
+    <Content Include="Views\PurchaseInvoice\PurchaseInvoice_old2.cshtml" />
+    <Content Include="Views\IReports\SalePurchaseDetailed.cshtml" />
+    <Content Include="Views\IReports\SalePurchaseGeneral.cshtml" />
+    <Content Include="Views\IReports\PartyWiseSaleRecovery.cshtml" />
+    <Content Include="Views\IReports\ProductPurchase.cshtml" />
+    <Content Include="Views\IReports\ProductSale.cshtml" />
+    <Content Include="Views\IReports\PurchaseRate.cshtml" />
+    <Content Include="Views\IReports\ProductPosition.cshtml" />
+    <Content Include="Views\IReports\PurchaseOrderReport.cshtml" />
+    <Content Include="Views\IReports\SaleOrderReport.cshtml" />
+    <Content Include="Views\IReports\SaleLedgerInvoiceWise.cshtml" />
+    <Content Include="Views\IReports\StockLedgerNew.cshtml" />
+    <Content Include="Views\IReports\StockLedgerFinalWeight.cshtml" />
+    <Content Include="Views\IReports\StockLedgerWithOutIssue.cshtml" />
+    <Content Include="Views\IReports\StockInHandDetail.cshtml" />
+    <Content Include="Views\IReports\StockInHandValue.cshtml" />
+    <Content Include="Views\IReports\StockInHandValueAvgRate.cshtml" />
+    <Content Include="Views\IReports\StockInHandValueAvgRateFW.cshtml" />
+    <Content Include="Views\IReports\StockInHandByGroup.cshtml" />
+    <Content Include="Views\IReports\StockInHandByStore.cshtml" />
+    <Content Include="Views\IReports\GstRegister.cshtml" />
+    <Content Include="Views\Reports_Olld\Aging.cshtml" />
+    <Content Include="Views\IndividualFormulaAdjustment\IndividualFormulaAdjustment.cshtml" />
+    <Content Include="Views\IReports\DailyProduction.cshtml" />
+    <Content Include="Views\BardanaType\Edit.cshtml" />
+    <Content Include="Views\BardanaType\RegisterBardanaType.cshtml" />
+    <Content Include="Views\BardanaType\ViewBardanaType.cshtml" />
+    <Content Include="Views\BardanaIssueReceived\BardanaIssueReceived.cshtml" />
+    <Content Include="Views\IReports\BardanaDailyRegister.cshtml" />
+    <Content Include="Views\IReports\BardanaPartyLedger.cshtml" />
+    <Content Include="Views\IReports\BardanaPartyStatus.cshtml" />
+    <Content Include="Views\IReports\BardanaPartyStatus2.cshtml" />
+    <Content Include="Views\IReports\BardanaLedger.cshtml" />
+    <Content Include="Views\InwardGatePassMix\InwardGatePassMix.cshtml" />
+    <Content Include="Views\OutwardGatePassFG\OutwardGatePassFG.cshtml" />
+    <Content Include="Views\OutwardGatePassMix\OutwardGatePassMix.cshtml" />
+    <Content Include="Views\ReturnableOutward\ReturnableOutward.cshtml" />
+    <Content Include="Views\ReturnableInward\ReturnableInward.cshtml" />
+    <Content Include="Views\EmployGatePass\EmployGatePass.cshtml" />
+    <Content Include="Views\GuestGatePass\GuestGatePass.cshtml" />
+    <Content Include="Views\IReports\GatePassRawMaterialPartyWise.cshtml" />
+    <Content Include="Views\IReports\GatePassRawMaterialProductWise.cshtml" />
+    <Content Include="Views\IReports\GatePassMixMaterialPartyWise.cshtml" />
+    <Content Include="Views\IReports\GatePassMixMaterialProductWise.cshtml" />
+    <Content Include="Views\IReports\OutwardGatePassMixPartyWise.cshtml" />
+    <Content Include="Views\IReports\OutwardGatePassMixProductWise.cshtml" />
+    <Content Include="Views\IReports\OutwardGatePassFGPartyWise.cshtml" />
+    <Content Include="Views\IReports\OutwardGatePassFGProductWise.cshtml" />
+    <Content Include="Views\IReports\InOut.cshtml" />
+    <Content Include="Views\IReports\EmployGatePass.cshtml" />
+    <Content Include="Views\Reports\AccountLedger.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\AccountReconciliation.cshtml" />
+    <Content Include="Views\Reports\Aging.cshtml" />
+    <Content Include="Views\Reports\BalanceSheet_Old.cshtml" />
+    <Content Include="Views\Reports\Cashbook.cshtml" />
+    <Content Include="Views\Reports\CashFlow.cshtml" />
+    <Content Include="Views\Reports\Daybook.cshtml" />
+    <Content Include="Views\Reports\DayBookInvoiceDetail.cshtml" />
+    <Content Include="Views\Reports\DayBookRecovered.cshtml" />
+    <Content Include="Views\Reports\DetailTrial.cshtml" />
+    <Content Include="Views\Reports\GroupTrial.cshtml" />
+    <Content Include="Views\Reports\Journalbook.cshtml" />
+    <Content Include="Views\Reports\PartyLedger.cshtml" />
+    <Content Include="Views\Reports\PartyLedgerSummary.cshtml" />
+    <Content Include="Views\Reports\ReceivablePayable.cshtml" />
+    <Content Include="Views\Reports\Report.cshtml" />
+    <Content Include="Views\Reports\SixColumnTrial.cshtml" />
+    <Content Include="Views\Reports\TrialBalance.cshtml" />
+    <Content Include="Views\Reports\TrialBalanceBetweenDates.cshtml" />
+    <Content Include="Views\Accounts\AccountCoding.cshtml" />
+    <Content Include="Views\Accounts\DeleteCoding.cshtml" />
+    <Content Include="Views\Accounts\OpeningBalances.cshtml" />
+    <Content Include="Views\Accounts\OpeningBalances2.cshtml" />
+    <Content Include="Views\Shared\_AccountTree.cshtml" />
+    <Content Include="Views\BankCJVoucher\BankCJVoucher.cshtml" />
+    <Content Include="Views\BankDJVoucher\BankDJVoucher.cshtml" />
+    <Content Include="Views\CVoucher\CVoucher.cshtml" />
+    <Content Include="Views\DVoucher\DVoucher.cshtml" />
+    <Content Include="Views\JVoucher\JVoucher.cshtml" />
+    <Content Include="Views\PurchaseJVoucher\PurchaseJVoucher.cshtml" />
+    <Content Include="Views\SaleJVoucher\SaleJVoucher.cshtml" />
+    <Content Include="Views\Reports\BalanceSheet.cshtml" />
+    <Content Include="Views\Reports\ProfitLoss.cshtml" />
+    <Content Include="Views\Reports\Receivable.cshtml" />
+    <Content Include="Views\GRN\GRN.cshtml" />
+    <Content Include="DataSets\igpds.xsc">
+      <DependentUpon>igpds.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\igpds.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>igpds.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\igpds.xss">
+      <DependentUpon>igpds.xsd</DependentUpon>
+    </Content>
+    <Content Include="Views\ProductsOpening\OpeningStock_oldd.cshtml" />
+    <Content Include="Views\DetailTransfer\DetailTransfer.cshtml" />
+    <Content Include="Views\Accounts\CreditLimit.cshtml" />
+    <Content Include="Views\IReports\GPRMPartyProduct.cshtml" />
+    <Content Include="Views\PurchaseInvoice\PurchaseInvoice - Copy.cshtml" />
+    <Content Include="Views\Reports\GroupTrial_WA.cshtml" />
+    <Content Include="Views\dbBackup\DbBackup.cshtml" />
+    <Content Include="Views\Reports\Log.cshtml" />
+    <Content Include="Views\Shared\_Verify.cshtml" />
+    <Content Include="Views\Reports\GRNBetweenDate.cshtml" />
+    <Content Include="Views\Shared\_Layout - 4-4-24.cshtml" />
+    <Content Include="Views\Shared\_AdminLTELayout.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_AdminLTENavbar.cshtml" />
+    <Content Include="Views\Shared\_AdminLTEAside.cshtml" />
+    <Content Include="Views\IssueInvoice\IssueInvoice.cshtml" />
+    <Content Include="Views\Receive\ReceiveInvoice.cshtml" />
+    <Content Include="Views\IReports\DailyProcess.cshtml" />
+    <Content Include="Views\FODVoucher\FODVoucher.cshtml" />
+    <Content Include="Views\FOCVoucher\FOCVoucher.cshtml" />
+    <Content Include="Views\IReports\PendingPOReport.cshtml" />
+    <Content Include="Views\IReports\PendingSOReport.cshtml" />
+    <Content Include="Views\IReports\PendingDCReport.cshtml" />
+    <Content Include="Views\FOJVoucher\FOJVoucher.cshtml" />
+    <None Include="Views\User\Registeration.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\RegisterUser.cshtml" />
+    <Content Include="Views\User\ViewUser.cshtml" />
+    <Content Include="Views\AccountsLevel\AddLevel.cshtml" />
+    <Content Include="DataSets\dsCoa.xsc">
+      <DependentUpon>dsCoa.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSets\dsAccountLedger.xsc">
+      <DependentUpon>dsAccountLedger.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsAccountLedger.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsAccountLedger.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsAccountLedger.xss">
+      <DependentUpon>dsAccountLedger.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\dsCoa.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsCoa.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\dsCoa.xss">
+      <DependentUpon>dsCoa.xsd</DependentUpon>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\User\OldLogin.cshtml" />
+    <Content Include="Views\Home\OldIndex.cshtml" />
+    <Content Include="Views\ControlAccounts\Add.cshtml" />
+    <Content Include="Views\Reports_Olld\AccountLedger.cshtml" />
+    <Content Include="Views\Reports_Olld\Cashbook.cshtml" />
+    <Content Include="Views\Reports_Olld\DetailTrial.cshtml" />
+    <Content Include="Views\Reports_Olld\GroupTrial.cshtml" />
+    <Content Include="Views\Reports_Olld\Report.cshtml" />
+    <Content Include="Views\Reports_Olld\SixColumnTrial.cshtml" />
+    <Content Include="Views\Reports_Olld\TrialBalance.cshtml" />
+    <Content Include="Views\Reports_Olld\CashFlow.cshtml" />
+    <Content Include="Views\VouchersVerification\Verify.cshtml" />
+    <Content Include="Views\VouchersVerification\VoucherVerify.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="IReports\rptArrivalSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptArrivalSummary.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptBardanaDaily.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptBardanaDaily.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptBardanaLedger.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptBardanaLedger.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptBardanaPartyWise.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptBardanaPartyWise.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptBardanaSummaryPartyWise.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptBardanaSummaryPartyWise.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptDailyGrossProfit.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDailyGrossProfit.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptDailyGrossProfit2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDailyGrossProfit2.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptDailyProduction.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDailyProduction.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptDailyPurchase.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDailyPurchase.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptDailySale.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDailySale.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptEmployGatePass.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptEmployGatePass.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptGatePassCommercial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGatePassCommercial.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptGatePassFinish.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGatePassFinish.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptGRNBetweenDateReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGRNBetweenDateReport.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptGroupWiseProductPurchase.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGroupWiseProductPurchase.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptGroupWiseProductSale.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGroupWiseProductSale.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptGstInvoice.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGstInvoice.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptGstRegister.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGstRegister.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptIndividualFormulaRunReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptIndividualFormulaRunReport.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptInvoice2Cash.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvoice2Cash.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptInvoice2CashSub.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvoice2CashSub.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptInvoicePur2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvoicePur2.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptInvoiceSaleNew.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvoiceSaleNew.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptInvoiceSaleNew2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvoiceSaleNew2.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptInWardGatePass.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInWardGatePass.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptInwardMixed.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInwardMixed.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptInWardOutRetunable.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInWardOutRetunable.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptOutWardGatePassFinish.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptOutWardGatePassFinish.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptOutWardGatePassFinishP.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptOutWardGatePassFinishP.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptOutwardMixedNew.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptOutwardMixedNew.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptOverLimit.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptOverLimit.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPartyLedger.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyLedger.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPartyLedgerNew.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyLedgerNew.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPartyPurchase.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyPurchase.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPartySale.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartySale.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPartyWiseProductPurchase.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyWiseProductPurchase.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPartyWiseProductSale.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyWiseProductSale.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPartyWisePurchase.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyWisePurchase.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPartyWiseSale.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyWiseSale.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptProductList.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptProductList.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptProductListGroupWise.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptProductListGroupWise.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPendingPOReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPendingPOReport.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPurchaseOrder.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurchaseOrder.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPurchaseRateReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurchaseRateReport.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPurOrder2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurOrder2.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPurOrder4.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurOrder4.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPurOrder5.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurOrder5.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPurSale.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurSale.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPurSaleDetailed.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurSaleDetailed.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptRecovery.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptRecovery.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptReportMixedProductWise.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptReportMixedProductWise.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptreportPartyWise.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptreportPartyWise.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptSaleBardanaPurchi.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptSaleBardanaPurchi.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptsaleOrder.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptsaleOrder.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptPurOrder.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurOrder.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptStockInHand.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptStockInHand.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptStockInHand1.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptStockInHand1.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptStockInHandValueWise.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptStockInHandValueWise.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptStockLedger.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptStockLedger.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptStockLedgerByQty.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptStockLedgerByQty.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptStockLedgerByWeight.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptStockLedgerByWeight.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptStoreWiseStockInhand.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptStoreWiseStockInhand.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptGRNBetweenDate.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGRNBetweenDate.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\rptVoucherReceipt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptVoucherReceipt1.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\StockInHand.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>StockInHand.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IReports\StockInHandwv.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>StockInHandwv.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptOutwardGateMixedNew.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptOutwardGateMixedNew.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptPurOrder3.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPurOrder3.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptVoucherLog.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptVoucherLog.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptLogInsert.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptLogInsert.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptAccountLedger.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptAccountLedger1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptAccountsReconciliation.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptAccountsReconciliation.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptAging.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptAging1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptBalancesheet.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptBalancesheet.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptBalancesheet2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptBalancesheet2.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptCashBook2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptCashBook2.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptCashFlow.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptCashFlow.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptDayBook.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDayBook.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptCashBook.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptCashBook.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptChartofaccount.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptChartofaccount1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptDayBookInvDetail.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDayBookInvDetail.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptDetailTrial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptDetailTrial.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGatePassEmployee.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGatePassEmployee1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGeneralReceivable.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGeneralReceivable.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGroupTrialOld2343.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGroupTrialOld2343.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGroupTrial2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGroupTrial2.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGroupTrial22.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGroupTrial22.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGroupTrial%28Old%29.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGroupTrial%28Old%29.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptGroupTrial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptGroupTrial.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptInvoicePur2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvoicePur21.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptJournalBook.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptJournalBook1.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptJVReceipt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptJVReceipt1.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptPartyLedger.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyLedger.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptPartyLedgerNew.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyLedgerNew.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptPartyLedgerSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptPartyLedgerSummary.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptProfitAndLoss2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptProfitAndLoss21.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptProfitLoss.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptProfitLoss.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptProfitLoss2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptProfitLoss2.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptRecPay.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptRecPay1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptSixColumnTrial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptSixColumnTrial.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptTrialBalance.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptTrialBalance.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptTrialBalance2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptTrialBalance2.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptTrialBalanceBetween.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptTrialBalanceBetween.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptVoucherReceipt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptVoucherReceipt1.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>4983</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:1313/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

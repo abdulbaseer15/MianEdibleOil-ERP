@@ -1,0 +1,60 @@
+﻿@model  List<ApnaAccountWeb.Models.Account>
+<style>
+    .collapsee {
+        width: 15px;
+        background-image: url('../Content/Images/minus-32.png');
+        background-repeat: no-repeat;
+        background-position: -36px -17px;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .expand {
+        width: 15px;
+        background-image: url('../Content/Images/plus-32.png');
+        background-repeat: no-repeat;
+        background-position: -50px -17px;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .treeview ul {
+        font: 14px Arial,Sans-Serif;
+        margin: 0px;
+        padding-left: 17px;
+        list-style: none;
+    }
+    .treeview > li > a {
+        font-weight: bold;
+    }
+    .treeview li a {
+        padding: 4px;
+        font-size: 12px;
+        display: inline-block;
+        width: auto;
+    }
+    .treeclass{
+    }
+</style>
+<head>
+    <title></title>
+    @*<script src="@Url.Content("~/Scripts/jquery-1.10.2.js")"></script>*@
+</head>
+    @*<div style="border:solid 1px black;width:200px; padding:10px; background-color:#FAFAFA">*@
+<div class=" treeview">
+            @if (Model != null && Model.Count() > 0)
+        {
+        <ul>
+            @TreeView.GetTreeView(Model, Model.FirstOrDefault().ParentId)
+        </ul>
+        }
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".treeview li>ul").css('display', 'none');
+        $(".collapsible").click(function (e) {
+            e.preventDefault();
+            $(this).toggleClass("collapsee expand");
+            $(this).closest('li').children('ul').slideToggle();
+        });
+    });
+</script>

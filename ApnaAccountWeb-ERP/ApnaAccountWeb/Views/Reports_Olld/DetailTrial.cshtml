@@ -1,0 +1,141 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script> 
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    $(document).ready(function () {
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        $('#dtpDatefrom').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#dtpDatefrom').datepicker('setDate', 'now');
+        $('#dtpDateto').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#dtpDateto').datepicker('setDate', 'now');
+        $('#ddlTitle').change(function () {
+            var selectedVal = $('#ddlTitle option:selected').attr('value');
+            $('#txtAccCode').val(selectedVal);
+            var e = document.getElementById("ddlTitle");
+            var title = e.options[e.selectedIndex].text;
+            $('#title').val(title);
+        });
+        $('#txtAccCode').keypress(function (e) {
+            debugger;
+            if (e.which == 13) {
+                $('#myModal').modal('show');
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                $('#tblPopup tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtAccCode').val($tds[0].innerText);
+                    $('#ddlTitle').val($tds[0].innerText);
+                    $('#ddlTitle').focus();
+                    $('#myModal').modal('hide');
+                });
+            }
+        });
+    });
+    function ViewClicked() {
+         var excel = "No";
+        var dtpDateto = $('#dtpDateto').val();
+        var supres = "";
+        if ($('#sz').is(":checked")) {
+            supres = "Yes";
+        }
+        else {
+            supres = "No";
+        }
+        var rtype = $('#rtype').val();
+        var string = "rtype=" + rtype + "&dtpDateto=" + dtpDateto + "" + "&excel=" + excel + "&title=" + supres + "";
+        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+    function ExportExcel() {
+        var excel = "Yes";
+        var dtpDateto = $('#dtpDateto').val();
+        var supres = "";
+        if ($('#sz').is(":checked")) {
+            supres = "Yes";
+        }
+        else {
+            supres = "No";
+        }
+        var rtype = $('#rtype').val();
+        var string = "rtype=" + rtype + "&dtpDateto=" + dtpDateto + "" + "&excel=" + excel + "&title=" + supres + "";
+        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+</script>
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3">
+            </div>
+         <div class="span5">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Detail Trial Report</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal" >
+                 <input type="hidden" id="rtype" name="rtype" value="rptDetailTrial" />
+                  <input type="hidden" id="title" name="title" />
+                  <div class="control-group">
+                <label class="control-label">To Date:</label>
+                <div class="controls">
+                  <input type="text" class="span11 datepicker" id="dtpDateto" name="dtpDateto" />
+                </div>
+              </div>
+                 <div class="control-group">
+                <div class="controls">
+                  <label>
+                    <input type="checkbox" class="checkbox" name="sz" id="sz" value="Yes" />
+                    Suppress Zero</label>
+                </div>
+                    </div>
+              <div class="form-actions">
+                <input type="button" value="View" id="btnSearch" class="btn btn-success" onclick='ViewClicked();'/>
+                  <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-success" style="background-color: #062f70" onclick='ExportExcel();'>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>
+               

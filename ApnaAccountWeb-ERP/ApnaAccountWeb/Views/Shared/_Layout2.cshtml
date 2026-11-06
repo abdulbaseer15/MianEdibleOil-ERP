@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>ApnaAccount</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+@*<meta name="description" content="Different Description" />
+<meta name="keywords" content="different, keywords" />*@
+<link rel="stylesheet" href="~/Content/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/Content/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="~/Content/css/fullcalendar.css" />
+<link rel="stylesheet" href="~/Content/css/maruti-style.css" />
+<link rel="stylesheet" href="~/Content/css/maruti-media.css" class="skin-color" />
+ <link rel="icon" type="image/png" href="~/Content/img/favicon-a.png" />  
+    <script src="~/Content/Submenu/js/jquery-1.9.1.min.js"></script>
+    <link href="~/Content/Submenu/styles.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+   <script src="script.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.dropdown ul').width(0);
+            $('.dropdown').hover(
+            function () {
+                $(".sub-menu").toggle("slide");
+                //$(this).children('.sub-menu').toggle("slide", { direction: "left" }, 1000);
+                //$(this).children('.sub-menu').slideDown(200);
+                //$(this).children('.sub-menu').show("slide", { direction: "left" }, 1000);
+            },
+            function () {
+                $(this).children('.sub-menu').slideUp(100);
+            });
+    }); // end ready
+        </script>
+</head>
+<body>
+<div id="header">
+  @*<h1><a href="@Url.Action("Index","Home")">ApnaAccount</a></h1>*@
+    <img src="~/Content/img/logo.png" width="150" height="150" alt="ApnaAccount" />
+   @* <h3 style="color:white; padding-left:1em;padding-top:0.3em;">ApnaAccount</h3>*@
+</div>
+<div class="btn-group rightzero"> <a class="top_message tip-left" title="Manage Files"><i class="icon-file"></i></a> <a class="top_message tip-bottom" title="Manage Users"><i class="icon-user"></i></a> <a class="top_message tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a> <a class="top_message tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a> </div>
+<div id="user-nav" class="navbar navbar-inverse">
+  <ul class="nav">
+     @* <li><img src="~/Content/img/urduapna.png" width="100" height="100" alt="ApnaAccount" /></li>
+      *@
+      <li style="float:right"><a title="" href="@Url.Action("Login", "User")"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
+  </ul>
+</div>
+    @{
+        string dbcon = Convert.ToString(Session["con"]);
+        ApnaAccountWeb.ViewModels.DbConection obj = new ApnaAccountWeb.ViewModels.DbConection();
+        string condb = obj.Connect(dbcon);
+        ApnaAccountWeb.Models.ApnaAccountEntities db = new ApnaAccountWeb.Models.ApnaAccountEntities(condb);
+        short userid = Convert.ToInt16(Session["userid"]);
+        List<int> list = new List<int>();
+        var lstuserrole = db.UserRights.Where(x => x.Userid == userid);
+        if (lstuserrole != null)
+        {
+            foreach (var item in lstuserrole)
+            {
+                list.Add(item.Selected);
+            }
+        }
+<div id="sidebar">
+    <div id='cssmenu'>
+<ul>
+   <li><a href='#'><span>Home</span></a></li>
+   <li class='active has-sub'><a href='#'><span>Products</span></a>
+      <ul>
+         <li class='has-sub'><a href='#'><span>Product 1</span></a>
+            <ul>
+               <li><a href='#'><span>Sub Product</span></a></li>
+               <li class='last'><a href='#'><span>Sub Product</span></a></li>
+            </ul>
+         </li>
+         <li class='has-sub'><a href='#'><span>Product 2</span></a>
+            <ul>
+               <li><a href='#'><span>Sub Product</span></a></li>
+               <li class='last'><a href='#'><span>Sub Product</span></a></li>
+            </ul>
+         </li>
+      </ul>
+   </li>
+   <li><a href='#'><span>About</span></a></li>
+   <li class='last'><a href='#'><span>Contact</span></a></li>
+</ul>
+</div>
+     @* <div id='cssmenu'>
+<ul>
+   <li><a href='#'><span>Home</span></a></li>
+   <li class='active has-sub'><a href='#'><span>Products</span></a>
+      <ul>
+         <li class='has-sub'><a href='#'><span>Product 1</span></a>
+            <ul>
+               <li><a href='#'><span>Sub Product</span></a></li>
+               <li class='last'><a href='#'><span>Sub Product</span></a></li>
+            </ul>
+         </li>
+         <li class='has-sub'><a href='#'><span>Product 2</span></a>
+            <ul>
+               <li><a href='#'><span>Sub Product</span></a></li>
+               <li class='last'><a href='#'><span>Sub Product</span></a></li>
+            </ul>
+         </li>
+      </ul>
+   </li>
+   <li><a href='#'><span>About</span></a></li>
+   <li class='last'><a href='#'><span>Contact</span></a></li>
+</ul>
+</div>
+    <a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a><ul>
+    <li class="active"><a href="@Url.Action("Index", "Home")"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Coding</span> <span class="label label-important"></span></a>
+      <ul>
+         @if(list.Contains(1))
+         {
+        <li><a href="@Url.Action("AccountCoding", "Accounts")">Accounts Coding</a></li>
+         }
+            @if(list.Contains(2))
+         {
+            <li><a href="@Url.Action("OpeningBalances", "Accounts")">Accounts Opening Balances</a></li>
+         }
+           @if(list.Contains(3))
+         {
+        <li><a href="@Url.Action("RegisterCity", "City")">City Coding</a></li>
+         }
+          <li class='has-sub'><a href='#'><span>Product 2</span></a>
+            <ul>
+               <li><a href='#'><span>Sub Product</span></a></li>
+               <li class='last'><a href='#'><span>Sub Product</span></a></li>
+            </ul>
+         </li>
+      </ul>
+    </li>
+     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Accounts</span> <span class="label label-important"></span></a>
+      <ul>
+          @if(list.Contains(4))
+         {
+          <li><a href="@Url.Action("CVoucher", "CVoucher")">Cash Receipt / Credit Voucher</a></li>
+          }
+           @if(list.Contains(5))
+         {
+              <li><a href="@Url.Action("DVoucher", "DVoucher")">Cash Payment / Debit Voucher</a></li>
+           }
+           @if(list.Contains(6))
+         {
+               <li><a href="@Url.Action("JVoucher", "JVoucher")">Journal Voucher</a></li>
+           }
+          @if(list.Contains(7))
+         {
+               <li><a href="@Url.Action("PurchaseJVoucher", "PurchaseJVoucher")">Purchase Journal Voucher</a></li>
+          }
+           @if(list.Contains(8))
+         {
+              <li><a href="@Url.Action("SaleJVoucher", "SaleJVoucher")">Sale Journal Voucher</a></li>
+           }
+           @if(list.Contains(9))
+         {
+               <li><a href="@Url.Action("BankCJVoucher", "BankCJVoucher")">Bank Credit Voucher</a></li>
+           }
+           @if(list.Contains(10))
+         {
+               <li><a href="@Url.Action("BankDJVoucher", "BankDJVoucher")">Bank Debit Voucher</a></li>
+           }
+           @if(list.Contains(11))
+         {
+               <li><a href="@Url.Action("Verify", "VouchersVerification")">Vouchers Verification</a></li>
+           }
+               </ul>
+    </li>
+     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Reports</span> <span class="label label-important"></span></a>
+      <ul>
+           @if(list.Contains(12))
+         {
+        <li><a href="@Url.Action("Report", "Reports", new { rtype = "ChartofAccount" })" target="_blank">Chart of Accounts</a></li>       
+         }
+           @if(list.Contains(13))
+         {
+          <li><a href="@Url.Action("AccountLedger", "Reports")">Account Ledger</a></li>
+           }
+           @if(list.Contains(14))
+         {
+          <li><a href="@Url.Action("Cashbook", "Reports")">Cash Book</a></li>
+           }
+           @if(list.Contains(19))
+         {
+          <li><a href="@Url.Action("CashFlow", "Reports")">Cash Flow</a></li>
+          }
+           <li class="submenu dropdown"> <a href="#"><span style="font-size:small">Trial Balances</span> <span class="label label-important"></span></a>
+                    <ul class="sub-menu" style="display: none;">
+                       @if(list.Contains(15))
+         {
+          <li><a href="@Url.Action("TrialBalance", "Reports")">Short Trial Balance</a></li>
+            }
+          @if(list.Contains(16))
+         {
+          <li><a href="@Url.Action("DetailTrial", "Reports")">Detail Trial</a></li>
+          }
+           @if(list.Contains(17))
+         {
+          <li><a href="@Url.Action("GroupTrial", "Reports")">Group Trial</a></li>
+           }
+           @if(list.Contains(18))
+         {
+          <li><a href="@Url.Action("SixColumnTrial", "Reports")">Six Column Trial</a></li>
+           }  
+<li><a href="@Url.Action("TrialBalanceBetweenDates", "Reports")">Trial Balance Between Dates</a></li>
+                    </ul>
+                </li>
+      </ul>
+    </li>
+   <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>System</span> <span class="label label-important"></span></a>
+      <ul>
+          @if(list.Contains(20))
+         {
+        <li><a href="@Url.Action("RegisterUser", "User")">Create User</a></li>
+          }
+           @if(list.Contains(21))
+         {
+          <li><a href="@Url.Action("UserRights", "User")">User Rights</a></li>
+           }
+          @if(list.Contains(22))
+         {
+          <li><a href="@Url.Action("AddLevel", "AccountsLevel")">Create Account Level</a></li>
+          }
+          @if(list.Contains(23))
+         {
+          <li><a href="@Url.Action("DeleteCoding", "Accounts")">Accounts Master Deletion</a></li>
+          }
+           @if(list.Contains(24))
+         {
+          <li><a href="@Url.Action("Add", "ControlAccounts")">Control Accounts</a></li>
+         }
+          @if (Convert.ToString(Session["LoggedUserID"]) == "1")
+          {
+<li><a href="@Url.Action("RequestList", "Request")">Request List</a></li>
+          }
+      </ul>
+    </li>
+  </ul>*@
+</div>
+        }
+                 @RenderBody()
+<script src="~/Content/js/bootstrap.min.js"></script> 
+<script src="~/Content/js/maruti.js"></script> 
+<script src="~/Content/js/maruti.dashboard.js"></script> 
+<script type="text/javascript">
+    $(".test").hover(function () {
+        $(".test1").show();
+    });
+  function goPage (newURL) {
+      if (newURL != "") {
+          if (newURL == "-" ) {
+              resetMenu();            
+          } 
+          else {  
+            document.location.href = newURL;
+          }
+      }
+  }
+function resetMenu() {
+   document.gomenu.selector.selectedIndex = 2;
+}
+</script>
+</body>
+</html>

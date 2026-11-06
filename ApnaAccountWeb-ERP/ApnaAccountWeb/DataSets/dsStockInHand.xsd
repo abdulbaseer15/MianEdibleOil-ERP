@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsStockInHand" targetNamespace="http://tempuri.org/dsStockInHand.xsd" xmlns:mstns="http://tempuri.org/dsStockInHand.xsd" xmlns="http://tempuri.org/dsStockInHand.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsStockInHand" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsStockInHand" msprop:Generator_UserDSName="dsStockInHand">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ado" msprop:Generator_TableClassName="adoDataTable" msprop:Generator_TableVarName="tableado" msprop:Generator_TablePropName="ado" msprop:Generator_RowDeletingName="adoRowDeleting" msprop:Generator_RowChangingName="adoRowChanging" msprop:Generator_RowEvHandlerName="adoRowChangeEventHandler" msprop:Generator_RowDeletedName="adoRowDeleted" msprop:Generator_UserTableName="ado" msprop:Generator_RowChangedName="adoRowChanged" msprop:Generator_RowEvArgName="adoRowChangeEvent" msprop:Generator_RowClassName="adoRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ProductID" msprop:Generator_ColumnVarNameInTable="columnProductID" msprop:Generator_ColumnPropNameInRow="ProductID" msprop:Generator_ColumnPropNameInTable="ProductIDColumn" msprop:Generator_UserColumnName="ProductID" type="xs:int" minOccurs="0" />
+              <xs:element name="ProductTitle" msprop:Generator_ColumnVarNameInTable="columnProductTitle" msprop:Generator_ColumnPropNameInRow="ProductTitle" msprop:Generator_ColumnPropNameInTable="ProductTitleColumn" msprop:Generator_UserColumnName="ProductTitle" type="xs:string" minOccurs="0" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" type="xs:string" minOccurs="0" />
+              <xs:element name="opening" msprop:Generator_ColumnVarNameInTable="columnopening" msprop:Generator_ColumnPropNameInRow="opening" msprop:Generator_ColumnPropNameInTable="openingColumn" msprop:Generator_UserColumnName="opening" type="xs:decimal" minOccurs="0" />
+              <xs:element name="openingwt" msprop:Generator_ColumnVarNameInTable="columnopeningwt" msprop:Generator_ColumnPropNameInRow="openingwt" msprop:Generator_ColumnPropNameInTable="openingwtColumn" msprop:Generator_UserColumnName="openingwt" type="xs:decimal" minOccurs="0" />
+              <xs:element name="purchase" msprop:Generator_ColumnVarNameInTable="columnpurchase" msprop:Generator_ColumnPropNameInRow="purchase" msprop:Generator_ColumnPropNameInTable="purchaseColumn" msprop:Generator_UserColumnName="purchase" type="xs:decimal" minOccurs="0" />
+              <xs:element name="PurchaseWt" msprop:Generator_ColumnVarNameInTable="columnPurchaseWt" msprop:Generator_ColumnPropNameInRow="PurchaseWt" msprop:Generator_ColumnPropNameInTable="PurchaseWtColumn" msprop:Generator_UserColumnName="PurchaseWt" type="xs:decimal" minOccurs="0" />
+              <xs:element name="issue" msprop:Generator_ColumnVarNameInTable="columnissue" msprop:Generator_ColumnPropNameInRow="issue" msprop:Generator_ColumnPropNameInTable="issueColumn" msprop:Generator_UserColumnName="issue" type="xs:decimal" minOccurs="0" />
+              <xs:element name="issueWt" msprop:Generator_ColumnVarNameInTable="columnissueWt" msprop:Generator_ColumnPropNameInRow="issueWt" msprop:Generator_ColumnPropNameInTable="issueWtColumn" msprop:Generator_UserColumnName="issueWt" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

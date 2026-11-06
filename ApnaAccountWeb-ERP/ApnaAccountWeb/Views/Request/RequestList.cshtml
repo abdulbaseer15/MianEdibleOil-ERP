@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ApnaAccountWeb.Models.Contact>
+<link rel="stylesheet" href="~/Content/css/uniform.css" />
+<link rel="stylesheet" href="~/Content/css/select2.css" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+       alert("@TempData["message"]");
+    </script>
+}
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="widget-box">
+          <div class="widget-title">
+             <span class="icon"><i class="icon-th"></i></span> 
+            <h5>Requests List</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered data-table">
+              <thead>
+                <tr>
+                  <th>Serial</th>
+                  <th>Business Name</th>
+                    <th>Phone</th>
+                  <th>Cell</th>
+                    <th>Email</th>
+                  <th>Contact Person</th>
+                  <th>Contact Person Cell</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                  @{
+                  int i=1;
+                  }
+                @foreach (var item in Model) {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Cell)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.ContactPerson)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.ContactPersonCell)</td>
+                                            <td>@Html.ActionLink("Details", "Details", new { id=@item.Id })</td>
+                                        </tr>
+                    i++;
+                                        }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="~/Content/js/jquery.min.js"></script> 
+<script src="~/Content/js/jquery.ui.custom.js"></script>
+<script src="~/Content/js/jquery.uniform.js"></script> 
+<script src="~/Content/js/select2.min.js"></script> 
+<script src="~/Content/js/jquery.dataTables.min.js"></script> 
+<script src="~/Content/js/maruti.js"></script>
+<script src="~/Content/js/maruti.tables.js"></script>

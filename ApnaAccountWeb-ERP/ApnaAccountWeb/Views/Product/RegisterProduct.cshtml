@@ -1,0 +1,656 @@
+﻿@model ApnaAccountWeb.Models.Product
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function () {
+        $('#ProductName').focus();
+        $('#ddlTitlesup').change(function () {
+            var selectedVal = $('#ddlTitlesup option:selected').attr('value');
+            $('#StrCol1').val(selectedVal);
+        });
+        $('#ddlTitlepur').change(function () {
+            var selectedVal = $('#ddlTitlepur option:selected').attr('value');
+            $('#StrCol2').val(selectedVal);
+        });
+        $('#ddlTitlesupdis').change(function () {
+            var selectedVal = $('#ddlTitlesupdis option:selected').attr('value');
+            $('#StrCol3').val(selectedVal);
+        });
+       
+        //$('input').keydown(function (e) {
+        //    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+        //    if (key == 13) {
+        //        e.preventDefault();
+        //        var inputs = $(this).closest('form').find(':input:visible');
+        //        inputs.eq(inputs.index(this) + 1).focus();
+        //    }
+        //});
+        //$('#ddlpgroup').keypress(function (e) {
+        //    if (e.which == 13) {
+        //        $('#ddlmaker').focus();
+        //    }
+        //});
+        //$('#ddlmaker').keypress(function (e) {
+        //    if (e.which == 13) {
+        //        $('#SMW').focus();
+        //    }
+        //});
+        //$('input, select').keydown(function (e) {
+        //    var key = e.which || e.keyCode;
+        //    if (key == 13 ) { // Enter key
+        //        e.preventDefault();
+        //        var inputs = $(this).closest('form').find(':input:visible');
+        //        inputs.eq(inputs.index(this) + 1).focus();
+        //    }
+        //});
+        $('input, select, textarea').keydown(function (e) {
+            var key = e.which || e.keyCode;
+            debugger;
+            if (key == 13) { // Enter key
+                e.preventDefault();
+                var inputs = $(this).closest('form').find(':input:visible');
+                var currentInput = inputs.eq(inputs.index(this));
+                debugger;
+                if (currentInput.is('button') || currentInput.is(':submit')) {
+                    // If the current element is a button (Save button), trigger the click event
+                    currentInput.click();
+                } else {
+                    // Move focus to the next visible input
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            }
+        });
+
+
+        $('#ddlpgroup').keydown(function (e) {
+            if (e.which == 13) { // Enter key
+                e.preventDefault();
+                $('#ddlmaker').focus();
+            }
+        });
+
+        $('#ddlmaker').keydown(function (e) {
+            if (e.which == 13) { // Enter key
+                e.preventDefault();
+                $('#SMW').focus();
+            }
+        });
+        $('#Remarks').keydown(function (e) {
+            if (e.which == 13) { // Enter key
+                e.preventDefault();
+                $('#btnSave').focus();
+            }
+        });
+        // function submitForm() {
+        $("#btnSave").click(function(){
+            // $("#btnSave").button().click(function(){
+            $("#btnSave").prop('disabled', true);
+            debugger;
+            if ($('#ProductName').val() == "" || $('#ProductName').val() == null) {
+                alert("Product Name can't be Null");
+                $("#btnSave").prop('disabled', false);
+                $('#ProductName').focus();
+                return;
+            }
+            if ($('#ddlpgroup').val() == "" || $('#ddlpgroup').val() == null) {
+                alert("Product Group can't be Null");
+                $("#btnSave").prop('disabled', false);
+                $('#ddlpgroup').focus();
+                return;
+            }
+            if ($('#ddlmaker').val() == "" || $('#ddlmaker').val() == null) {
+                alert("Product Sub Group can't be Null");
+                $("#btnSave").prop('disabled', false);
+                $('#ddlmaker').focus();
+                return;
+            }
+
+            if ($('#SMW').val() == "" || $('#SMW').val() == null) {
+                alert("Sale Mond Weight  can't be Null");
+                $("#btnSave").prop('disabled', false);
+                $('#SMW').focus();
+                return;
+            }
+            if ($('#PMW').val() == "" || $('#PMW').val() == null) {
+                alert("Purchase Mond Weight  can't be Null");
+                $("#btnSave").prop('disabled', false);
+                $('#PMW').focus();
+                return;
+            }
+            //if ($('#StWt').val() == "" || $('#StWt').val() == null) {
+            //    alert("Weight Per Unit  can't be Null");
+            //    $('#StWt').focus();
+            //    return;
+            //}
+            //if ($('#OpeningQty').val() == "" || $('#OpeningQty').val() == null) {
+            //    alert("No of Pieces/Carton  can't be Null");
+            //    $('#OpeningQty').focus();
+            //    return;
+            //}
+            if ($('#PurchasePrice').val() == "" || $('#PurchasePrice').val() == null) {
+                alert("Purchase Price  can't be Null");
+                $("#btnSave").prop('disabled', false);
+                $('#PurchasePrice').focus();
+                return;
+            }
+            if ($('#SalePrice').val() == "" || $('#SalePrice').val() == null) {
+                alert("Sale Price  can't be Null");
+                $("#btnSave").prop('disabled', false);
+                $('#SalePrice').focus();
+                return;
+            }
+
+            if ($('#RateCalc1').val() == "" || $('#RateCalc1').val() == null) {
+                alert("Rate Calculation 1 can't be Null");
+                $("#btnSave").prop('disabled', false);
+                $('#RateCalc1').focus();
+                return;
+            }
+
+            if ($('#ReorderLevel').val() == "" || $('#ReorderLevel').val() == null) {
+                $('#ReorderLevel').val(0);
+            }
+            if ($('#PurchasePrice').val() == "" || $('#PurchasePrice').val() == null) {
+                $('#PurchasePrice').val(0);
+            }
+
+            SaveProduct();
+            $('#frm1').submit();
+       // }
+        });
+
+
+        function SaveProduct() {
+            debugger;
+            var ProductName = $('#ProductName').val();
+            var ProductID = $('#ProductID').val();
+            if (ProductName == "" || ProductName == null) {
+                alert("ProductName can not be null");
+            }
+            else {
+                var GroupId = $("#ddlpgroup option:selected").attr('value');
+                var SubGroup = $("#ddlmaker option:selected").attr('value');
+                // var StWt = $("#StWt").val();
+                var SMW = $("#SMW").val();
+                var PMW = $("#PMW").val();
+                var GstRate = $("#GstRate").val();
+                //  var GstRate = $("#GstRate").val();
+                //  var UnitId = $("#ddlpunit option:selected").attr('value');
+                var PurchasePrice = $("#PurchasePrice").val();
+                var SalePrice = $("#SalePrice").val();
+                var Reorder = $("#ReorderLevel").val();
+                var RateCalc1 = $("#RateCalc1 option:selected").text();
+                var StrCol3 = $("#ddlTitlesupdis option:selected").attr('value');
+                var StrCol1 = $("#ddlTitlesup option:selected").attr('value');
+                var StrCol2 = $("#ddlTitlepur option:selected").attr('value');
+                var Remarks = $("#Remarks").val();
+                // var GstRate = $("#GstRate").val();
+                debugger;
+                if ((SalePrice == "" || SalePrice == null)) {
+                    alert("Sale Price Can't Be Null...");
+                    $('#SalePrice').focus();
+                    return;
+                }
+                else {
+                    var rowCount = $('#mytable tbody tr').length;
+                    var answer = confirm("Do You really want to Save this?");
+                    if (answer) {
+                        var detail = [];
+                        //if (rowCount >= 0) {
+
+                        //    $('#mytable tbody tr').each(function () {
+                        //        var $row = $(this), $tds = $row.find("td");
+                        //        detail.push({
+                        //            Barcode: $tds[0].innerText,
+                        //        });
+
+                        //    });
+                        //}
+                        var model = {
+                            ProductId: ProductID,         // Assuming ProductID is a variable holding the Product ID
+                            ProductName: ProductName,     // Assuming ProductName is a variable holding the Product Name
+                            ItemDetail: ProductName,      // Setting ItemDetail to the same value as ProductName (if needed)
+                            PG_ID: GroupId,
+                            GstRate: GstRate,// Group ID (maps to PG_ID in Product class)
+                            SalePrice: SalePrice,         // Sale Price of the product
+                            PurchasePrice: PurchasePrice, // Purchase Price of the product
+                            RateCalc1: RateCalc1,         // Opening Weight of the product
+                            ReorderLevel: Reorder,        // Reorder level threshold
+                            Remarks: Remarks,             // Any remarks or comments about the product           // GST (Goods and Services Tax) rate for the product
+                            PT_ID: SubGroup,              // Sub Group ID (maps to PT_ID in Product class)              // FBR Tax value                    // Assuming PMW stands for something specific (like Pack Measurement Weight)
+                           // BagTypeId: UnitId,
+                           // StWt: StWt,                   // Standard Weight
+                            SMW: SMW,                   // Standard Weight
+                            PMW: PMW,                   // Standard Weight
+                            StrCol1: StrCol1,             // Custom string column 1
+                            StrCol2: StrCol2,             // Custom string column 2
+                            StrCol3: StrCol3//,             // Custom string column 3           // Flag to indicate if the operation is an update or not
+                            // detail: detail                // Additional product details
+                        };
+                        debugger;
+                        $.ajax({
+                            url: "/Product/RegisterProduct",
+                            type: "POST",
+                            data: JSON.stringify({ p: model }),
+                            dataType: 'json', // Correct data type to 'json'
+                            async: false,
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (response) {
+                                if (response != null && response.success) {
+                                    alert(response.message); // Display success message
+                                    window.location.reload(); // Reload the page
+                                } else {
+                                    alert(response.message); // Display error message
+                                }
+                            },
+                            error: function (response) {
+                                debugger
+                               // alert("An error occurred: " + response.responseText);
+                            }
+                        });
+
+                        // $('#btnSave').disable(false);
+
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+
+<!--<div id="content">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"> <i class="icon-align-justify"></i> </span>
+                        <h5>Create Product</h5>
+                    </div>
+                    <div class="widget-content nopadding">
+                        <form action="RegisterProduct" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <table class="table table-bordered data-table">
+                                <tbody>
+                                    <tr>
+                                        <td>Product Name<input type="text" class="span11" id="ProductName" required name="ProductName" /></td>
+                                        <td>
+                                            Group
+                                            @*@{List<SelectListItem> AccCodelist2 = new List<SelectListItem>();
+                                                foreach (var Acc in ViewBag.pgroupDetails)
+                                                {
+                                                    AccCodelist2.Add(new SelectListItem
+                                                    {
+                                                        Text = Acc.Title,
+                                                        Value = Convert.ToString(Acc.Code),
+                                                    });
+                                                }
+                                            }
+                                            @Html.DropDownListFor(u => u.PG_ID, AccCodelist2, new { id = "ddlpgroup", @class = "span11 ddl" })*@
+                                        </td>
+                                        <td>
+                                            Type
+                                            @*@{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                                foreach (var Acc in ViewBag.makerDetails)
+                                                {
+                                                    AccCodelist.Add(new SelectListItem
+                                                    {
+                                                        Text = Acc.Title,
+                                                        Value = Convert.ToString(Acc.Code),
+                                                    });
+                                                }
+                                            }
+                                            @Html.DropDownListFor(u => u.PT_ID, AccCodelist, new { id = "ddlmaker", @class = "span11 ddl" })*@
+                                        </td>
+                                        Already Commented-->
+@*<td>
+        Product Unit
+        @{List<SelectListItem> AccCodelist3 = new List<SelectListItem>();
+          foreach (var Acc in ViewBag.punitDetails)
+        {
+            AccCodelist3.Add(new SelectListItem
+            {
+                Text = Acc.Title,
+                Value = Convert.ToString(Acc.Code),
+            });
+        }
+        }
+        @Html.DropDownListFor(u => u., AccCodelist3, new { id = "ddlpunit", @class = "span11 ddl" })
+    </td>*@
+<!--Already Commented
+                                    </tr>
+                                    <tr>
+                                        <td>Sale Mond Weight<input type="number" class="span11" id="SMW" name="SMW" /></td>
+                                        <td>Pur Mond Weight<input type="number" class="span11" id="PMW" name="PMW" required /></td>
+                                        <td>Gst Rate<input type="number" class="span11" id="GstRate" name="GstRate" required /></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sale Price<input type="number" class="span11" id="SalePrice" name="SalePrice" required /></td>
+                                        <td>Purchase Price<input type="number" class="span11" id="PurchasePrice" name="PurchasePrice" required /></td>
+                                        <td>Reorder level<input type="number" class="span11" id="ReorderLevel" name="ReorderLevel" required /></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Rate Calculation 1 <br />
+                                            <select id="RateCalc1" name="RateCalc1">
+                                                <option></option>
+                                                <option>Bags</option>
+                                                <option>Kg</option>
+                                                <option>Mond</option>
+                                                <option>PIECES</option>
+                                                <option>METER</option>
+                                                <option>FEET</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            Rate Calculation 2 <br />
+                                            <select id="RateCalc2" name="RateCalc2">
+                                                <option></option>
+                                                <option>Purchase Price</option>
+                                                <option>Sale Price</option>
+                                            </select>
+                                        </td>
+                                        <td>Discount Account<input type="text" class="span11" id="StrCol3" name="StrCol3" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                        <td>
+                                            Discount Title
+                                            @*@{List<SelectListItem> AccCodelistdis = new List<SelectListItem>();
+                                                foreach (var Acc in ViewBag.AccCodelistdis1)
+                                                {
+                                                    AccCodelistdis.Add(new SelectListItem
+                                                    {
+                                                        Text = Acc.Title,
+                                                        Value = Acc.AccountId
+                                                    });
+                                                }
+                                            }
+                                            @Html.DropDownListFor(u => u.StrCol3, AccCodelistdis, "-- Select Account --", new { id = "ddlTitlesupdis", @class = "span11 ddl" })*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Purchase Account<input type="text" class="span11" id="StrCol1" name="StrCol1" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                        <td>
+                                            Purchase Title
+                                            @*@{List<SelectListItem> AccCodelistpur = new List<SelectListItem>();
+                                                foreach (var Acc in ViewBag.AccCodelistpur1)
+                                                {
+                                                    AccCodelistpur.Add(new SelectListItem
+                                                    {
+                                                        Text = Acc.Title,
+                                                        Value = Acc.AccountId
+                                                    });
+                                                }
+                                            }
+                                            @Html.DropDownListFor(u => u.StrCol1, AccCodelistpur, "-- Select Account --", new { id = "ddlTitlesup", @class = "span11 ddl" })*@
+                                        </td>
+                                        <td>Sale Account<input type="text" class="span11" id="StrCol2" name="StrCol2" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                        <td>
+                                            Sale Title
+                                            @*@{List<SelectListItem> AccCodelistSale = new List<SelectListItem>();
+                                                foreach (var Acc in ViewBag.AccCodelistSale1)
+                                                {
+                                                    AccCodelistSale.Add(new SelectListItem
+                                                    {
+                                                        Text = Acc.Title,
+                                                        Value = Acc.AccountId
+                                                    });
+                                                }
+                                            }
+                                            @Html.DropDownListFor(u => u.StrCol2, AccCodelistSale, "-- Select Account --", new { id = "ddlTitlepur", @class = "span11 ddl" })*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            Remarks
+                                            <textarea name="Remarks" id="Remarks" class="span12"></textarea>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="form-actions">
+                                <a href="@Url.Action("ViewProducts", "Product")" style="padding-right:2em;">View Products</a>
+                                <button type="submit" class="btn btn-success">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<div id="content">
+    <div class="row">
+        <div class="col-md-12">
+            <form action=""  id="frm1" enctype="multipart/form-data" class="form-horizontal">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Create Product</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Product Name</label>
+                                    <input type="text" class="form-control form-control-sm" id="ProductName" required name="ProductName" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Group</label>
+                                    @{List<SelectListItem> AccCodelist2 = new List<SelectListItem>();
+                                    foreach (var Acc in ViewBag.pgroupDetails)
+                                    {
+                                        AccCodelist2.Add(new SelectListItem
+                                        {
+                                            Text = Acc.Title,
+                                            Value = Convert.ToString(Acc.Code),
+                                        });
+                                    }
+                                    }
+                                    @Html.DropDownListFor(u => u.PG_ID, AccCodelist2, new { id = "ddlpgroup", @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                    foreach (var Acc in ViewBag.makerDetails)
+                                    {
+                                        AccCodelist.Add(new SelectListItem
+                                        {
+                                            Text = Acc.Title,
+                                            Value = Convert.ToString(Acc.Code),
+                                        });
+                                    }
+                                    }
+                                    @Html.DropDownListFor(u => u.PT_ID, AccCodelist, new { id = "ddlmaker", @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            @*<div class="col-md-4">
+                            <div class="form-group">
+                                <label>Product Unit</label>
+                                @{List<SelectListItem> AccCodelist3 = new List<SelectListItem>();
+                                    foreach (var Acc in ViewBag.punitDetails)
+                                    {
+                                        AccCodelist3.Add(new SelectListItem
+                                        {
+                                            Text = Acc.Title,
+                                            Value = Convert.ToString(Acc.Code),
+                                        });
+                                    }
+                                }
+                                @Html.DropDownListFor(u => u., AccCodelist3, new { id = "ddlpunit", @class = "form-control form-control-sm" })
+                            </div>
+                        </div>*@
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Sale Mond Weight</label>
+                                    <input type="number" class="form-control form-control-sm" value="1" id="SMW" name="SMW" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Pur Mond Weight</label>
+                                    <input type="number" class="form-control form-control-sm" value="1" id="PMW" name="PMW" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Gst Rate</label>
+                                    <input type="number" class="form-control form-control-sm" id="GstRate" name="GstRate" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Sale Price</label>
+                                    <input type="number" class="form-control form-control-sm" id="SalePrice" name="SalePrice" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Purchase Price</label>
+                                    <input type="number" class="form-control form-control-sm" id="PurchasePrice" name="PurchasePrice" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Reorder level</label>
+                                    <input type="number" class="form-control form-control-sm" id="ReorderLevel" name="ReorderLevel" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Rate Calculation 1</label>
+                                    <select id="RateCalc1" name="RateCalc1" class="form-control form-control-sm">
+                                        <option></option>
+                                        <option>Bags</option>
+                                        <option>Kg</option>
+                                        <option>Mond</option>
+                                        <option>PIECES</option>
+                                        <option>METER</option>
+                                        <option>FEET</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Rate Calculation 2</label>
+                                    <select id="RateCalc2" name="RateCalc2" class="form-control form-control-sm">
+                                        <option></option>
+                                        <option>Purchase Price</option>
+                                        <option>Sale Price</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Discount Account</label>
+                                    <input type="text" class="form-control form-control-sm" id="StrCol3" name="StrCol3" data-toggle="tooltip" title="Press enter and select account code" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Discount Title</label>
+                                    @{List<SelectListItem> AccCodelistdis = new List<SelectListItem>();
+                                    foreach (var Acc in ViewBag.AccCodelistdis1)
+                                    {
+                                        AccCodelistdis.Add(new SelectListItem
+                                        {
+                                            Text = Acc.Title,
+                                            Value = Acc.AccountId
+                                        });
+                                    }
+                                    }
+                                    @Html.DropDownListFor(u => u.StrCol3, AccCodelistdis, "-- Select Account --", new { id = "ddlTitlesupdis", @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Purchase Account</label>
+                                    <input type="text" class="form-control form-control-sm" id="StrCol1" name="StrCol1" data-toggle="tooltip" title="Press enter and select account code" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Purchase Title</label>
+                                    @{List<SelectListItem> AccCodelistpur = new List<SelectListItem>();
+                                    foreach (var Acc in ViewBag.AccCodelistpur1)
+                                    {
+                                        AccCodelistpur.Add(new SelectListItem
+                                        {
+                                            Text = Acc.Title,
+                                            Value = Acc.AccountId
+                                        });
+                                    }
+                                    }
+                                    @Html.DropDownListFor(u => u.StrCol1, AccCodelistpur, "-- Select Account --", new { id = "ddlTitlesup", @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Sale Account</label>
+                                    <input type="text" class="form-control form-control-sm" id="StrCol2" name="StrCol2" data-toggle="tooltip" title="Press enter and select account code" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Sale Title</label>
+                                    @{List<SelectListItem> AccCodelistSale = new List<SelectListItem>();
+                                    foreach (var Acc in ViewBag.AccCodelistSale1)
+                                    {
+                                        AccCodelistSale.Add(new SelectListItem
+                                        {
+                                            Text = Acc.Title,
+                                            Value = Acc.AccountId
+                                        });
+                                    }
+                                    }
+                                    @Html.DropDownListFor(u => u.StrCol2, AccCodelistSale, "-- Select Account --", new { id = "ddlTitlepur", @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Remarks</label>
+                                    <textarea name="Remarks" id="Remarks" class="form-control form-control-sm"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-2">
+                              
+                                @*<input type="button" value="Save" id="btnSave" class="btn btn-success"  />*@
+                                <button type="button" id="btnSave" class="btn btn-success">Save</button>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-10">
+                                <div class="text-right">
+                                    <a class="btn btn-sm btn-default" href="@Url.Action("ViewProducts", "Product")">View Products</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ApnaAccountWeb.Models.User>
+<link rel="stylesheet" href="~/Content/css/uniform.css" />
+<link rel="stylesheet" href="~/Content/css/select2.css" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+       alert("@TempData["message"]");
+    </script>
+}
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+          <a href="@Url.Action("RegisterUser", "User", new {@class="btn btn-primary" })" style="float:right">Add User</a>
+        <div class="widget-box">
+          <div class="widget-title">
+             <span class="icon"><i class="icon-th"></i></span> 
+            <h5>Users List</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered data-table">
+              <thead>
+                <tr>
+                  <th>Serial</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                    <th>Office</th>
+                    <th>Cell No</th>
+                   <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                  @{
+                  int i=1;
+                  }
+                @foreach (var item in Model) {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.UserType)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Office)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.PhNo)</td>
+                                            <td>@Html.ActionLink("Edit", "Edit", new { id=@item.UserId }) |@Html.ActionLink("Delete", "Delete", new { id=@item.UserId })</td>
+                                        </tr>
+                    i++;
+                                        }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="~/Content/js/jquery.min.js"></script> 
+<script src="~/Content/js/jquery.ui.custom.js"></script> 
+<script src="~/Content/js/bootstrap.min.js"></script> 
+<script src="~/Content/js/jquery.uniform.js"></script> 
+<script src="~/Content/js/select2.min.js"></script> 
+<script src="~/Content/js/jquery.dataTables.min.js"></script> 
+<script src="~/Content/js/maruti.js"></script> 
+<script src="~/Content/js/maruti.tables.js"></script>

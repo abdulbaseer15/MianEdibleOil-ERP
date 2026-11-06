@@ -1,0 +1,1880 @@
+﻿@model IEnumerable<string>
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+    tr.highlighted td {
+        color: white;
+        background-color: #062f70;
+    }
+</style>
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    var isTrue = 0;
+    var visibleArrayLength = 0;
+    var counter = 0;
+    var arrVisible = new Array();
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        $("#txtdiscountp").keydown(function () {
+            var dis = parseFloat($('#txtdiscountp').val());
+            if (dis > 0) {
+                var tamount = parseFloat($('#txtamount').val());
+                var discountamount = tamount * (dis / 100);
+                $('#txtdiscount').val(discountamount.toFixed(2));
+                $('#txtnetamount').val((tamount - discountamount).toFixed(2));
+            }
+        });
+        $("#txtdiscount").keydown(function () {
+            var dis = parseFloat($('#txtdiscount').val());
+            if (dis > 0) {
+                var tamount = parseFloat($('#txtamount').val());
+                var discountper = (100 * dis) / tamount;
+                $('#txtdiscountp').val(discountper.toFixed(2));
+                $('#txtnetamount').val((tamount - dis).toFixed(2));
+                //$('#txtnetamount').focus();
+            }
+        });
+        $('#txtdiscountp').disable(true);
+        $('#txtdesc').disable(true);
+        $('#txtnetamount').disable(true);
+        $('#txtdiscount').disable(true);
+        $('#nettotal').disable(true);
+        $('#txtproCode').disable(true);
+        $('#txtsupCode').disable(true);
+        $('#txtpurCode').disable(true);
+        $('#ddlTitlesup').disable(true);
+        $('#ddlTitlepur').disable(true);
+        $('#ddlTitlepro').disable(true);
+        $('#txtunit').disable(true);
+        $('#txtunit').width(100);
+        $('#txtbox').disable(true);
+        $('#ddlTitleinv').hide();
+        $('#txtquan').disable(true);
+        $('#txtamount').disable(true);
+        //$('#comDate').disable(true);
+        $('#compno').disable(true);
+        $('#btnDelete').disable(true);
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+        $("#divSelectDis").hide();
+        $("#tempdata").hide();
+        $('#comDate').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#comDate').datepicker('setDate', 'now');
+        $('#youDate').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#youDate').datepicker('setDate', 'now');
+        var i = 0;
+        currentRow = null;
+        $('#txtbox').keypress(function (e) {
+            if (e.which == 13) {
+                var unitid = $('#txtunit').val();
+                var unitname = $("#txtunit option:selected").text();
+                var productid = $('#txtproCode').val()
+                var box = parseFloat($('#txtbox').val());
+                if (isNaN(box))
+                    box = 0;
+                var title = $('#ddlTitlepro').val();
+                var desc = $('#txtdesc').val();
+                if (currentRow == null || currentRow == "") {
+                    checkIfAlreadyAdded(productid);
+                    if (isAdded == true) {
+                        alert("This Product Is Already Added Please Edit to Add More");
+                        isAdded = false;
+                        $('#txtproCode').focus();
+                        return;
+                    }
+                }
+                if ($('#txtproCode').val() == "" || $('#txtproCode').val() == null || $("#ddlTitlepro option:selected").text() == "-- Select Account --") {
+                    alert("Cant Save You Must Select Account Code");
+                    $('#txtproCode').focus();
+                }
+                else {
+                            i++;
+                            var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + productid + "</td><td class='title'>" + title + "</td><td class='unitid'>" + unitid + "</td><td class='unitname'>" + unitname + "</td><td class='desc'>" + desc + "</td><td class='net'>" + box + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                            if (currentRow) {
+                                $('#mytable').find($(currentRow)).replaceWith(new_row);
+                                currentRow = null;
+                            }
+                            else {
+                                $('#mytable').append(new_row);
+                            }
+                            var tp = 0;
+                            var tb = 0;
+                            var tquan = 0;
+                            var tamount = 0;
+                            var tdiscount = 0;
+                            var tnetamount = 0;
+                            $('#mytable tbody tr').each(function () {
+                                var $row = $(this), $tds = $row.find("td");
+                            });
+                            $('#txtproCode').focus();
+                            $("#tempdata").show();
+                            IntiateFields();
+                            $('#txtproCode').focus();
+                }
+            }
+        });
+        $(document).on('click', 'span.deleterow', function () {
+            $(this).parents('tr').remove();
+            return false;
+        });
+        $(document).on('click', 'span.editrow', function () {
+            currentRow = $(this).parents('tr');
+            $("#txtproCode").val($(this).closest('tr').find('td.accCode').text());
+            $("#ddlTitlepro").val($(this).closest('tr').find('td.title').text());
+            $("#txtunit").val($(this).closest('tr').find('td.unitid').text());
+            $("#txtbox").val($(this).closest('tr').find('td.net').text());
+            //$("#txtamount").val($(this).closest('tr').find('td.naration').text());
+            $("#txtdesc").val($(this).closest('tr').find('td.desc').text());
+           // $("#txtdiscount").val($(this).closest('tr').find('td.discount').text());
+            //$("#txtnetamount").val($(this).closest('tr').find('td.net').text());
+           // var dis = parseFloat($('#txtdiscount').val());
+           // var tamount = parseFloat($('#txtamount').val());
+          //  var discountper = (100 * dis) / tamount;
+           // $('#txtdiscountp').val(discountper.toFixed(2));
+            $('#txtproCode').focus();
+        });
+        $('#ddlTitlesup').change(function () {
+            var selectedVal = $('#ddlTitlesup option:selected').attr('value');
+            $('#txtsupCode').val(selectedVal);
+        });
+        $('#ddlTitlepur').change(function () {
+            var selectedVal = $('#ddlTitlepur option:selected').attr('value');
+            $('#txtpurCode').val(selectedVal);
+        });
+        $('#ddlTitlepro').change(function () {
+            var selectedVal = $('#ddlTitlepro option:selected').attr('value');
+            $('#txtproCode').val(selectedVal);
+            $('#txtquan').focus();
+            var code = selectedVal;
+            $.ajax({
+                url: "/SaleInvoice/GetProductRate",
+                type: "Post",
+                data: JSON.stringify({ code: code }),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null) {
+                        $('#txtstock').val(response.stock.toString());
+                        if(parseFloat(response.stock)<parseFloat(response.reorder))
+                        {
+                            alert("Warning! Stock below reorder level");
+                        }
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+        $('#compno').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder2();
+                $('#myModalinvoices').modal('show');
+                $('#myInputinv').focus();
+                $('.textboxSearch').focus();
+                var $rows = $('#tblPopupinv tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopupinv tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#compno').val($tds[0].innerText);
+                    $('#comDate').val($tds[1].innerText);
+                    $('#txtsupCode1').val($tds[3].innerText);
+                    $('#ddlTitlesup').val($tds[3].innerText);
+                    $('#myModalinvoices').modal('hide');
+                    $('#comDate').disable(true);
+                    $('#compno').disable(true);
+                });
+            }
+        });
+        $('#cbxPrintJV').change(function () {
+            if (this.checked) {
+                IsPrintJV = true;
+            }
+            else {
+                IsPrintJV = false;
+            }
+        });
+        $('#txtproCode').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 0) {
+                forOrder();
+                $('#myModalpro').modal('show');
+                $('#myInput3').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup3 tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup3 tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtproCode').val($tds[0].innerText);
+                    $('#ddlTitlepro').val($tds[1].innerText);
+                    $('#txtunit').val($tds[3].innerText);
+                    $('#piecesperbox').val($tds[4].innerText);
+                    $('#txtdesc').focus();
+                    $('#myModalpro').modal('hide');
+                    $('#myInput3').val("");
+                    $.ajax({
+                        url: "/SaleInvoice/GetProductRate",
+                        type: "Post",
+                        data: JSON.stringify({ code: $tds[0].innerText }),
+                        dataType: 'text json',
+                        async: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response != null) {
+                                $('#txtstockb').val(response.stockbox.toString());
+                                $('#txtstockp').val(response.stockpiece.toString());
+                            }
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                });
+            }
+        });
+        $('#txtdesc').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 0) {
+                $('#txtbox').focus();
+            }
+        });
+        $('#txtsupCode').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder3();
+                $('#myModalsup').modal('show');
+                $('#myInput').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtsupCode').val($tds[0].innerText);
+                    $('#ddlTitlesup').val($tds[1].innerText);
+                    var supid = $('#txtsupCode').val();
+                    var date = $('#comDate').val();
+                    $.ajax({
+                        url: "/Recipe/CheckIfExists",
+                        type: "POST",
+                        data: JSON.stringify({ date: date, custid: supid }),
+                        dataType: 'text json',
+                        async: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response != null && response.success) {
+                                if ((response.responseText.toString() == "1")) {
+                                    alert("The Recipe for this Product is already Added");
+                                    ClearClicked();
+                                    return;
+                                }
+                                else {
+                                }
+                            }
+                            else {
+                                alert(response.responseText);
+                            }
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                    $('#myInput').val("");
+                    $('#myModalsup').modal('hide');
+                    $('#txtproCode').focus();
+                });
+            }
+        });
+        $('#txtpurCode').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 0) {
+                forOrder4();
+                $('#myModalpur').modal('show');
+                $('#myInput2').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup2 tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup2 tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtpurCode').val($tds[0].innerText);
+                    $('#ddlTitlepur').val($tds[0].innerText);
+                    $('#myModalpur').modal('hide');
+                    $('#myInput2').val("");
+                });
+            }
+        });
+    });
+    function forOrder4() {
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopup2').rows, t = trows.length, trow;
+        //alert();
+        var i = 0;
+        visibleArrayLength = arrVisible.length;
+        //alert(arrVisible.length);
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+            if (visibleArrayLength == (trows.length) - 1) {
+                while (--t > -1) {
+                    trow = trows[t];
+                    if (gethighlight && trow.className === 'highlighted')
+                    { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+                        trow.className = 'normal';
+                    }
+                }
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+                    return;
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+        function movehighlight(way, e) {
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup2').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup2').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup2").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup2)
+                                $tds = row.find("td");
+                                $('#txtpurCode').val($tds[0].innerText);
+                                $('#ddlTitlepur').val($tds[0].innerText);
+                                $('#myInput2').val("");
+                                $('#myModalpur').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtproCode').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup2)
+                                $tds = row.find("td");
+                                $('#txtpurCode').val($tds[0].innerText);
+                                $('#ddlTitlepur').val($tds[0].innerText);
+                                $('#myInput2').val("");
+                                $('#myModalpur').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtproCode').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder3() {
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+        //alert();
+        var i = 0;
+        visibleArrayLength = arrVisible.length;
+        //alert(arrVisible.length);
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+            if (visibleArrayLength == (trows.length) - 1) {
+                while (--t > -1) {
+                    trow = trows[t];
+                    if (gethighlight && trow.className === 'highlighted')
+                    { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+                        trow.className = 'normal';
+                    }
+                }
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+                    return;
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+        function movehighlight(way, e) {
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtsupCode').val($tds[0].innerText);
+                                $('#ddlTitlesup').val($tds[1].innerText);
+                                var supid = $('#txtsupCode').val();
+                                var date = $('#comDate').val();
+                                $.ajax({
+                                    url: "/Recipe/CheckIfExists",
+                                    type: "POST",
+                                    data: JSON.stringify({ date: date, custid: supid }),
+                                    dataType: 'text json',
+                                    async: false,
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function (response) {
+                                        if (response != null && response.success) {
+                                            if ((response.responseText.toString() == "1")) {
+                                                alert("The Recipe for this Product is already Added");
+                                                ClearClicked();
+                                                return;
+                                            }
+                                            else {
+                                            }
+                                        }
+                                        else {
+                                            alert(response.responseText);
+                                        }
+                                    },
+                                    error: function (response) {
+                                        alert(response.responseText);
+                                    }
+                                });
+                                $('#myInput').val("");
+                                $('#myModalsup').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtproCode').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtsupCode').val($tds[0].innerText);
+                                $('#ddlTitlesup').val($tds[1].innerText);
+                                var supid = $('#txtsupCode').val();
+                                var date = $('#comDate').val();
+                                $.ajax({
+                                    url: "/Recipe/CheckIfExists",
+                                    type: "POST",
+                                    data: JSON.stringify({ date: date, custid: supid }),
+                                    dataType: 'text json',
+                                    async: false,
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function (response) {
+                                        if (response != null && response.success) {
+                                            if ((response.responseText.toString() == "1")) {
+                                                alert("The Recipe for this Product is already Added");
+                                                ClearClicked();
+                                                return;
+                                            }
+                                            else {
+                                            }
+                                        }
+                                        else {
+                                            alert(response.responseText);
+                                        }
+                                    },
+                                    error: function (response) {
+                                        alert(response.responseText);
+                                    }
+                                });
+                                $('#myInput').val("");
+                                $('#myModalsup').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtproCode').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder2() {
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopupinv').rows, t = trows.length, trow;
+        //alert();
+        var i = 0;
+        visibleArrayLength = arrVisible.length;
+        //alert(arrVisible.length);
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+            if (visibleArrayLength == (trows.length) - 1) {
+                while (--t > -1) {
+                    trow = trows[t];
+                    if (gethighlight && trow.className === 'highlighted')
+                    { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+                        trow.className = 'normal';
+                    }
+                }
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+                    return;
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+        function movehighlight(way, e) {
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopupinv').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopupinv').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopupinv").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#compno').val($tds[0].innerText);
+                                $('#comDate').val($tds[1].innerText);
+                                $('#txtsupCode1').val($tds[3].innerText);
+                                $('#ddlTitlesup').val($tds[3].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#comDate').disable(true);
+                                $('#compno').disable(true);
+                                isTrue = 1;
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#compno').val($tds[0].innerText);
+                                $('#comDate').val($tds[1].innerText);
+                                $('#txtsupCode1').val($tds[3].innerText);
+                                $('#ddlTitlesup').val($tds[3].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#comDate').disable(true);
+                                $('#compno').disable(true);
+                                isTrue = 1;
+                                //$('#invono').focus();
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder() {
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopup3').rows, t = trows.length, trow;
+        //alert();
+        var i = 0;
+        visibleArrayLength = arrVisible.length;
+        //alert(arrVisible.length);
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+            if (visibleArrayLength == (trows.length) - 1) {
+                while (--t > -1) {
+                    trow = trows[t];
+                    if (gethighlight && trow.className === 'highlighted')
+                    { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+                        trow.className = 'normal';
+                    }
+                }
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+                    return;
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+        function movehighlight(way, e) {
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup3').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup3').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup3").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup3)
+                                $tds = row.find("td");
+                                $('#txtproCode').val($tds[0].innerText);
+                                $('#ddlTitlepro').val($tds[1].innerText);
+                                $('#txtunit').val($tds[3].innerText);
+                                $('#piecesperbox').val($tds[4].innerText);
+                                $('#myInput3').val("");
+                                $('#myModalpro').modal('hide');
+                                isTrue = 1;
+                                $('#txtdesc').focus();
+                                //$('#txtunit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup3)
+                                $tds = row.find("td");
+                                $('#txtproCode').val($tds[0].innerText);
+                                $('#ddlTitlepro').val($tds[1].innerText);
+                                $('#txtunit').val($tds[3].innerText);
+                                $('#piecesperbox').val($tds[4].innerText);
+                                $('#myInput3').val("");
+                                $('#myModalpro').modal('hide');
+                                isTrue = 1;
+                                $('#txtdesc').focus();
+                                // $('#txtunit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function ClearClicked() {
+        window.location.href = '@Url.Action("Recipe", "Recipe")';
+     }
+    function NewClicked() {
+        var date = $('#comDate').val();
+        //if (date == "" || date == null) {
+        //    alert("Date can not be null");
+        //}
+        //else {
+            $('#btnNew').disable(true);
+            $.ajax({
+                url: "/Recipe/GetRecipeID",
+                type: "POST",
+                data: JSON.stringify({ date: date }),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success) {
+                        $('#compno').val(response.responseText.toString());
+                        $('#txtproCode').disable(false);
+                        $('#txtsupCode').disable(false);
+                        $('#txtpurCode').disable(false);
+                        $('#ddlTitlesup').disable(false);
+                        $('#ddlTitlepur').disable(false);
+                        $('#ddlTitlepro').disable(false);
+                        $('#txtquan').disable(false);
+                        $('#txtamount').disable(false);
+                        $('#txtbox').disable(false);
+                        $('#txtdiscountp').disable(false);
+                        $('#txtdesc').disable(false);
+                        $('#txtnetamount').disable(false);
+                        $('#txtdiscount').disable(false);
+                        $('#btnSave').show();
+                        $('#btnSearch').hide();
+                        $('#txtsupCode1').focus();;
+                    }
+                    else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    //}
+    function IntiateFields() {
+        $('#txtproCode').val("");
+        $('#ddlTitlepro').val("");
+        $('#txtquan').val("");
+        $('#txtamount').val("");
+        $('#ddlTitlepro').focus();
+        $('#txtdiscount').val("");
+        $('#txtdesc').val("");
+        $('#txtnetamount').val("");
+        $('#txtstock').val("");
+        $('#txtdiscountp').val("");
+        $('#txtbox').val("");
+        dvcid = null;
+        RowNo = null;
+    }
+    function SearchDV() {
+        //var dvid = $('#ddlTitleinv').val();
+        var dvid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null)
+        {
+            alert("Date or voucher id can not be null");
+            $('#compno').focus();
+        }
+        else {
+            $('#btnSave').show();
+            $('#btnGo').hide();
+            IsUpdate = true;
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/Recipe/SearchRecipe",
+                data: { Date: date, VId: dvid },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        var new_row;
+                        //var tb = 0;
+                        //var tp = 0;
+                        //var tquan=0;
+                        //var tamount = 0;
+                        //var disamt = 0;
+                        //var netamt = 0;
+                       // var netto = 0;
+                        $.each(result, function (i, item) {
+                           // netto = item.InvTotal - item.Discount;
+                           // tquan = tquan + item.QtyDr;
+                           // tamount = tamount + item.InvTotal;
+                           // disamt = disamt + item.Discount;
+                           // netamt += item.NetTotal;
+                           // tb = tb + item.Boxes;
+                          //  tp = tp + item.Pieces;
+                            new_row += "<tr id='row" + i + "' ><td class='accCode'>" + item.ItemId + "</td><td class='title'>" + item.ItemName + "</td><td class='unitid'>" + item.Unit + "</td><td class='unitname'>" + item.Title + "</td><td class='desc'>" + item.Rtype + "</td><td class='net'>" + item.NetTotal + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                        });
+                       // $('.quan').html(tquan);
+                        //$('.amount').html(tamount);
+                        //$('.tdiscount').html(disamt);
+                        //$('.tnetaamount').html(netamt);
+                        $('#mytable tbody').append(new_row);
+                        $("#tempdata").show();
+                        $('#txtproCode').focus();
+                    }
+                    else {
+                        alert("No record found");
+                        window.location.reload();
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+            @*var string = "Date=" + date + "&DVId=" + dvid + "";
+        $("#divPartial").load('@(Url.Action("SearchVoucher", "CVoucher", null, Request.Url.Scheme))?' + string);*@
+            $('#txtVochNo').disable(true);
+            $('#dtpDate').disable(true);
+            $('#btnDelete').disable(false);
+            $('#cbxPrintJV').disable(false);
+        }
+    }
+    function SearchClicked() {
+        $('#compno').disable(false);
+        $('#compno').focus();
+        $('#txtproCode').disable(false);
+        $('#txtsupCode').disable(false);
+        $('#txtpurCode').disable(false);
+        $('#ddlTitlesup').disable(false);
+        $('#ddlTitlepur').disable(false);
+        $('#ddlTitlepro').disable(false);
+        $('#txtquan').disable(false);
+        $('#txtamount').disable(false);
+        $('#txtdesc').disable(false);
+        $('#txtdiscount').disable(false);
+        $('#txtdiscountp').disable(false);
+        $('#youDate').disable(false);
+        $('#invono').disable(false);
+        $('#txtnetamount').disable(false);
+        $('#txtbox').disable(false);
+        //$('#ddlTitleinv').show();
+        //$('#compno').hide();
+        $('#btnNew').disable(true);
+        $('#btnSearch').hide();
+        $('#btnGo').show();
+    }
+    var i = 0;
+    currentRow = null;
+    var isAdded = false;
+    function checkIfAlreadyAdded(value) {
+        $('#mytable tr').each(function () {
+            if ($(this).find('td').eq(0).text() == value) {
+                isAdded = true;
+            }
+        });
+    };
+    function AddGridClicked() {
+        var unitid = $('#txtunit').val();
+        var unitname = $("#txtunit option:selected").text();
+        var productid = $('#txtproCode').val()
+        var box = parseFloat($('#txtbox').val());
+        if (isNaN(box))
+            box = 0;
+        var desc = $('#txtdesc').val();
+        var title = $('#ddlTitlepro').val();
+        //var quan = $('#txtquan').val();
+        if (currentRow == null || currentRow == "") {
+            checkIfAlreadyAdded(productid);
+            if (isAdded == true) {
+                alert("This Product Is Already Added Please Edit to Add More");
+                isAdded = false;
+                $('#txtproCode').focus();
+                return;
+            }
+        }
+        if ($('#txtproCode').val() == "" || $('#txtproCode').val() == null || $("#ddlTitlepro option:selected").text() == "-- Select Account --") {
+            alert("Cant Save You Must Select Raw Product Code");
+            $('#txtproCode').focus();
+        }
+        else {
+                    i++;
+                    var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + productid + "</td><td class='title'>" + title + "</td><td class='unitid'>" + unitid + "</td><td class='unitname'>" + unitname + "</td><td class='desc'>" + desc + "</td><td class='net'>" + box + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                    if (currentRow) {
+                        $('#mytable').find($(currentRow)).replaceWith(new_row);
+                        currentRow = null;
+                    }
+                    else {
+                        $('#mytable').append(new_row);
+                    }
+                    var tp = 0;
+                    var tb = 0;
+                    var tquan = 0;
+                    var tamount = 0;
+                    var tdiscount = 0;
+                    var tnetamount = 0;
+                    $('#mytable tbody tr').each(function () {
+                        var $row = $(this), $tds = $row.find("td");
+                        var t1quan = parseFloat($tds[3].innerText);
+                        //var t1amount = parseFloat($tds[8].innerText);
+                        //var t1discount = parseFloat($tds[9].innerText);
+                        //var t1netamount = parseFloat($tds[10].innerText);
+                        if (isNaN(t1quan))
+                            t1quan = 0;
+                        //if (isNaN(t1amount)) {
+                        //    t1amount = 0;
+                        //}
+                        //if (isNaN(t1discount))
+                        //    t1discount = 0;
+                        //if (isNaN(t1netamount)) {
+                        //    t1netamount = 0;
+                        //}
+                        //var t1p = parseFloat($tds[6].innerText);
+                        //if (isNaN(t1p)) {
+                        //    t1p = 0;
+                        //}
+                        //var t1b = parseFloat($tds[5].innerText);
+                        //if (isNaN(t1b)) {
+                        //    t1b = 0;
+                        //}
+                        //tp = tp + t1p;
+                        //tb = tb + t1b;
+                        //tdiscount = tdiscount + t1discount;
+                        //tnetamount = tnetamount + t1netamount;
+                        //tquan = tquan + t1quan;
+                        //tamount = tamount + t1amount;
+                    });
+                    $('#txtproCode').focus();
+                   $("#tempdata").show();
+                    IntiateFields();
+                    $('#txtproCode').focus();
+            }
+        }
+    function SaveDVoucher() {
+        var date = $('#comDate').val();
+        if (date == "" || date == null)
+        {
+            alert("Date can not be null");
+        }
+        else {
+            //var supid= $('#ddlTitlesup').val();
+            //var supname= $("#ddlTitlesup option:selected").text();
+            var supid= $('#ddlTitlesup').val();
+            var supname = $('#txtsupCode1').val();
+            if (( supname == "" || supname == null) )
+            {
+                alert("Recipe Name can not be empty or null");
+            }
+        else{
+        var rowCount = $('#mytable tbody tr').length;
+        if (rowCount <= 0) {
+            alert("Must have rows to save.")
+        }
+        else {
+            var answer = confirm("Do You really want to Save this?");
+            if (answer) {
+                var date = $('#comDate').val();
+                var vid = $('#compno').val();
+                //if (vid == "" || vid == null)
+                //{
+                //    vid = $('#ddlTitleinv').val();
+                //}
+                var selectedVal = $('#txtsupCode').val();
+                var detail = [];
+                $('#mytable tbody tr').each(function () {
+                    var $row = $(this), $tds = $row.find("td");
+                    //alert($tds[0].innerText);
+                    detail.push({
+                        code: $tds[0].innerText,
+                        title: $tds[1].innerText,
+                        unitid: $tds[2].innerText,
+                        unit: $tds[3].innerText,
+                        desc: $tds[4].innerText,
+                        box: $tds[5].innerText,
+                    });
+                });
+                var model = {
+                    vid: vid,
+                    comdate: date,
+                    supid: selectedVal,
+                    //supname: $("#ddlTitlesup option:selected").text(),
+                    supname: $('#txtsupCode1').val(),
+                    isupdate: IsUpdate,
+                    detail: detail
+                };
+                //  alert(JSON.stringify(model));
+                $.ajax({
+                    url: "/Recipe/SaveRecipe",
+                    type: "POST",
+                    data: JSON.stringify({ model: model }),
+                    dataType: 'text json',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response != null && response.success) {
+                            alert(response.responseText);
+                            //$('#txtVochNo').val(response.responseText.toString());
+                            //$('#txtAccCode').disable(false);
+                            //$('#ddlTitle').disable(false);
+                            //$('#txtDebit').disable(false);
+                            //$('#txtCredit').disable(false);
+                            //$('#txtNarration').disable(false);
+                            //$("#txtAccCode").focus();
+                            //$('#btnSave').show();
+                            //$('#btnSearch').hide();
+                            @*if (IsPrintJV) {
+                                //alert("hurrah");
+                                var string = "rtype=rptSaleInvoice" + "&txtAccCode=" + vid + "";
+                                var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+                                window.open(url, "_blank");
+                            }*@
+                            window.location.reload();
+                        }
+                        else {
+                            alert(response.responseText);
+                        }
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+                @* var date = $('#dtpDate').val();
+            var vid = $('#txtVochNo').val();
+            var string = "Date=" + date + "&ISUpdate=" + IsUpdate + "&IsPrintDV=" + IsPrintJV + "&VID=" + vid + "";
+            var url = '@(Url.Action("SaveDVVoucher", "DVoucher", null, Request.Url.Scheme))?' + string
+            window.location.href = url;
+            IsUpdate = false;
+            IsPrintJV = false;*@
+                IsUpdate = false;
+                IsPrintJV = false;
+            }
+        }
+        }
+    }
+    }
+    function DeleteClicked() {
+        //var dvid = $('#ddlTitleinv').val();
+        var dvid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Recipe id can not be null");
+        }
+        else {
+            var answer = confirm("Do You really want to Delete this?");
+            if (answer) {
+                $('#btnSave').show();
+                $('#btnGo').hide();
+                IsUpdate = true;
+                var string = "Date=" + date + "&DVId=" + dvid + "";
+                var url = '@(Url.Action("DeleteRecipe", "Recipe", null, Request.Url.Scheme))?' + string;
+                window.location.href = url;
+            }
+        }
+    }
+</script>
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span12">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Finished Product Recipe</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="#" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                 <input type="hidden" class="span11" id="piecesperbox" name="piecesperbox" />
+                 <table class="table table-bordered data-table">
+              <tbody>
+                  <tr>
+    <td class="span4">
+        Recipe #
+        @foreach (var fullPath in Model)
+        {
+            var fileName = Path.GetFileName(fullPath);
+    <tr><td class="span4">
+    @fileName</td>
+</tr>
+        }
+              </tbody>
+            </table>
+                 <div id="tempdata">
+                     <br />
+                     <table class="table table-bordered data-table" id="mytable">
+                         <thead>
+                             <tr>
+                                 <th>Code</th>
+                                 <th>Product Name</th>
+                                 <th>Unit Id</th>
+                                 <th>Unit</th>
+                                 <th>Description</th>
+                                 <th>Quantity</th>    
+                                 <th>Action</th>
+                             </tr>
+                         </thead>
+                         <tbody></tbody>
+                     </table>
+                     @*<table class="table table-bordered data-table" id="mytable23">
+                         <thead style="display:none">
+                             <tr>
+                                 <th>Code</th>
+                                 <th>Product Name</th>
+                                 <th>Description</th>
+                                 <th>Quantity</th>
+                                 <th>Rate</th>
+                                 <th>Amount</th>
+                                 <th>Discount</th>
+                                 <th>Net Amount</th>
+                                 <th>Action</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                              <td style="width:35.1%;color:maroon;font-weight: bold;">Sub total</td>
+                             <td style="width:10.3%;color:maroon;font-weight: bold;" class="quan"></td>
+                                <td style="width:7.1%" ></td>
+                             <td class="amount" style="width:9.8%;color:maroon; font-weight: bold;"></td>
+                                 <td class="tdiscount" style="width:10.6%;color:maroon; font-weight: bold;"></td>
+                                     <td class="tnetaamount" style="color:maroon; font-weight: bold;"></td>
+                                 </tr>
+                         </tbody>
+                     </table>*@
+                 </div>
+              <div class="form-actions"> 
+               @* <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();' >New</button>*@
+                  <input type="button" value="New" id="btnNew" class="btn btn-primary" onclick='NewClicked();'>
+                  <input type="button" value="Save" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                    <input type="button" id="btnDelete"  class="btn btn-danger" value="Delete" onclick='DeleteClicked();'>
+                  <input type="button" value="Search" id="btnSearch" class="btn btn-default" onclick='SearchClicked();'/>
+                  <input type="button" id="btnGo" value="Go" class="btn btn-success" onclick='SearchDV();'>
+                  <input type="button" id="btnClose" value="Clear" class="btn btn-warning" onclick='ClearClicked();'>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="myModalpro" class="modal hide">
+              <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>Search Raw product</h3>
+              </div>
+              <div class="modal-body">
+        <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+          <div class="widget-box">
+          <div class="widget-title">
+             <span class="icon"><i class="icon-th"></i></span> 
+            <h5>Products List</h5>
+                <input type="text" id="myInput3" onkeyup="myFunction3()" placeholder="Search for product.." style="float:right;">
+          </div>
+          <div class="widget-content nopadding">
+            <table id="tblPopup3" class="table table-bordered data-table" tabindex="-1">
+              <thead>
+                <tr>
+                    <th>Product Code</th>
+                    <th>Product Name</th>
+                    <th>Rate</th>
+                    <th>Unit Id</th>
+                    <th>Stock In Hand</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>   
+            </div>
+</div>
+<div id="myModalsup" class="modal hide">
+              <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>Search Product</h3>
+              </div>
+              <div class="modal-body">
+        <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+          <div class="widget-box">
+          <div class="widget-title">
+             <span class="icon"><i class="icon-th"></i></span> 
+            <h5>Products List</h5>
+                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for title.." style="float:right;">
+          </div>
+          <div class="widget-content nopadding">
+            <table id="tblPopup" class="table table-bordered data-table" tabindex="-1">
+              <thead>
+                <tr>
+                  <th>Product Id</th>
+                  <th>Title</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>   
+            </div>
+</div>
+<div id="myModalpur" class="modal hide">
+              <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>Search Account</h3>
+              </div>
+              <div class="modal-body">
+        <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+          <div class="widget-box">
+          <div class="widget-title">
+             <span class="icon"><i class="icon-th"></i></span> 
+            <h5>Accounts List</h5>
+                <input type="text" id="myInput2" onkeyup="myFunction2()" placeholder="Search for title.." style="float:right;">
+          </div>
+          <div class="widget-content nopadding">
+            <table id="tblPopup2" class="table table-bordered data-table" tabindex="-1">
+              <thead>
+                <tr>
+                  <th>AccountCode</th>
+                  <th>Title</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>   
+            </div>
+</div>
+<div id="myModalinvoices" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Recipe</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Recipes List</h5>
+                            <input type="text" id="myInputinv" onkeyup="myFunctioninv()" placeholder="Search for title.." style="float:right;">
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopupinv" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>Recipe No</th>
+                                        <th>Date</th>
+                                        <th>Product Id</th>
+                                        <th>Product Name
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrder3();
+    }
+    function myFunction2() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup2");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrder4();
+    }
+    function myFunction3() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput3");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup3");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrder();
+    }
+    function myFunctioninv() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputinv");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopupinv");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrder2();
+    }
+</script>
+<script>
+    @*var keys = {};
+    $(document).keydown(function (e) {
+        keys[e.which] = true;
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    $(document).keyup(function (e) {
+        delete keys[e.which];
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    function printKeys() {
+        var html = '';
+        for (var i in keys) {
+            if (!keys.hasOwnProperty(i)) continue;
+            html += i;
+        }
+        //home start
+        if (html == '72') {
+            keys = {};
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+        //home end
+        //accounts start
+        if (html == '7486') {
+            keys = {};
+            window.location.href = '@Url.Action("JVoucher", "JVoucher")';
+        }
+        if (html == '6886') {
+            keys = {};
+            window.location.href = '@Url.Action("DVoucher", "DVoucher")';
+        }
+        if (html == '6786') {
+            keys = {};
+            window.location.href = '@Url.Action("CVoucher", "CVoucher")';
+        }
+        if (html == '666886') {
+            keys = {};
+            window.location.href = '@Url.Action("BankDJVoucher", "BankDJVoucher")';
+        }
+        if (html == '666774') {
+            keys = {};
+            window.location.href = '@Url.Action("BankCJVoucher", "BankCJVoucher")';
+        }
+        if (html == '748086') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseJVoucher", "PurchaseJVoucher")';
+        }
+        if (html == '748386') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleJVoucher", "SaleJVoucher")';
+        }
+        if (html == '86') {
+            keys = {};
+            window.location.href = '@Url.Action("Verify", "VouchersVerification")';
+        }
+        //accounts end
+        //coding start
+        if (html == '6567') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountCoding", "Accounts")';
+        }
+        if (html == '656679') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningBalances", "Accounts")';
+        }
+        if (html == '678085') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductUnit", "ProductUnit")';
+        }
+        if (html == '677180') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductGroup", "ProductGroup")';
+        }
+        if (html == '678083') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductSubGroup", "ProductSubGroup")';
+        }
+        if (html == '6780') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProduct", "Product")';
+        }
+        if (html == '6783') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterStores", "Stores")';
+        }
+        if (html == '7983') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningStock", "ProductsOpening")';
+        }
+        if (html == '1667') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterCity", "City")';
+        }
+        //coding end
+        //invoice start
+        if (html == '7380') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseInvoice", "PurchaseInvoice")';
+        }
+        if (html == '8082') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoicePurchaseReturn", "InvoicePurchaseReturn")';
+        }
+        if (html == '7383') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleInvoice", "SaleInvoice")';
+        }
+        if (html == '8283') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoiceSaleReturn", "InvoiceSaleReturn")';
+        }
+        //invoice end
+        //accounts report start
+        if (html == '656782') {
+            keys = {};
+            var string = "rtype=ChartofAccount";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+        if (html == '657682') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountLedger", "Reports")';
+        }
+        if (html == '666782') {
+            keys = {};
+            window.location.href = '@Url.Action("Cashbook", "Reports")';
+        }
+        if (html == '677082') {
+            keys = {};
+            window.location.href = '@Url.Action("CashFlow", "Reports")';
+        }
+        if (html == '668284') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalance", "Reports")';
+        }
+        if (html == '666884') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalanceBetweenDates", "Reports")';
+        }
+        if (html == '6884') {
+            keys = {};
+            window.location.href = '@Url.Action("DetailTrial", "Reports")';
+        }
+        if (html == '7184') {
+            keys = {};
+            window.location.href = '@Url.Action("GroupTrial", "Reports")';
+        }
+        if (html == '8384') {
+            keys = {};
+            window.location.href = '@Url.Action("SixColumnTrial", "Reports")';
+        }
+        //accounts report end
+        //inventory report start
+        if (html == '6880') {
+            keys = {};
+            window.location.href = '@Url.Action("DailyPurchase", "IReports")';
+        }
+        if (html == '6883') {
+            keys = {};
+            window.location.href = '@Url.Action("DailySale", "IReports")';
+        }
+        if (html == '7683') {
+            keys = {};
+            window.location.href = '@Url.Action("StockLedger", "IReports")';
+        }
+        if (html == '7283') {
+            keys = {};
+            window.location.href = '@Url.Action("StockInHand", "IReports")';
+        }
+        //inventory report end
+        //system start
+        if (html == '85') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterUser", "User")';
+        }
+        if (html == '1682') {
+            keys = {};
+            window.location.href = '@Url.Action("UserRights", "User")';
+        }
+        if (html == '657683') {
+            keys = {};
+            window.location.href = '@Url.Action("AddLevel", "AccountsLevel")';
+        }
+        if (html == '656877') {
+            keys = {};
+            window.location.href = '@Url.Action("DeleteCoding", "Accounts")';
+        }
+        if (html == '17') {
+            keys = {};
+            window.location.href = '@Url.Action("Add", "ControlAccounts")';
+        }
+        //system end
+    }*@
+</script>
+               

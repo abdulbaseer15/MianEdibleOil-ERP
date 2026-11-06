@@ -1,0 +1,1217 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+    tr.highlighted td {
+        color: white;
+        background-color: red;
+    }
+</style>
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    var isTrue = 0;
+    $(document).ready(function () {
+        $('#txtVochNo').attr('disabled', 'disabled');
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        $('#txtAccCode').disable(true);
+        $('#ddlTitle').disable(true);
+        $('#txtDebit').disable(true);
+        $('#txtCredit').disable(true);
+        $('#txtNarration').disable(true);
+        $('#btnDelete').disable(true);
+        $('#ddlAType').disable(true);
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+        //$('#cbxPrintJV').disable(true);
+        $("#divSelectDis").hide();
+        $("#tempdata").hide();
+        $("#tempdata1").hide();
+        //$('#dtpDate').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDate').datepicker('setDate', 'now');
+        var i = 0;
+        currentRow = null;
+        $('#txtNarration').keypress(function (e) {
+            if (e.which == 13) {
+                var accCode = $('#ddlTitle').val();
+                var debit = $('#txtDebit').val();
+                var credit = $('#txtCredit').val();
+                var narration = $('#txtNarration').val();
+                var title = $("#ddlTitle option:selected").text();
+                if ($('#txtAccCode').val() == "" || $('#txtAccCode').val() == null || $("#ddlTitle option:selected").text() == "-- Select Account --") {
+                    alert("Cannot Save, You Must Select Account Code");
+                    $('#txtAccCode').focus();
+                }
+                else {
+                    if ((debit == "" || debit == null || debit == 0 || debit < 0) && (credit == "" || credit == null || credit == 0 || credit < 0)) {
+                        alert("Debit and Credit Cannot be Empty or Zero")
+                        $('#txtDebit').focus();
+                    }
+                    else {
+                        if ((debit != "" && debit != null && debit != 0) && (credit != "" && credit != null && credit != 0)) {
+                            alert("Enter in debit or credit not both")
+                            $('#txtDebit').focus();
+                        }
+                        else {
+                            i++;
+                            var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + accCode + "</td><td class='title'>" + title + "</td><td class='debit'>" + debit + "</td><td class='credit'>" + credit + "</td><td class='naration'>" + narration + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                            if (currentRow) {
+                                $('#mytable').find($(currentRow)).replaceWith(new_row);
+                                currentRow = null;
+                            }
+                            else {
+                                $('#mytable').append(new_row);
+                            }
+                            var tdebit = 0;
+                            var tcredit = 0;
+                            $('#mytable tbody tr').each(function () {
+                                var $row = $(this), $tds = $row.find("td");
+                                var t1debit = parseFloat($tds[2].innerText);
+                                var t1credit = parseFloat($tds[3].innerText);
+                                if (isNaN(t1debit))
+                                    t1debit = 0;
+                                if (isNaN(t1credit)) {
+                                    t1credit = 0;
+                                }
+                                tdebit = tdebit + t1debit;
+                                tcredit = tcredit + t1credit;
+                            });
+                            document.getElementById('sumcredit').innerHTML = tcredit;
+                            document.getElementById('sumdebit').innerHTML = tdebit;
+                            $("#tempdata1").show();
+                            $("#tempdata").show();
+                            IntiateFields();
+                            $('#txtAccCode').focus();
+                            //SaveDVChild();
+                        }
+                    }
+                }
+            }
+        });
+        $(document).on('click', 'span.deleterow', function () {
+            var s1debit = parseFloat($("#sumdebit").text());
+            var s1credit = parseFloat($("#sumcredit").text());
+            var sdebit = parseFloat($(this).closest('tr').find('td.debit').text());
+            var scredit = parseFloat($(this).closest('tr').find('td.credit').text());
+            var sumdebit = -1;
+            var sumcredit = -1;
+            // if (scredit >0) {
+            if (isNaN(sdebit))
+                sdebit = 0;
+            if (isNaN(scredit)) {
+                scredit = 0;
+            }
+            sumcredit = s1credit - scredit;
+            document.getElementById('sumcredit').innerHTML = sumcredit;
+            // }
+            // if (sdebit > 0) {
+            sumdebit = s1debit - sdebit;
+            document.getElementById('sumdebit').innerHTML = sumdebit;
+            //}
+            if ((sumdebit == 0 && sumcredit == 0)) {
+                $("#tempdata1").hide();
+            }
+            $(this).parents('tr').remove();
+            return false;
+        });
+        $(document).on('click', 'span.editrow', function () {
+            currentRow = $(this).parents('tr'); $("#txtAccCode").val($(this).closest('tr').find('td.accCode').text());
+            $("#ddlTitle").val($(this).closest('tr').find('td.accCode').text());
+            $("#txtDebit").val($(this).closest('tr').find('td.debit').text());
+            $("#txtCredit").val($(this).closest('tr').find('td.credit').text());
+            $("#txtNarration").val($(this).closest('tr').find('td.naration').text());
+            var tdebit = 0;
+            var tcredit = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1debit = parseFloat($tds[2].innerText);
+                var t1credit = parseFloat($tds[3].innerText);
+                if (isNaN(t1debit))
+                    t1debit = 0;
+                if (isNaN(t1credit)) {
+                    t1credit = 0;
+                }
+                tdebit = tdebit + t1debit;
+                tcredit = tcredit + t1credit;
+            });
+            document.getElementById('sumcredit').innerHTML = tcredit;
+            document.getElementById('sumdebit').innerHTML = tdebit;
+            if ((tdebit == 0 && tcredit == 0)) {
+                $("#tempdata1").hide();
+            }
+        });
+        $('#ddlTitle').change(function () {
+            var selectedVal = $('#ddlTitle option:selected').attr('value');
+            $('#txtAccCode').val(selectedVal);
+            $('#txtDebit').focus();
+        });
+        $('#cbxPrintJV').change(function () {
+            if (this.checked) {
+                IsPrintJV = true;
+            }
+            else {
+                IsPrintJV = false;
+            }
+        });
+        $('#txtDebit').keypress(function (e) {
+            debugger;
+            if (e.which == 13 && isTrue == 0) {
+                debugger;
+                isTrue = 1;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 1) {
+                debugger;
+                isTrue == 0;
+                $('#txtCredit').focus();
+            }
+        });
+        $('#txtCredit').keypress(function (e) {
+            debugger;
+            if (e.which == 13 && isTrue == 1) {
+                debugger;
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 0) {
+                debugger;
+                isTrue == 0;
+                $('#txtNarration').focus();
+            }
+        });
+        $('#txtVochNo').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder2();
+                $('#myModalinvoices').modal('show');
+                $('#myInputinv').focus();
+                $('.textboxSearch').focus();
+                var $rows = $('#tblPopupinv tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopupinv tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtVochNo').val($tds[0].innerText);
+                    $('#dtpDate').val($tds[1].innerText);
+                    $('#myModalinvoices').modal('hide');
+                    $('#dtpDate').disable(true);
+                    $('#txtVochNo').disable(true);
+                });
+            }
+        });
+        $('#txtAccCode').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder();
+                $('#myModal').modal('show');
+                $('#myModal').on('shown.bs.modal', function () {
+                    $('#myInput').focus(); // Set focus once the modal is fully visible
+                });
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                         reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtAccCode').val($tds[0].innerText);
+                    $('#ddlTitle').val($tds[0].innerText);
+                    $('#ddlTitle').focus();
+                    $('#myModal').modal('hide');
+                    $('#myInput').val("");
+                    $('#txtDebit').focus();
+                });
+            }
+        });
+    });
+    function forOrder2() {
+        var flag = true;
+        var trows = document.getElementById('tblPopupinv').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopupinv').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopupinv').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopupinv").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#txtVochNo').val($tds[0].innerText);
+                                $('#dtpDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#dtpDate').disable(true);
+                                $('#txtVochNo').disable(true);
+                                // isTrue = 1;
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#txtVochNo').val($tds[0].innerText);
+                                $('#dtpDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#dtpDate').disable(true);
+                                $('#txtVochNo').disable(true);
+                                //isTrue = 1;
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopupinv)
+                            $tds = row.find("td");
+                            $('#txtVochNo').val($tds[0].innerText);
+                            $('#dtpDate').val($tds[1].innerText);
+                            $('#myModalinvoices').modal('hide');
+                            $('#dtpDate').disable(true);
+                            $('#txtVochNo').disable(true);
+                            //isTrue = 1;
+                            $('#btnGo').focus();
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder() {
+        // debugger;
+        var flag = true;
+        var trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+        var countrow = -1; // Initialize countrow to -1, as no rows are selected initially
+
+        // Initialize the table rows and set up onclick event
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+
+        function highlightRow(gethighlight) {
+            //debugger;
+            gethighlight = gethighlight === true;
+            trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted') {
+                    countrow = t; // Change this to set countrow to the exact index
+                    return t;
+                } else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+
+        function movehighlight(way, e) {
+            //  debugger;
+            var idx = highlightRow(true), nextrow;
+            var filteredCount = 0; // Count of visible rows
+            var startIndex = way > 0 ? idx + 1 : idx - 1; // Start from next or previous index
+
+            for (var i = startIndex; i >= 0 && i < trows.length; i += way) {
+                if (trows[i].style.display !== 'none') { // Only consider visible rows
+                    filteredCount++; // Increment visible row count
+                    if (filteredCount === 1) {
+                        countrow = i; // Update countrow to the current row index
+                        return highlightRow.apply(trows[i]); // Highlight the first visible row found
+                    }
+                }
+            }
+
+            // If no visible rows found, cycle to the first or last displayed row
+            for (var j = way > 0 ? 0 : trows.length - 1; (way > 0 ? j < trows.length : j >= 0) ; j += (way > 0 ? 1 : -1)) {
+                if (trows[j].style.display !== 'none') {
+                    countrow = j; // Update countrow to the current row index
+                    return highlightRow.apply(trows[j]); // Highlight the first found visible row
+                }
+            }
+        }
+
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: { // Up Arrow
+                    // debugger;
+                    $('#tblPopup').focus();
+                    flag = false;
+                    countrow--; // Decrease countrow on keyup
+                    return movehighlight(-1, e);
+                }
+                case 40: { // Down Arrow
+                    //debugger;
+                    $('#tblPopup').focus();
+                    flag = true;
+                    countrow++; // Increase countrow on keydown
+                    return movehighlight(1, e); // Move highlight to displayed records
+                }
+                case 13: { // Enter Key
+                    if ($("#tblPopup").is(":focus")) {
+                        if (countrow >= 0) { // Ensure countrow is not negative
+                            var selectedRow = trows[countrow]; // Select the highlighted row directly using countrow
+                            var $tds = $(selectedRow).find("td");
+
+                            // Fetch values from the selected row
+                            $('#txtAccCode').val($tds[0].innerText); // Assuming the first column contains the code
+                            $('#ddlTitle').val($tds[0].innerText); // Populate another field with the same value
+                            $('#myInput').val(""); // Clear the input if needed
+                            $('#myModal').modal('hide'); // Hide the modal
+                            isTrue == 1;
+                            $('#txtDebit').focus(); // Set focus to another input if needed
+                            countrow = -1; // Reset countrow
+                            isTrue == 1;
+                            return;
+                        }
+                    }
+                    break; // Exit the switch
+                }
+                default: {
+                    return true; // Allow other keys to function normally
+                }
+            }
+        }
+
+        document.onkeydown = processkey; // Set the keydown event handler
+    }
+    function ClearClicked() {
+        window.location.href = '@Url.Action("FOJVoucher", "FOJVoucher")';
+    }
+    function NewClicked() {
+        $('#btnNew').disable(true);
+        var date = $('#dtpDate').val();
+        $.ajax({
+            url: "/FOJVoucher/GetVoucherID",
+            type: "POST",
+            data: JSON.stringify({ date: date }),
+            dataType: 'text json',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response != null && response.success) {
+                    $('#txtVochNo').val(response.responseText.toString());
+                    $('#txtVoucherID').val(response.responseVI.toString());
+                    $('#txtAccCode').disable(false);
+                    $('#ddlTitle').disable(false);
+                    $('#txtDebit').disable(false);
+                    $('#txtCredit').disable(false);
+                    $('#txtNarration').disable(false);
+                    $("#txtAccCode").focus();
+                    $('#btnSave').show();
+                    $('#btnSearch').hide();
+                }
+                else {
+                    alert(response.responseText);
+                }
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+    function IntiateFields() {
+        $('#txtAccCode').val("");
+        $('#ddlTitle').val("");
+        $('#txtDebit').val("");
+        $('#txtCredit').val("");
+        //$('#txtNarration').val("");
+        $('#ddlTitle').focus();
+        dvcid = null;
+        RowNo = null;
+    }
+    //function UpdateDVoucher(id, rowNo) {
+    //    dvcid = id;
+    //    RowNo = rowNo;
+    //}
+    function SearchDV() {
+        var dvid = $('#txtVochNo').val();
+        var date = $('#dtpDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or voucher id can not be null");
+        }
+        else {
+            $('#btnSave').show();
+            $('#btnGo').hide();
+            IsUpdate = true;
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/FOJVoucher/SearchVoucher",
+                data: { Date: date, VId: dvid },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        var new_row;
+                        $.each(result, function (i, item) {
+                            $('#txtVoucherID').val(item.VId);
+                            if (item.Mode == "HO") {
+                                $("#wv").prop("checked", true);
+                            }
+                            else {
+                                $("#wmr").prop("checked", true);
+                            }
+                            new_row += "<tr id='row" + i + "' ><td class='accCode'>" + item.AccountId + "</td><td class='title'>" + item.Title + "</td><td class='debit'>" + item.Debit + "</td><td class='credit'>" + item.Credit + "</td><td class='naration'>" + item.Narration + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                        });
+                        $('#mytable tbody').append(new_row);
+                        var tdebit = 0;
+                        var tcredit = 0;
+                        $('#mytable tbody tr').each(function () {
+                            var $row = $(this), $tds = $row.find("td");
+                            var t1debit = parseFloat($tds[2].innerText);
+                            var t1credit = parseFloat($tds[3].innerText);
+                            if (isNaN(t1debit))
+                                t1debit = 0;
+                            if (isNaN(t1credit)) {
+                                t1credit = 0;
+                            }
+                            tdebit = tdebit + t1debit;
+                            tcredit = tcredit + t1credit;
+                        });
+                        document.getElementById('sumcredit').innerHTML = tcredit;
+                        document.getElementById('sumdebit').innerHTML = tdebit;
+                        $("#tempdata").show();
+                    }
+                    else {
+                        alert("No record found");
+                        window.location.reload();
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+            @*var string = "Date=" + date + "&DVId=" + dvid + "";
+        $("#divPartial").load('@(Url.Action("SearchVoucher", "JVoucher", null, Request.Url.Scheme))?' + string);*@
+            $('#txtVochNo').disable(true);
+            $('#dtpDate').disable(true);
+            $('#btnDelete').disable(false);
+            $('#cbxPrintJV').disable(false);
+        }
+    }
+    function SearchClicked() {
+        $('#txtAccCode').disable(false);
+        $('#ddlTitle').disable(false);
+        $('#txtDebit').disable(false);
+        $('#txtCredit').disable(false);
+        $('#txtNarration').disable(false);
+        $('#btnNew').disable(true);
+        $('#btnSearch').hide();
+        $('#btnGo').show();
+        $('#txtVochNo').disable(false);
+        $('#txtVochNo').focus();
+    }
+    var i = 0;
+    currentRow = null;
+    function AddGridClicked() {
+        var accCode = $('#ddlTitle').val();
+        var debit = $('#txtDebit').val();
+        var credit = $('#txtCredit').val();
+        var narration = $('#txtNarration').val();
+        var title = $("#ddlTitle option:selected").text();
+        if ($('#txtAccCode').val() == "" || $('#txtAccCode').val() == null || $("#ddlTitle option:selected").text() == "-- Select Account --") {
+            alert("Cannot Save, You Must Select Account Code");
+            $('#txtAccCode').focus();
+        }
+        else {
+            if ((debit == "" || debit == null || debit == 0 || debit < 0) && (credit == "" || credit == null || credit == 0 || credit < 0)) {
+                alert("Debit and Credit Cannot be Empty or Zero")
+                $('#txtDebit').focus();
+            }
+            else {
+                if ((debit != "" && debit != null && debit != 0) && (credit != "" && credit != null && credit != 0)) {
+                    alert("Enter in debit or credit not both")
+                    $('#txtDebit').focus();
+                }
+                else {
+                    i++;
+                    var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + accCode + "</td><td class='title'>" + title + "</td><td class='debit'>" + debit + "</td><td class='credit'>" + credit + "</td><td class='naration'>" + narration + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                    if (currentRow) {
+                        $('#mytable').find($(currentRow)).replaceWith(new_row);
+                        currentRow = null;
+                    }
+                    else {
+                        $('#mytable').append(new_row);
+                    }
+                    var tdebit = 0;
+                    var tcredit = 0;
+                    $('#mytable tbody tr').each(function () {
+                        var $row = $(this), $tds = $row.find("td");
+                        var t1debit = parseFloat($tds[2].innerText);
+                        var t1credit = parseFloat($tds[3].innerText);
+                        if (isNaN(t1debit))
+                            t1debit = 0;
+                        if (isNaN(t1credit)) {
+                            t1credit = 0;
+                        }
+                        tdebit = tdebit + t1debit;
+                        tcredit = tcredit + t1credit;
+                    });
+                    document.getElementById('sumcredit').innerHTML = tcredit;
+                    document.getElementById('sumdebit').innerHTML = tdebit;
+                    $("#tempdata1").show();
+                    $("#tempdata").show();
+                    IntiateFields();
+                    $('#txtAccCode').focus();
+                }
+            }
+        }
+    }
+    function SaveDVoucher() {
+        var date = $('#dtpDate').val();
+        if (date == "" || date == null) {
+            alert("Date can not be null");
+        }
+        else {
+            var tdebit = parseFloat($('#sumdebit').text());
+            var tcredit = parseFloat($('#sumcredit').text());
+            //var tdebit =0;
+            //var tcredit = 0;
+            var rowCount = $('#mytable tbody tr').length;
+            if (rowCount <= 0) {
+                alert("Must have rows to save.")
+            }
+            else {
+                if (tdebit != tcredit) {
+                    alert("Debit & Credit Total Must Be Equal.")
+                }
+                else {
+                    var answer = confirm("Do You really want to Save this?");
+                    if (answer) {
+                        $('#btnSave').disable(true);
+                        var date = $('#dtpDate').val();
+                        var vid = $('#txtVochNo').val();
+                        var supres = "";
+                        if ($('#wv').is(":checked")) {
+                            supres = "HO";
+                        }
+                        else if ($('#wmr').is(":checked")) {
+                            supres = "FO";
+                        }
+                        var detail = [];
+                        $('#mytable tbody tr').each(function () {
+                            var $row = $(this), $tds = $row.find("td");
+                            detail.push({
+                                accCode: $tds[0].innerText,
+                                title: $tds[1].innerText,
+                                debit: $tds[2].innerText,
+                                credit: $tds[3].innerText,
+                                naration: $tds[4].innerText
+                            });
+                        });
+                        var model = {
+                            vid: vid,
+                            VoucherId: $('#txtVoucherID').val(),
+                            date: date,
+                            CashType: supres,
+                            isupdate: IsUpdate,
+                            isprint: IsPrintJV,
+                            detail: detail
+                        };
+                        $.ajax({
+                            url: "/FOJVoucher/SaveVoucher",
+                            type: "POST",
+                            data: JSON.stringify({ model: model }),
+                            dataType: 'text json',
+                            async: false,
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (response) {
+                                if (response != null && response.success) {
+                                    alert(response.responseText);
+                                    $('#btnSave').disable(false);
+                                    if (IsPrintJV) {
+                                        //alert("hurrah");
+                                        var string = "rtype=rptFOJVReceipt" + "&txtAccCode=" + $('#txtVoucherID').val() + "&dtpDatefrom=" + date + "&title=" + vid + "";
+                                        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+                                    window.open(url, "_blank");
+                                }
+                                window.location.reload();
+                            }
+                            else {
+                                alert(response.responseText);
+                            }
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                    IsUpdate = false;
+                    IsPrintJV = false;
+                }
+            }
+        }
+        }
+    }
+    function PrintReport() {
+        var vid = $('#txtVochNo').val();
+        var date = $('#dtpDate').val();
+        if (vid == "" || vid == null) {
+            alert(" Voucher id can not be null");
+        }
+        else {
+           var string = "rtype=rptFOJVReceipt" + "&txtAccCode=" + $('#txtVoucherID').val() + "&dtpDatefrom=" + date + "&title=" + vid + "";
+                                    var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+                                    window.open(url, "_blank");
+        }
+    }
+    function DeleteClicked() {
+        var dvid = $('#txtVoucherID').val();
+        var date = $('#dtpDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or voucher id can not be null");
+        }
+        else {
+            var answer = confirm("Do You really want to Delete this?");
+            if (answer) {
+                $('#btnSave').show();
+                $('#btnGo').hide();
+                IsUpdate = true;
+                var string = "Date=" + date + "&DVId=" + dvid + "";
+                var url = '@(Url.Action("DeleteVoucher", "FOJVoucher", null, Request.Url.Scheme))?' + string;
+                window.location.href = url;
+            }
+        }
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span11">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Journal Voucher</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="DDVoucher" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <input type="hidden" class="span11" id="txtVoucherID" name="txtVoucherID" />
+                                <table class="table table-bordered data-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>Voucher#<input type="number" class="span11" id="txtVochNo" name="txtVochNo" /></td>
+                                            <td>Date<input type="text" class="span11 datepicker" id="dtpDate" name="dtpDate" /></td>
+                                            <td>
+                                                <input type="radio" name="radios" id="wv" hidden />
+                                                @*Cash in Hand HO
+            <br />*@
+                                                <input type="radio" name="radios" id="wmr" checked />
+                                                Cash in Hand FO
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            @*Text = Acc.AccountId + " | " + Acc.Title,*@
+                                            <td>Account Code<input type="text" class="span11" id="txtAccCode" name="txtAccCode" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                            <td>
+                                                Title
+                                                @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                                    foreach (var Acc in ViewBag.AccCodeDetails)
+                                                    {
+                                                        AccCodelist.Add(new SelectListItem
+                                                        {
+                                                            Text = Acc.Title,
+                                                            Value = Acc.AccountId,
+                                                        });
+                                                    }
+                                                }
+                                                @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitle", @class = "span11 ddl" })
+                                            </td>
+                                            <td>Debit<input type="number" class="span11" id="txtDebit" name="txtDebit" /></td>
+                                            <td>Credit<input type="number" class="span11" id="txtCredit" name="txtCredit" /></td>
+                                            <td> Narration <textarea id="txtNarration" name="txtNarration" style="height:100px"></textarea></td>
+                                            @*<td>Narration<input type="text" class="span11" id="txtNarration" name="txtNarration" data-toggle="tooltip"  title="Enter narration and press enter or add button to save"  placeholder="Naration" /></td>*@
+                                            <td><br /><input type="button" value="Add" id="btnaddgrid" class="btn btn-default" onclick='AddGridClicked();' />
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                @*<div id="divPartial">
+                                        @{ Html.RenderAction("_JVGrid", "JVoucher"); }
+                                        @Html.RenderPartial("~/Views/Shared/_JVGrid.cshtml")
+                                    </div>*@
+                                <div id="tempdata">
+                                    <table class="table table-bordered data-table" id="mytable">
+                                        <thead>
+                                            <tr>
+                                                <th>AccountCode</th>
+                                                <th>Title</th>
+                                                <th>Debit</th>
+                                                <th>Credit</th>
+                                                <th>Narration</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div class="span12">
+                                </div>
+                                <div id="tempdata1">
+                                    <div class="span12">
+                                        <div class="span6">
+                                        </div>
+                                        <div class="span6">
+                                            <div class="span8">
+                                                <h5 style="color:maroon;float:right;"> Total Debit:</h5>
+                                            </div>
+                                            <div class="span4">
+                                                <h5 id="sumdebit" style="color:maroon;">0</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span12">
+                                        <div class="span6">
+                                        </div>
+                                        <div class="span6">
+                                            <div class="span8">
+                                                <h5 style="color:maroon;float:right;">Total Credit:</h5>
+                                            </div>
+                                            <div class="span4">
+                                                <h5 id="sumcredit" style="color:maroon;">0</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span11">
+                                    <input type="checkbox" style="float:left" id="cbxPrintJV" name="cbxPrintJV">Print voucher<br>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();'>New</button>
+                                    <input type="button" value="Save" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                                    <input type="button" id="btnDelete" class="btn btn-danger" value="Delete" onclick='DeleteClicked();'>
+                                    <input type="button" value="Search" id="btnSearch" class="btn btn-default" onclick='SearchClicked();' />
+                                    <input type="button" id="btnGo" value="Go" class="btn btn-success" onclick='SearchDV();'>
+                                    <input type="button" id="btnClose" value="Clear" class="btn btn-warning" onclick='ClearClicked();'>
+                                    <input type="button" id="btnPrint" value="Print Preview" class="btn btn-success" style="background-color: #f4429b" onclick='PrintReport();' >
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Journal Voucher</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="DDVoucher" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <input type="hidden" class="form-control form-control-sm" id="txtVoucherID" name="txtVoucherID" />
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Voucher #</label>
+                                        <input type="number" class="form-control form-control-sm" id="txtVochNo" name="txtVochNo" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDate" name="dtpDate" />
+                                            <div class="input-group-append" id="dtpDateIcon" data-target="#dtpDate" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 align-content-end">
+                                    <div class="form-group">
+                                        @*<div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="wv" name="radios">
+                    <label for="wv" class="custom-control-label">Cash in Hand HO</label>
+                </div>*@
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="wmr" name="radios" checked>
+                                            <label for="wmr" class="custom-control-label">Cash in Hand FO</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Account Code</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtAccCode" name="txtAccCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Account Title</label>
+                                        @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                AccCodelist.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Acc.AccountId,
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitle", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Debit</label>
+                                        <input type="number" class="form-control form-control-sm" id="txtDebit" name="txtDebit" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Credit</label>
+                                        <input type="number" class="form-control form-control-sm" id="txtCredit" name="txtCredit" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Narration</label>
+                                        <input style="width: 300px;" type="text" id="txtNarration" class="form-control form-control-sm" name="txtNarration" />
+                                    </div>
+                                </div>
+                                <div class="col-md-1 align-content-center">
+                                    <input style=" margin-left:65px;"  type="button" value="Add" id="btnaddgrid" class="btn btn-sm btn-default mt-3" onclick='AddGridClicked();' />
+                                </div>
+                            </div>
+                            <div id="tempdata">
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered table-responsive" id="mytable">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 10%;">Account Code</th>
+                                                    <th style="width: 45%;">Title</th>
+                                                    <th style="width: 10%;">Debit</th>
+                                                    <th style="width: 10%;">Credit</th>
+                                                    <th style="width: 10%;">Narration</th>
+                                                    <th style="width: 15%;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                        <div class="row">
+                                            <div class="col-md-3 offset-md-9">
+                                                <b>Total Debit:</b>
+                                                <span><b id="sumdebit" class="text-danger">0</b></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3 offset-md-9">
+                                                <b>Total Credit:</b>
+                                                <span><b id="sumcredit" class="text-danger">0</b></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="cbxPrintJV" name="cbxPrintJV">
+                                        <label for="cbxPrintJV" class="custom-control-label">Print voucher</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-3 col-6">
+                                            @* <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();' >New</button>*@
+                                            <input type="button" value="New" id="btnNew" class="btn btn-sm w-100 btn-primary" onclick='NewClicked();'>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-6">
+                                            <input type="button" value="Save" id="btnSave" class="btn btn-sm w-100 btn-success" onclick='SaveDVoucher();'>
+                                            <input type="button" value="Search" id="btnSearch" class="btn btn-sm w-100 btn-default" onclick='SearchClicked();' />
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-6">
+                                            <input type="button" id="btnDelete" class="btn btn-sm w-100 btn-danger" value="Delete" onclick='DeleteClicked();'>
+                                            <input type="button" id="btnGo" value="Go" class="btn btn-sm w-100 btn-success" onclick='SearchDV();'>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-6">
+                                            <input type="button" id="btnClose" value="Clear" class="btn btn-sm w-100 btn-warning" onclick='ClearClicked();'>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                          
+                                            <input type="button" id="btnPrint" value="Print Preview" class="btn btn-sm w-100 btn-success" style="background-color: #f4429b" onclick='PrintReport();'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@*Account Code Modal*@
+<div id="myModal" class="modal hide fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search Account</h5>
+                <button data-dismiss="modal" class="close" type="button">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <h5>Accounts List</h5>
+                                <input type="text" class="form-control form-control-sm" id="myInput" onkeyup="myFunction()" placeholder="Search for title.." style="float:right;">
+                            </div>
+                            <div class="card-body">
+                                <table id="tblPopup" class="table table-bordered" tabindex="-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Account Code</th>
+                                            <th>Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var Acc in ViewBag.AccCodeDetails)
+                                        {
+                                            <tr>
+                                                <td>@Acc.AccountId</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*Account Code Modal End*@
+<div id="myModalinvoices" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Vouchers</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Vouchers List</h5>
+                            <input type="text" id="myInputinv" onkeyup="myFunctioninv()" placeholder="Search for title.." style="float:right;">
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopupinv" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>Vch No</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var Acc in ViewBag.AccCodeDetails2)
+                                    {
+                                        <tr>
+                                            <td>@Convert.ToString(Acc.Code)</td>
+                                            <td>@Acc.Pdate.ToString("dd/MM/yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunctioninv() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputinv");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopupinv");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#dtpDate').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#youDate').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDateIcon').click(function () {
+                $('#dtpDate').datepicker('show');
+            });
+            $('#youDateIcon').click(function () {
+                $('#youDate').datepicker('show');
+            });
+            $('#dtpDate').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDate').datepicker('setDate', 'now');
+            $('#youDate').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#youDate').datepicker('setDate', 'now');
+        });
+    </script>
+}   

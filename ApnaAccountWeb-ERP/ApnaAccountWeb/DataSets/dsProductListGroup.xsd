@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsProductListGroup" targetNamespace="http://tempuri.org/dsProductListGroup.xsd" xmlns:mstns="http://tempuri.org/dsProductListGroup.xsd" xmlns="http://tempuri.org/dsProductListGroup.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="ApnaAccount_IKConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ApnaAccount_IKConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.ApnaAccount_IKConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsProductListGroup" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsProductListGroup" msprop:Generator_UserDSName="dsProductListGroup">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ado" msprop:Generator_TableClassName="adoDataTable" msprop:Generator_TableVarName="tableado" msprop:Generator_TablePropName="ado" msprop:Generator_RowDeletingName="adoRowDeleting" msprop:Generator_RowChangingName="adoRowChanging" msprop:Generator_RowEvHandlerName="adoRowChangeEventHandler" msprop:Generator_RowDeletedName="adoRowDeleted" msprop:Generator_UserTableName="ado" msprop:Generator_RowChangedName="adoRowChanged" msprop:Generator_RowEvArgName="adoRowChangeEvent" msprop:Generator_RowClassName="adoRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ProductID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnProductID" msprop:Generator_ColumnPropNameInRow="ProductID" msprop:Generator_ColumnPropNameInTable="ProductIDColumn" msprop:Generator_UserColumnName="ProductID" type="xs:int" />
+              <xs:element name="SalePrice" msprop:Generator_ColumnVarNameInTable="columnSalePrice" msprop:Generator_ColumnPropNameInRow="SalePrice" msprop:Generator_ColumnPropNameInTable="SalePriceColumn" msprop:Generator_UserColumnName="SalePrice" type="xs:decimal" minOccurs="0" />
+              <xs:element name="PurchasePrice" msprop:Generator_ColumnVarNameInTable="columnPurchasePrice" msprop:Generator_ColumnPropNameInRow="PurchasePrice" msprop:Generator_ColumnPropNameInTable="PurchasePriceColumn" msprop:Generator_UserColumnName="PurchasePrice" type="xs:decimal" minOccurs="0" />
+              <xs:element name="ReorderLevel" msprop:Generator_ColumnVarNameInTable="columnReorderLevel" msprop:Generator_ColumnPropNameInRow="ReorderLevel" msprop:Generator_ColumnPropNameInTable="ReorderLevelColumn" msprop:Generator_UserColumnName="ReorderLevel" type="xs:int" minOccurs="0" />
+              <xs:element name="ProductName" msprop:Generator_ColumnVarNameInTable="columnProductName" msprop:Generator_ColumnPropNameInRow="ProductName" msprop:Generator_ColumnPropNameInTable="ProductNameColumn" msprop:Generator_UserColumnName="ProductName" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PMW" msprop:Generator_ColumnVarNameInTable="columnPMW" msprop:Generator_ColumnPropNameInRow="PMW" msprop:Generator_ColumnPropNameInTable="PMWColumn" msprop:Generator_UserColumnName="PMW" type="xs:decimal" minOccurs="0" />
+              <xs:element name="PG_ID" msprop:Generator_ColumnVarNameInTable="columnPG_ID" msprop:Generator_ColumnPropNameInRow="PG_ID" msprop:Generator_ColumnPropNameInTable="PG_IDColumn" msprop:Generator_UserColumnName="PG_ID" type="xs:int" minOccurs="0" />
+              <xs:element name="ProductGroup" msprop:Generator_ColumnVarNameInTable="columnProductGroup" msprop:Generator_ColumnPropNameInRow="ProductGroup" msprop:Generator_ColumnPropNameInTable="ProductGroupColumn" msprop:Generator_UserColumnName="ProductGroup">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

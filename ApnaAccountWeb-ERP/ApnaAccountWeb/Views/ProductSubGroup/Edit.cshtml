@@ -1,0 +1,30 @@
+﻿ @model ApnaAccountWeb.Models.ProductSubGroup 
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span6">
+             <a href="@Url.Action("ViewProductSubGroup", "ProductSubGroup", new {@class="btn btn-primary" })" style="float:right">View Product Types</a>
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Edit Product Type</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="Edit" method="Post" enctype="multipart/form-data" class="form-horizontal">
+               <input type="hidden" id="PSG_Id" name="PSG_Id" value="@Model.PSG_Id" />
+                 <div class="control-group">
+                <label class="control-label">Title:</label>
+                <div class="controls">
+                  <input type="text" id="Title" name="Title" required value="@Convert.ToString(Model.Title)" />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-success">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>
+               

@@ -1,0 +1,48 @@
+﻿@helper GetTreeView(List<ApnaAccountWeb.Models.Account> siteMenu, string parentId)
+{
+    foreach (var i in siteMenu.Where(a => a.ParentId.Equals(parentId)))
+    {
+        <li>
+            @{
+        var submenu = siteMenu.Where(a => a.ParentId.Equals(i.AccountId)).Count();
+        if (submenu > 0)
+        {
+            <span class="collapsee collapsible">
+                <img style="width:10px;height:10px;" src="~/Content/Images/next.png" />
+            </span>
+        }
+        else
+        {
+            <span style="width:15px; display:inline-block">&nbsp;</span>
+        }
+            }
+            @if ((i.AccType).Trim() == "Group")
+            {
+                <span>
+                    @if (i.AccountId == "01" || i.AccountId == "02" || i.AccountId == "03" || i.AccountId == "04" || i.AccountId == "05")
+                    {
+                        <img style="width:20px;height:20px;" src="~/Content/Images/letter_M_red-32.png" />
+                    }
+                    else
+                    {
+                        <img style="width:20px;height:20px;" src="~/Content/Images/Group2.png" />
+                    }
+                    <a id="@i.AccountId" name="@i.LevelKey" title="@i.Title" onclick="SelectedAccount(this.id, this.title, 'Group')" ondblclick="    NewAccount(this.id, this.name, this.title)" style="cursor:pointer">@i.Title</a>
+                </span>
+            }
+            else
+            {
+                <span>
+                    <img style="width:20px;height:20px;" src="~/Content/Images/Detail.png" />
+                    <a id="@i.AccountId" class="treeclass" name="@i.LevelKey" title="@i.Title" onclick="SelectedAccount(this.id, this.title,'Detail')" style="cursor:pointer">@i.Title</a>
+                </span>
+            }
+            @if (submenu > 0)
+            {
+                <ul>
+                    @TreeView.GetTreeView(siteMenu, i.AccountId)
+                </ul>
+            }
+        </li>
+    }
+}

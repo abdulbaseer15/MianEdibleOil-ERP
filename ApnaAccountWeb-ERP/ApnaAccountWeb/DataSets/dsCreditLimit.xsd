@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsCreditLimit" targetNamespace="http://tempuri.org/dsCreditLimit.xsd" xmlns:mstns="http://tempuri.org/dsCreditLimit.xsd" xmlns="http://tempuri.org/dsCreditLimit.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="ApnaAccount_IKConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ApnaAccount_IKConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.ApnaAccount_IKConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsCreditLimit" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsCreditLimit" msprop:Generator_UserDSName="dsCreditLimit">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="qryCreditLimit" msprop:Generator_TableClassName="qryCreditLimitDataTable" msprop:Generator_TableVarName="tableqryCreditLimit" msprop:Generator_TablePropName="qryCreditLimit" msprop:Generator_RowDeletingName="qryCreditLimitRowDeleting" msprop:Generator_RowChangingName="qryCreditLimitRowChanging" msprop:Generator_RowEvHandlerName="qryCreditLimitRowChangeEventHandler" msprop:Generator_RowDeletedName="qryCreditLimitRowDeleted" msprop:Generator_UserTableName="qryCreditLimit" msprop:Generator_RowChangedName="qryCreditLimitRowChanged" msprop:Generator_RowEvArgName="qryCreditLimitRowChangeEvent" msprop:Generator_RowClassName="qryCreditLimitRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="AccountID" msprop:Generator_ColumnVarNameInTable="columnAccountID" msprop:Generator_ColumnPropNameInRow="AccountID" msprop:Generator_ColumnPropNameInTable="AccountIDColumn" msprop:Generator_UserColumnName="AccountID">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="15" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Balance" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnBalance" msprop:Generator_ColumnPropNameInRow="Balance" msprop:Generator_ColumnPropNameInTable="BalanceColumn" msprop:Generator_UserColumnName="Balance" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Credit_Days" msprop:Generator_ColumnVarNameInTable="columnCredit_Days" msprop:Generator_ColumnPropNameInRow="Credit_Days" msprop:Generator_ColumnPropNameInTable="Credit_DaysColumn" msprop:Generator_UserColumnName="Credit_Days" type="xs:decimal" />
+              <xs:element name="Credit_Limit" msprop:Generator_ColumnVarNameInTable="columnCredit_Limit" msprop:Generator_ColumnPropNameInRow="Credit_Limit" msprop:Generator_ColumnPropNameInTable="Credit_LimitColumn" msprop:Generator_UserColumnName="Credit_Limit" type="xs:decimal" />
+              <xs:element name="OverLimit" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnOverLimit" msprop:Generator_ColumnPropNameInRow="OverLimit" msprop:Generator_ColumnPropNameInTable="OverLimitColumn" msprop:Generator_UserColumnName="OverLimit" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Ini_ApnaAccountModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Ini_Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ConactNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="Owner" Type="varchar" MaxLength="10" />
+          <Property Name="OwnerNo" Type="varchar" MaxLength="13" />
+          <Property Name="Ccode" Type="int" Nullable="false" />
+          <Property Name="DBConEF" Type="varchar(max)" Nullable="false" />
+          <Property Name="DBConSQL" Type="varchar(max)" Nullable="false" />
+          <Property Name="VoucherClosing" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityContainer Name="Ini_ApnaAccountModelStoreContainer">
+          <EntitySet Name="Ini_Company" EntityType="Self.Ini_Company" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Ini_ApnaAccountModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Ini_ApnaAccountEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Ini_Company" EntityType="Ini_ApnaAccountModel.Ini_Company" />
+        </EntityContainer>
+        <EntityType Name="Ini_Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="ConactNo" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="Owner" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="OwnerNo" Type="String" MaxLength="13" Unicode="false" FixedLength="false" />
+          <Property Name="Ccode" Type="Int32" Nullable="false" />
+          <Property Name="DBConEF" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="DBConSQL" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="VoucherClosing" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Ini_ApnaAccountModelStoreContainer" CdmEntityContainer="Ini_ApnaAccountEntities">
+          <EntitySetMapping Name="Ini_Company">
+            <EntityTypeMapping TypeName="Ini_ApnaAccountModel.Ini_Company">
+              <MappingFragment StoreEntitySet="Ini_Company">
+                <ScalarProperty Name="VoucherClosing" ColumnName="VoucherClosing" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ConactNo" ColumnName="ConactNo" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerNo" ColumnName="OwnerNo" />
+                <ScalarProperty Name="Ccode" ColumnName="Ccode" />
+                <ScalarProperty Name="DBConEF" ColumnName="DBConEF" />
+                <ScalarProperty Name="DBConSQL" ColumnName="DBConSQL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

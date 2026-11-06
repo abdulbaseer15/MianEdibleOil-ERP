@@ -1,0 +1,261 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    $(document).ready(function () {
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        //$('#dtpDatefrom').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDatefrom').datepicker('setDate', 'now');
+        //$('#dtpDateto').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDateto').datepicker('setDate', 'now');
+    });
+    function ViewClicked() {
+        var dtpDateto = $('#dtpDateto').val();
+        var dtpDatefrom = $('#dtpDatefrom').val();
+        var supres = "";
+        if ($('#Insert').is(":checked")) {
+            supres = "Insertion";
+        }
+        else if ($('#Update').is(":checked")) {
+            supres = "Updation";
+        }
+        else if ($('#Delete').is(":checked")) {
+            supres = "Deletion";
+        }
+        else if ($('#Overall').is(":checked")) {
+            supres = "Overall";
+        }
+            $.ajax({
+                url: "/Reports/GetIfExist",
+                type: "Post",
+                data: JSON.stringify({ dtpDateto: dtpDateto, dtpDatefrom:dtpDatefrom}),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null) {
+                        if(response.responseText.toString()=="True")
+                        {
+                            var excel = "No";
+                            var string = "rtype=rptLog" + "&dtpDatefrom=" + dtpDatefrom + "&excel=" + excel + "&dtpDateto=" + dtpDateto + "&title=" + supres + "";
+                            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+                            window.open(url, "_blank");
+                        }
+                        else {
+                            alert("Sorry.........No Transaction between these dates!");
+                        }
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+    }
+    function ExportExcel() {
+        var excel = "Yes";
+        var dtpDateto = $('#dtpDateto').val();
+        var dtpDatefrom = $('#dtpDatefrom').val();
+        var string = "rtype=rptCashbook" + "&dtpDatefrom=" + dtpDatefrom + "&excel=" + excel + "&dtpDateto=" + dtpDateto + "";
+        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                </div>
+                <div class="span5">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Cash Book</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <div class="control-group">
+                                    <label class="control-label">From:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDatefrom" name="dtpDatefrom" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Cash Book Account:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDateto" name="dtpDateto" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">To:</label>
+                                    <div class="controls">
+                                        <input type="radio" name="radios" id="Insert" checked />
+                                        Insert
+                                        <br />
+                                        <input type="radio" name="radios" id="Update" />
+                                        Update
+                                        <br />
+                                        <input type="radio" name="radios" id="Delete" />
+                                        Delete
+                                        <br />
+                                        <input type="radio" name="radios" id="Overall" />
+                                        Overall
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <input type="button" value="View" id="btnSearch" class="btn btn-success" onclick='ViewClicked();' />
+                                    <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-success" style="background-color: #062f70" onclick='ExportExcel();'>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Cash Book</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>From:</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDatefrom" name="dtpDatefrom" />
+                                            <div class="input-group-append" id="dtpDatefromIcon" data-target="#dtpDatefrom" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>To:</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDateto" name="dtpDateto" />
+                                            <div class="input-group-append" id="dtpDatetoIcon" data-target="#dtpDateto" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <b>Cash Book Account:</b>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="Insert" checked name="radios">
+                                            <label for="Insert" class="custom-control-label">Insert</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="Update" name="radios">
+                                            <label for="Update" class="custom-control-label">Update</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="Delete" name="radios">
+                                            <label for="Delete" class="custom-control-label">Delete</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="Overall" name="radios">
+                                            <label for="Overall" class="custom-control-label">Overall</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-2">
+                                    <input type="button" value="View" id="btnSearch" class="btn btn-sm btn-success" onclick='ViewClicked();' />
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-10">
+                                    <div class="text-right">
+                                        <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-sm btn-primary" onclick='ExportExcel();'>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#dtpDatefrom').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDateto').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDatefromIcon').click(function () {
+                $('#dtpDatefrom').datepicker('show');
+            });
+            $('#dtpDatetoIcon').click(function () {
+                $('#dtpDateto').datepicker('show');
+            });
+            $('#dtpDatefrom').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDatefrom').datepicker('setDate', 'now');
+
+            $('#dtpDateto').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDateto').datepicker('setDate', 'now');
+        });
+    </script>
+}     

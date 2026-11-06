@@ -1,0 +1,43 @@
+﻿ @model ApnaAccountWeb.Models.PartiesGatePass 
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span12">
+             <a href="@Url.Action("ViewGPParties", "GPParties", new { @class = "btn btn-primary" })" style="float:right">View GatePass Parties</a>
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Edit GatePass Party</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="Edit" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                 <input type="hidden" id="CompID" name="CompID" value="@Model.CompID" />
+                      <table class="table table-bordered data-table">
+              <tbody>
+                  <tr>
+                      <td>Name<input type="text" class="span11" id="Title" required name="Title" value="@Model.Title" /></td>
+                      <td>Father Name<input type="text" class="span11" id="So" required name="So" value="@Model.So" /></td>
+                      <td>Id Card<input type="text" class="span11" id="IDcard" required name="IDcard" value="@Model.IDcard" /></td>
+                  </tr>
+                  <tr>
+                      <td>Designation<input type="text" class="span11" id="Designation" required name="Designation" value="@Model.Designation" /></td>
+                      <td>Mobile No<input type="text" class="span11" id="MobNo" required name="MobNo" value="@Model.MobNo" /></td>
+                      <td>Hom Mob No<input type="text" class="span11" id="HomeMobNo" required name="HomeMobNo" value="@Model.HomeMobNo" /></td>
+                  </tr>
+                  <tr>
+                      <td>Address<input type="text" class="span11" id="Remarks" required name="Remarks" value="@Model.Remarks" /></td>
+                      <td>Joining Date<input type="date" class="span11" id="JDate" required name="JDate" value="@Model.JDate.Value.ToString("yyyy-MM-dd")" /></td>
+                      <td></td>
+                  </tr>
+              </tbody>
+            </table>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-success">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>
+               

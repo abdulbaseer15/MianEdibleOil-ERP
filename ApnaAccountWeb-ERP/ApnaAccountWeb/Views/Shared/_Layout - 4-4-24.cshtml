@@ -1,0 +1,871 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ApnaAccount</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @*<meta name="description" content="Different Description" />
+        <meta name="keywords" content="different, keywords" />*@
+    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="~/Content/css/fullcalendar.css" />
+    <link rel="stylesheet" href="~/Content/css/maruti-style.css" />
+    <link rel="stylesheet" href="~/Content/css/maruti-media.css" class="skin-color" />
+    <link rel="icon" type="image/png" href="~/Content/img/favicon-a.png" />
+    <script src="~/Content/js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+                $(".ac").hide();
+                $(".ac2").show();
+            }
+            //SetupSessionUpdater('/Home/KeepSessionAlive');
+            //Url.Action("KeepSessionAlive","Home")
+            setInterval("fnSessionRun()", 50000);
+        });
+    </script>
+    <script>
+        //var SessionTimer = $("#hdnSessionTimeout").val();
+        var flag = true;
+        function fnSessionRun() {
+            SessionOKClick();
+        }
+        function SessionOKClick() {
+            //ajax call to reset session
+            $.ajax({
+                url: '/Common/ResetSession/',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {},
+                success: function (data) {
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+        }
+        $(document).ajaxStart(function (event, jqxhr, settings) {
+            //SessionTimer = parseInt($("#hdnSessionTimeout").val());
+        });
+    </script>
+    <style>
+        tr.normal td {
+            color: black;
+            background-color: white;
+        }
+        tr.highlighted td {
+            color: white;
+            background-color: #062f70;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div class="span6">
+            <a href="@Url.Action("Index", "Home")">  <img src="~/Content/img/logo.png" width="150" height="150" alt="ApnaAccount" /></a>
+        </div>
+        <div class="span6">
+            <h4 style="color:white;display:block;margin-top:20px">@Convert.ToString(Session["comName"])</h4>
+        </div>
+    </div>
+    <div class="btn-group rightzero">
+        <a class="top_message tip-left" title="Manage Files"><i class="icon-file"></i></a> <a class="top_message tip-bottom" title="Manage Users"><i class="icon-user"></i></a> <a class="top_message tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a> <a class="top_message tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+    </div>
+    <div id="user-nav" class="navbar navbar-inverse">
+        <ul class="nav">
+            @* <li><img src="~/Content/img/urduapna.png" width="100" height="100" alt="ApnaAccount" /></li>
+            *@
+            <li style="float:right"><a title="" href="@Url.Action("Logout", "User")"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
+        </ul>
+    </div>
+    @{
+        string dbcon = Convert.ToString(Session["con"]);
+        ApnaAccountWeb.ViewModels.DbConection obj = new ApnaAccountWeb.ViewModels.DbConection();
+        string condb = obj.Connect(dbcon);
+        ApnaAccountWeb.Models.ApnaAccountEntities db = new ApnaAccountWeb.Models.ApnaAccountEntities(condb);
+        short userid = Convert.ToInt16(Session["userid"]);
+        List<int> list = new List<int>();
+        var lstuserrole = db.UserRights.Where(x => x.Userid == userid);
+        if (lstuserrole != null)
+        {
+            foreach (var item in lstuserrole)
+            {
+                list.Add(item.Selected);
+            }
+        }
+        <div id="sidebar">
+            <a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
+            <ul>
+                @*<li class="active"><a href="@Url.Action("Index", "Home")"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>*@
+                <li class="submenu">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Coding</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(1))
+                        {
+                            <li><a href="@Url.Action("AccountCoding", "Accounts")">Accounts Coding</a></li>
+                        }
+                        @if (list.Contains(2))
+                        {
+                            <li><a href="@Url.Action("OpeningBalances", "Accounts")">Accounts Opening Balances</a></li>
+                        }
+                        @if (list.Contains(3))
+                        {
+                            <li><a href="@Url.Action("CreditLimit", "Accounts")">Client Credit Limit</a></li>
+                        }
+                        @if (list.Contains(4))
+                        {
+                            <li><a href="@Url.Action("AccountCoding", "PartyRegisteration")">Party Registeration Info</a></li>
+                        }
+                        <hr /> style="margin-top:4px;margin-bottom:4px;">
+                        @if (list.Contains(5))
+                        {
+                            <li><a href="@Url.Action("RegisterProductGroup", "ProductGroup")">Product Group</a></li>
+                        }
+                        @if (list.Contains(6))
+                        {
+                            <li><a href="@Url.Action("RegisterProductSubGroup", "ProductSubGroup")">Product Type</a></li>
+                        }
+                        @if (list.Contains(7))
+                        {
+                            <li><a href="@Url.Action("RegisterProduct", "Product")">Product Coding</a></li>
+                        }
+                        @if (list.Contains(8))
+                        {
+                            <li><a href="@Url.Action("OpeningStock", "ProductsOpening")">Opening Stocks</a></li>
+                        }
+                        @if (list.Contains(9))
+                        {
+                            <li><a href="@Url.Action("#", "#")">Physical Stock Taking</a></li>
+                        }
+                        <hr style="margin-top:4px;margin-bottom:4px;" />
+                        @if (list.Contains(10))
+                        {
+                            <li><a href="@Url.Action("RegisterPlant", "Plant")">Plant Coding</a></li>
+                        }
+                        @if (list.Contains(11))
+                        {
+                            <li><a href="@Url.Action("RegisterStore", "Store")">Store Coding</a></li>
+                        }
+                        @if (list.Contains(12))
+                        {
+                            <li><a href="@Url.Action("RegisterVehicleType", "VehicleType")">Vehicle Type Coding</a></li>
+                        }
+                        @if (list.Contains(13))
+                        {
+                            <li><a href="@Url.Action("RegisterPartyFarm", "PartyFarm")">Party Farm</a></li>
+                        }
+                        @if (list.Contains(14))
+                        {
+                            <li><a href="@Url.Action("RegisterCity", "City")">City Coding</a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Purchase</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(15))
+                        {
+                            <li><a href="@Url.Action("PurchaseOrder", "PurchaseOrder")">Purchase Order</a></li>
+                        }
+                        @if (list.Contains(16))
+                        {
+                            <li><a href="@Url.Action("InwardGatePassRM", "InwardGatePassRM")">Inward Gate Pass </a></li>
+                        }
+                        @if (list.Contains(17))
+                        {
+                            <li><a href="@Url.Action("GRN", "GRN")">Good Receive Note </a></li>
+                        }
+                        @if (list.Contains(18))
+                        {
+                            <li><a href="@Url.Action("PurchaseInvoice", "PurchaseInvoice")">Purchase Invoice</a></li>
+                        }
+                        @if (list.Contains(19))
+                        {
+                            <li><a href="@Url.Action("PurchaseRInvoice", "PurchaseRInvoice")">Purchase Return</a></li>
+                        }
+                        @if (list.Contains(20))
+                        {
+                            <li><a href="@Url.Action("PurchaseGSTInvoice", "PurchaseGSTInvoice")">Purchase Invoice GST</a></li>
+                        }
+                        @if (list.Contains(21))
+                        {
+                            <li><a href="@Url.Action("PurchaseReturnGST", "PurchaseReturnGST")">Purchase Return GST</a></li>
+                        }
+                        @if (list.Contains(17))
+                        {
+                            <li><a href="@Url.Action("GRNBetweenDate", "Reports")">GRN Report Between Date</a></li>
+                        }
+                        @if (list.Contains(17))
+                        {
+                            <li><a href="@Url.Action("Report", "Reports", new { rtype = "PendingGRN" })" tar target="_blank">Pending GRN Report</a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="submenu ac">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Production</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(22))
+                        {
+                            <li><a href="@Url.Action("IndividualFormulaFG", "IndividualFormulaFG")">Individual Formula - [Finished Goods]</a></li>
+                        }
+                        @if (list.Contains(23))
+                        {
+                            <li><a href="@Url.Action("IndividualFormulaAdjustment", "IndividualFormulaAdjustment")">Individual Formula - [Adjustment]</a></li>
+                        }
+                        @if (list.Contains(24))
+                        {
+                            <li><a href="@Url.Action("DailyProduction", "IReports")">Production Reports</a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Sale</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(25))
+                        {
+                            <li><a href="@Url.Action("SaleOrder", "SaleOrder")">Sale Order</a></li>
+                        }
+                        @if (list.Contains(26))
+                        {
+                            <li><a href="@Url.Action("DeliveryChallan", "DeliveryChallan")">Delivery Challan</a></li>
+                        }
+                        @if (list.Contains(27))
+                        {
+                            <li><a href="@Url.Action("SaleInvoice", "SaleInvoice")">Sale Invoice New</a></li>
+                        }
+                        @if (list.Contains(28))
+                        {
+                            <li><a href="@Url.Action("SaleReturn", "SaleReturn")">Sale Return</a></li>
+                        }
+                        @if (list.Contains(29))
+                        {
+                            <li><a href="@Url.Action("SaleGSTInvoice", "SaleGSTInvoice")">Sale Invoice GST</a></li>
+                        }
+                        @if (list.Contains(30))
+                        {
+                            <li><a href="@Url.Action("SaleReturnGST", "SaleReturnGST")">Sale Return GST</a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="submenu ac">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Bardana</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(31))
+                        {
+                            <li><a href="@Url.Action("RegisterBardanaType", "BardanaType")">Bardana Types Coding</a></li>
+                        }
+                        @if (list.Contains(32))
+                        {
+                            <li><a href="@Url.Action("BardanaIssueReceived", "BardanaIssueReceived")">Bardana Issued/Received</a></li>
+                        }
+                        @if (list.Contains(33))
+                        {
+                            <li class="submenu tb2">
+                                <a href="@Url.Action("#", "#")">Report</a>
+                            </li>
+                        }
+                        <li class="submenu a2" style="display:none;float:right">
+                            <ul>
+                                <li><a href="@Url.Action("BardanaDailyRegister", "IReports")" class="spec">Bardana Daily Register </a></li>
+                                <li><a href="@Url.Action("BardanaPartyLedger", "IReports")" class="spec1">Bardana Party Ledger</a></li>
+                                <li><a href="@Url.Action("BardanaPartyStatus", "IReports")" class="spec2">Bardana Party Status</a></li>
+                                <li><a href="@Url.Action("BardanaPartyStatus2", "IReports")" class="spec3">Bardana Status (BetweenDates)</a></li>
+                                <li><a href="@Url.Action("BardanaLedger", "IReports")" class="spec4">Bardana Ledger</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Accounts</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(34))
+                        {
+                            <li><a href="@Url.Action("DVoucher", "DVoucher")">Cash Payment / Debit Voucher</a></li>
+                        }
+                        @if (list.Contains(35))
+                        {
+                            <li><a href="@Url.Action("CVoucher", "CVoucher")">Cash Receipt / Credit Voucher</a></li>
+                        }
+                        @if (list.Contains(36))
+                        {
+                            <li><a href="@Url.Action("JVoucher", "JVoucher")">Journal Voucher</a></li>
+                            @*<li><a href="@Url.Action("#", "#")">Adjustment Journal Voucher</a></li>*@
+                        }
+                        @if (list.Contains(37))
+                        {
+                            <li><a href="@Url.Action("BankCJVoucher", "BankCJVoucher")">Bank Receipt Voucher</a></li>
+                        }
+                        @if (list.Contains(38))
+                        {
+                            <li><a href="@Url.Action("BankDJVoucher", "BankDJVoucher")">Bank Payment Voucher</a></li>
+                            @*<li><a href="@Url.Action("#", "#")">Bank Markup</a></li>
+                                <li><a href="@Url.Action("#", "#")">Voucher General</a></li>
+                                <li><a href="@Url.Action("#", "#")">Voucher Customized</a></li>*@
+                        }
+                        @*@if(list.Contains(11))
+                            {
+                                  <li><a href="@Url.Action("Verify", "VouchersVerification")">Vouchers Verification</a></li>
+                              }*@
+                        @if (list.Contains(36))
+                        {
+                            <li><a href="@Url.Action("VoucherVerify", "VouchersVerification")">Search Voucher By Narration</a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="submenu ac">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Accounts Reports</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(39))
+                        {
+                            <li><a href="@Url.Action("Report", "Reports", new { rtype = "ChartofAccount" })" target="_blank">Chart of Accounts</a></li>
+                        }
+                        @if (list.Contains(40))
+                        {
+                            <li><a href="@Url.Action("AccountLedger", "Reports")">Account Ledger</a></li>
+                        }
+                        @if (list.Contains(41))
+                        {
+                            <li><a href="@Url.Action("AccountReconciliation", "Reports")">Account Reconciliation</a></li>
+                        }
+                        @if (list.Contains(42))
+                        {
+                            <li><a href="@Url.Action("PartyLedger", "Reports")">Party Ledger</a></li>
+                        }
+                        @if (list.Contains(43))
+                        {
+                            <li><a href="@Url.Action("PartyLedgerSummary", "Reports")">Party Ledger Summary</a></li>
+                        }
+                        @if (list.Contains(44))
+                        {
+                            <li class="submenu tb9">
+                                <a href="@Url.Action("Index", "Home")">Trial Balances</a>
+                            </li>
+                        }
+                        <li class="submenu a9" style="display:none;float:right">
+                            <ul>
+                                <li><a href="@Url.Action("TrialBalance", "Reports")" class="spec">Short Trial Balance</a></li>
+                                <li><a href="@Url.Action("TrialBalanceBetweenDates", "Reports")" class="spec1">Trial Balance Between Dates</a></li>
+                                <li><a href="@Url.Action("DetailTrial", "Reports")" class="spec2">Detail Trial</a></li>
+                                <li><a href="@Url.Action("GroupTrial", "Reports")" class="spec3">Group Trial</a></li>
+                                <li><a href="@Url.Action("SixColumnTrial", "Reports")" class="spec4">Six Column Trial</a></li>
+                            </ul>
+                        </li>
+                        @if (list.Contains(45))
+                        {
+                            <li><a href="@Url.Action("Cashbook", "Reports")">Cash Book</a></li>
+                        }
+                        @if (list.Contains(46))
+                        {
+                            <li><a href="@Url.Action("Daybook", "Reports")">Day Book</a></li>
+                        }
+                        @if (list.Contains(47))
+                        {
+                            <li><a href="@Url.Action("DayBookInvoiceDetail", "Reports")">DayBook Invoice Detail</a></li>
+                        }
+                        @if (list.Contains(48))
+                        {
+                            <li><a href="@Url.Action("DayBookRecovered", "Reports")">Day Book Recovered</a></li>
+                        }
+                        @if (list.Contains(49))
+                        {
+                            <li><a href="@Url.Action("Journalbook", "Reports")">Journal Book</a></li>
+                        }
+                        @if (list.Contains(50))
+                        {
+                            <li><a href="@Url.Action("GroupTrial_WA", "Reports")">Aging Group Report</a></li>
+                            <li><a href="@Url.Action("Aging", "Reports")">Aging Report New</a></li>
+                        }
+                        @if (list.Contains(51))
+                        {
+                            <li><a href="@Url.Action("BalanceSheet", "Reports")">Balance Sheet</a></li>
+                        }
+                        @if (list.Contains(52))
+                        {
+                            <li><a href="@Url.Action("Receivable", "Reports")">Receiveable and Payable</a></li>
+                        }
+                        @if (list.Contains(53))
+                        {
+                            <li><a href="@Url.Action("ProfitLoss", "Reports")">Profit and Loss</a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="submenu ac1">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Inventory Reports</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(54))
+                        {
+                            <li><a href="@Url.Action("GstRegister", "IReports")">Gst Register</a></li>
+                        }
+                        @if (list.Contains(55))
+                        {
+                            <li><a href="@Url.Action("StockLedger", "IReports")">Stock Ledger</a></li>
+                        }
+                        @if (list.Contains(56))
+                        {
+                            <li><a href="@Url.Action("StockLedgerFinalWeight", "IReports")">Stock Ledger Final Weight</a></li>
+                        }
+                        @if (list.Contains(57))
+                        {
+                            <li><a href="@Url.Action("StockLedgerWithOutIssue", "IReports")">Stock Ledger without issue</a></li>
+                        }
+                        @if (list.Contains(58))
+                        {
+                            <li><a href="@Url.Action("StockInHandDetail", "IReports")">Stock in hand Detail</a></li>
+                        }
+                        @if (list.Contains(59))
+                        {
+                            <li><a href="@Url.Action("StockInHand", "IReports")">Stock in hand</a></li>
+                        }
+                        @if (list.Contains(60))
+                        {
+                            <li><a href="@Url.Action("StockInHandValue", "IReports")">Stock in hand Value</a></li>
+                        }
+                        @if (list.Contains(61))
+                        {
+                            <li><a href="@Url.Action("StockInHandValueAvgRate", "IReports")">Stock in hand Avg Rate</a></li>
+                        }
+                        @if (list.Contains(62))
+                        {
+                            <li><a href="@Url.Action("StockInHandValueAvgRateFW", "IReports")">Stock in hand Avg - Final</a></li>
+                        }
+                        @if (list.Contains(63))
+                        {
+                            <li><a href="@Url.Action("StockInHandByGroup", "IReports")">Stock in hand by Group</a></li>
+                        }
+                        @if (list.Contains(64))
+                        {
+                            <li><a href="@Url.Action("StockInHandByStore", "IReports")">Stock in hand by Store</a></li>
+                        }
+                        @if (list.Contains(65))
+                        {
+                            <li class="submenu tb6">
+                                <a href="@Url.Action("Index", "Home")">Product Reports</a>
+                            </li>
+                        }
+                        <li class="submenu a6" style="display:none;float:right">
+                            <ul>
+                                <li><a href="@Url.Action("ProductPurchase", "IReports")" class="spec">Product Purchase</a></li>
+                                <li><a href="@Url.Action("PurchaseRate", "IReports")" class="spec1">Purchase rate product wise</a></li>
+                                <li><a href="@Url.Action("ProductSale", "IReports")" class="spec2">Product Sale</a></li>
+                                <li><a href="@Url.Action("ProductPosition", "IReports")" class="spec3">Product Position</a></li>
+                            </ul>
+                        </li>
+                        @if (list.Contains(66))
+                        {
+                            <li class="submenu tb5">
+                                <a href="@Url.Action("Index", "Home")">Party Reports</a>
+                            </li>
+                        }
+                        <li class="submenu a5" style="display:none;float:right">
+                            <ul>
+                                <li><a href="@Url.Action("PartyWisePurchaseOverall", "IReports")" class="spec"> Purchase Overall</a></li>
+                                <li><a href="@Url.Action("PartyWisePurchase", "IReports")" class="spec1">Purchase Selected</a></li>
+                                <li><a href="@Url.Action("PartyWiseSaleOverall", "IReports")" class="spec2">Sale Overall</a></li>
+                                <li><a href="@Url.Action("PartyWiseSale", "IReports")" class="spec3">Sale Selected</a></li>
+                                <li><a href="@Url.Action("PartyWiseSaleRecovery", "IReports")" class="spec4">Sale Recovery Report</a></li>
+                                <li><a href="@Url.Action("SalePurchaseGeneral", "IReports")" class="spec3">Sale/Purchase General </a></li>
+                                <li><a href="@Url.Action("SalePurchaseDetailed", "IReports")" class="spec4">Sale/Purchase Detailed</a></li>
+                            </ul>
+                        </li>
+                        @if (list.Contains(67))
+                        {
+                            <li><a href="@Url.Action("PurchaseLedgerInvoiceWise", "IReports")">Purchase Ledger Invoice Voice</a></li>
+                        }
+                        @if (list.Contains(68))
+                        {
+                            <li><a href="@Url.Action("PurchaseOrderReport", "IReports")">Purchase Order Report</a></li>
+                        }
+                        @if (list.Contains(69))
+                        {
+                            <li><a href="@Url.Action("SaleOrderReport", "IReports")">Sale Order Report</a></li>
+                        }
+                        @if (list.Contains(70))
+                        {
+                            <li><a href="@Url.Action("SaleLedgerInvoiceWise", "IReports")">Sale Ledger Invoice Wise</a></li>
+                        }
+                        @if (list.Contains(71))
+                        {
+                            <li><a href="@Url.Action("Report", "IReports", new { rtype = "ProductList" })" target="_blank">Product List</a></li>
+                        }
+                        @if (list.Contains(72))
+                        {
+                            <li><a href="@Url.Action("Report", "IReports", new { rtype = "ProductListGroupWise" })" target="_blank">Product List Group Wise</a></li>
+                        }
+                        @if (list.Contains(73))
+                        {
+                            <li><a href="@Url.Action("Report", "IReports", new { rtype = "CustomerLimit" })">Customer Over Limit</a></li>
+                        }
+                        @*<li><a href="#">Balance Sheet</a></li>
+                            <li><a href="#">Vouchers Printing</a></li>*@
+                    </ul>
+                </li>
+                @* start *@
+                <li class="submenu ac2" style="display:none;float:right">
+                    <a href="@Url.Action("Index", "Home")"><i class="icon icon-th-list"></i> <span>Reports</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(12))
+                        {
+                            <li><a href="@Url.Action("Report", "Reports", new { rtype = "ChartofAccount" })" target="_blank">Chart of Accounts</a></li>
+                        }
+                        @if (list.Contains(13))
+                        {
+                            <li><a href="@Url.Action("AccountLedger", "Reports")">Account Ledger</a></li>
+                        }
+                        @if (list.Contains(14))
+                        {
+                            <li><a href="@Url.Action("Cashbook", "Reports")">Cash Book</a></li>
+                        }
+                        @if (list.Contains(19))
+                        {
+                            @*<li class="cf"><a href="@Url.Action("CashFlow", "Reports")">Cash Flow</a></li>*@
+                        }
+                        @if (list.Contains(15))
+                        {
+                            <li><a href="@Url.Action("TrialBalance", "Reports")" class="spec">Short Trial Balance</a></li>
+                        }
+                        @if (list.Contains(25))
+                        {
+                            @*<li><a href="@Url.Action("TrialBalanceBetweenDates", "Reports")" class="spec1">Trial Balance Between Dates</a></li>*@
+                        }
+                        @if (list.Contains(16))
+                        {
+                            @*<li><a href="@Url.Action("DetailTrial", "Reports")" class="spec2">Detail Trial</a></li>*@
+                        }
+                        @if (list.Contains(17))
+                        {
+                            <li><a href="@Url.Action("GroupTrial", "Reports")" class="spec3">Group Trial</a></li>
+                        }
+                        @if (list.Contains(18))
+                        {
+                            @*<li><a href="@Url.Action("SixColumnTrial", "Reports")" class="spec4">Six Column Trial</a></li>*@
+                        }
+                    </ul>
+                </li>
+                @* end *@
+                <li class="submenu ac">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>Gate Pass</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @if (list.Contains(74))
+                        {
+                            <li><a href="@Url.Action("RegisterGatePass", "PCGatePass")">Product Coding for Gate pass</a></li>
+                        }
+                        @if (list.Contains(75))
+                        {
+                            <li><a href="@Url.Action("RegisterPCEmployee", "PCEmployee")">Employee Coding</a></li>
+                        }
+                        @if (list.Contains(76))
+                        {
+                            <li><a href="@Url.Action("RegisterGPParties", "GPParties")">Gate pass Parties</a></li>
+                        }
+                        @if (list.Contains(77))
+                        {
+                            <li><a href="@Url.Action("InwardGatePassRM", "InwardGatePassRM")">Inward Gate pass Raw Material</a></li>
+                        }
+                        @if (list.Contains(78))
+                        {
+                            <li><a href="@Url.Action("InwardGatePassMix", "InwardGatePassMix")">Inward Gate pass Mixed</a></li>
+                        }
+                        @if (list.Contains(79))
+                        {
+                            <li><a href="@Url.Action("OutwardGatePassFG", "OutwardGatePassFG")">Outward Gate pass Finished</a></li>
+                        }
+                        @if (list.Contains(80))
+                        {
+                            <li><a href="@Url.Action("OutwardGatePassMix", "OutwardGatePassMix")">Outward Gate pass Mixed </a></li>
+                        }
+                        @if (list.Contains(81))
+                        {
+                            <li><a href="@Url.Action("ReturnableOutward", "ReturnableOutward")">Returnable Outward</a></li>
+                        }
+                        @if (list.Contains(82))
+                        {
+                            <li><a href="@Url.Action("ReturnableInward", "ReturnableInward")">Returnable Inward</a></li>
+                        }
+                        @if (list.Contains(83))
+                        {
+                            <li><a href="@Url.Action("EmployGatePass", "EmployGatePass")">Employee Gate pass</a></li>
+                        }
+                        @if (list.Contains(84))
+                        {
+                            <li><a href="@Url.Action("GuestGatePass", "GuestGatePass")">Guest Gate pass</a></li>
+                        }
+                        @if (list.Contains(85))
+                        {
+                            <li class="submenu tb3">
+                                <a href="@Url.Action("#", "#")">Report</a>
+                            </li>
+                        }
+                        <li class="submenu a3" style="display:none;float:right">
+                            <ul>
+                                <li><a href="@Url.Action("GPRMPartyProduct", "IReports")" class="spec1">Overall Report</a></li>
+                                <li><a href="@Url.Action("GatePassRawMaterialPartyWise", "IReports")" class="spec">IGPRM party wise </a></li>
+                                <li><a href="@Url.Action("GatePassRawMaterialProductWise", "IReports")" class="spec1">IGPRM product wise</a></li>
+                                <li><a href="@Url.Action("GPRMPartyProduct", "IReports")" class="spec1">IGPRM Party/Product</a></li>
+                                <li><a href="@Url.Action("GatePassMixMaterialPartyWise", "IReports")" class="spec">IGPMM party wise </a></li>
+                                <li><a href="@Url.Action("GatePassMixMaterialProductWise", "IReports")" class="spec1">IGPMM product wise</a></li>
+                                <li><a href="@Url.Action("OutwardGatePassFGPartyWise", "IReports")" class="spec2">OGPFG party wise</a></li>
+                                <li><a href="@Url.Action("OutwardGatePassFGProductWise", "IReports")" class="spec3">OGPFG product wise</a></li>
+                                <li><a href="@Url.Action("OutwardGatePassMixPartyWise", "IReports")" class="spec2">OGPM party wise</a></li>
+                                <li><a href="@Url.Action("OutwardGatePassMixProductWise", "IReports")" class="spec3">OGPM product wise</a></li>
+                                <li><a href="@Url.Action("InOut", "IReports")" class="spec4">Returnable Gate pass</a></li>
+                                <li><a href="@Url.Action("EmployGatePass", "IReports")" class="spec4">Employee Gate pass</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="icon icon-th-list"></i> <span>System</span> <span class="label label-important"></span></a>
+                    <ul>
+                        @*<li><a href="@Url.Action("#", "#")">Replicate</a></li>
+                            <li><a href="@Url.Action("#", "#")">Update Arrivals</a></li>
+                            <li><a href="@Url.Action("#", "#")">Company Info</a></li>
+                            <li><a href="@Url.Action("#", "#")">Database backup</a></li>
+                            <li><a href="@Url.Action("#", "#")">Sale Resave</a></li>
+                            <li><a href="@Url.Action("#", "#")">Shift Account Record</a></li>
+                            <li><a href="@Url.Action("#", "#")">Delete Party Record</a></li>*@
+                        @if (list.Contains(86))
+                        {
+                            <li><a href="@Url.Action("RegisterUser", "User")">Create User</a></li>
+                        }
+                        @if (list.Contains(87))
+                        {
+                            <li><a href="@Url.Action("UserRights", "User")">User Rights</a></li>
+                        }
+                        @if (list.Contains(88))
+                        {
+                            @*<li><a href="@Url.Action("AddLevel", "AccountsLevel")">Create Account Level</a></li>*@
+                        }
+                        @if (list.Contains(88))
+                        {
+                            <li><a href="@Url.Action("DeleteCoding", "Accounts")">Accounts Master Deletion</a></li>
+                        }
+                        @if (list.Contains(89))
+                        {
+                            <li><a href="@Url.Action("Add", "ControlAccounts")">Control Accounts</a></li>
+                        }
+                        @if (list.Contains(90))
+                        {
+                            <li><a href="@Url.Action("DetailTransfer", "DetailTransfer")">Transfer Account</a></li>
+                        }
+                        @if (list.Contains(90))
+                        {
+                            <li><a href="@Url.Action("DbBackup", "dbBackup")"> Backup Database</a></li>
+                        }
+                        @if (list.Contains(90))
+                        {
+                            <li><a href="@Url.Action("Log", "Reports")">  Log Report</a></li>
+                        }
+                        @*@if (Convert.ToString(Session["LoggedUserID"]) == "1")
+                                      {
+                            <li><a href="@Url.Action("RequestList", "Request")">Request List</a></li>
+                                      }*@
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    }
+    @RenderBody()
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/maruti.js"></script>
+    <script src="~/Content/js/maruti.dashboard.js"></script>
+    <script type="text/javascript">
+        $(".test").hover(function () {
+            $(".test1").show();
+        });
+        function goPage(newURL) {
+            if (newURL != "") {
+                if (newURL == "-") {
+                    resetMenu();
+                }
+                else {
+                    document.location.href = newURL;
+                }
+            }
+        }
+        function resetMenu() {
+            document.gomenu.selector.selectedIndex = 2;
+        }
+        var keepSessionAlive = false;
+        var keepSessionAliveUrl = null;
+        function SetupSessionUpdater(actionUrl) {
+            keepSessionAliveUrl = actionUrl;
+            var container = $("#body");
+            container.mousemove(function () { keepSessionAlive = true; });
+            container.keydown(function () { keepSessionAlive = true; });
+            CheckToKeepSessionAlive();
+        }
+        function CheckToKeepSessionAlive() {
+            setTimeout("KeepSessionAlive()", 3 * 60 * 1000);
+        }
+        function KeepSessionAlive() {
+            if (keepSessionAlive && keepSessionAliveUrl != null) {
+                $.ajax({
+                    type: "POST",
+                    url: keepSessionAliveUrl,
+                    success: function () { keepSessionAlive = false; }
+                });
+            }
+            CheckToKeepSessionAlive();
+        }
+    </script>
+    <script>
+        $(".tb").mouseover(function () {
+            // .position() uses position relative to the offset parent,
+            var pos = $(this).position();
+            // .outerWidth() takes into account border and padding.
+            var width = $(this).outerWidth();
+            //show the menu directly over the placeholder
+            $(".a").css({
+                position: "absolute",
+                top: (pos.top - 40) + "px",
+                left: (pos.left + width) + "px"
+            }).show();
+        });
+        $(".tb2").mouseover(function () {
+            // .position() uses position relative to the offset parent,
+            var pos = $(this).position();
+            // .outerWidth() takes into account border and padding.
+            var width = $(this).outerWidth();
+            //show the menu directly over the placeholder
+            $(".a2").css({
+                position: "absolute",
+                top: (pos.top - 40) + "px",
+                left: (pos.left + width) + "px"
+            }).show();
+        });
+        $(".tb1").mouseover(function () {
+            // .position() uses position relative to the offset parent,
+            var pos = $(this).position();
+            // .outerWidth() takes into account border and padding.
+            var width = $(this).outerWidth();
+            //show the menu directly over the placeholder
+            $(".a1").css({
+                position: "absolute",
+                top: (pos.top - 40) + "px",
+                left: (pos.left + width) + "px"
+            }).show();
+        });
+        $(".tb3").mouseover(function () {
+            // .position() uses position relative to the offset parent,
+            var pos = $(this).position();
+            // .outerWidth() takes into account border and padding.
+            var width = $(this).outerWidth();
+            //show the menu directly over the placeholder
+            $(".a3").css({
+                position: "absolute",
+                top: (pos.top - 40) + "px",
+                left: (pos.left + width) + "px"
+            }).show();
+        });
+        $(".tb5").mouseover(function () {
+            // .position() uses position relative to the offset parent,
+            var pos = $(this).position();
+            // .outerWidth() takes into account border and padding.
+            var width = $(this).outerWidth();
+            //show the menu directly over the placeholder
+            $(".a5").css({
+                position: "absolute",
+                top: (pos.top - 40) + "px",
+                left: (pos.left + width) + "px"
+            }).show();
+            $(".a6").hide();
+        });
+        $(".tb6").mouseover(function () {
+            // .position() uses position relative to the offset parent,
+            var pos = $(this).position();
+            // .outerWidth() takes into account border and padding.
+            var width = $(this).outerWidth();
+            //show the menu directly over the placeholder
+            $(".a6").css({
+                position: "absolute",
+                top: (pos.top - 40) + "px",
+                left: (pos.left + width) + "px"
+            }).show();
+            $(".a5").hide();
+        });
+        $(".tb9").mouseover(function () {
+            // .position() uses position relative to the offset parent,
+            var pos = $(this).position();
+            // .outerWidth() takes into account border and padding.
+            var width = $(this).outerWidth();
+            //show the menu directly over the placeholder
+            $(".a9").css({
+                position: "absolute",
+                top: (pos.top - 40) + "px",
+                left: (pos.left + width) + "px"
+            }).show();
+        });
+        $(".ac").mouseleave(function () {
+            $(".a").hide();
+        });
+        $(".ac1").mouseleave(function () {
+            $(".a1").hide();
+        });
+        $(".cf").mouseover(function () {
+            $(".a").hide();
+        });
+        $(".tb").mouseleave(function () {
+            $(".a").hide();
+        });
+        $(".tb1").mouseleave(function () {
+            $(".a1").hide();
+        });
+        $(".a9").mouseleave(function () {
+            $(".a9").hide();
+        });
+    </script>
+    @* accounts reports hover *@
+    <script>
+        $(".spec").hover(function () {
+            $(".spec").css({
+                'background-Color': "#78909c",
+            });
+        });
+        $(".spec").mouseleave(function () {
+            $(".spec").css({
+                'background-Color': "#455a64",
+            });
+        });
+        $(".spec1").hover(function () {
+            $(".spec1").css({
+                'background-Color': "#78909c",
+            });
+        });
+        $(".spec1").mouseleave(function () {
+            $(".spec1").css({
+                'background-Color': "#455a64",
+            });
+        });
+        $(".spec2").hover(function () {
+            $(".spec2").css({
+                'background-Color': "#78909c",
+            });
+        });
+        $(".spec2").mouseleave(function () {
+            $(".spec2").css({
+                'background-Color': "#455a64",
+            });
+        });
+        $(".spec3").hover(function () {
+            $(".spec3").css({
+                'background-Color': "#78909c",
+            });
+        });
+        $(".spec3").mouseleave(function () {
+            $(".spec3").css({
+                'background-Color': "#455a64",
+            });
+        });
+        $(".spec4").hover(function () {
+            $(".spec4").css({
+                'background-Color': "#78909c",
+            });
+        });
+        $(".spec4").mouseleave(function () {
+            $(".spec4").css({
+                'background-Color': "#455a64",
+            });
+        });
+    </script>
+</body>
+</html>

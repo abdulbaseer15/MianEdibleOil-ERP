@@ -1,0 +1,280 @@
+﻿<script src="~/Content/js/jquery.min.js"></script>
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script>
+    $(document).ready(function () {
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        $(".debit").change(function () {
+            var count = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1debit = parseFloat($('.debit', this).val());
+                if (isNaN(t1debit))
+                    t1debit = 0;
+                count = count + t1debit;
+            });
+            document.getElementById('sumdebit').innerHTML = "Total debit:" + count;
+        });
+        $(".credit").change(function () {
+            var count = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1debit = parseFloat($('.credit', this).val());
+                if (isNaN(t1debit))
+                    t1debit = 0;
+                count = count + t1debit;
+            });
+            document.getElementById('sumcredit').innerHTML = "Total credit:" + count;
+        });
+    });
+    function SaveDVoucher() {
+        var count = 0;
+        $('#mytable tbody tr').each(function () {
+            var $row = $(this), $tds = $row.find("td");
+            var t1debit = parseFloat($('.debit', this).val());
+            var t1credit = parseFloat($('.credit', this).val());
+            if (isNaN(t1debit))
+                t1debit = 0;
+            if (isNaN(t1credit)) {
+                t1credit = 0;
+            }
+            if (t1credit > 0 && t1debit > 0) {
+                count = count + 1;
+                return false;
+            }
+        });
+        count = -1;
+        if (count > 0) {
+            alert("Can't enter in both debit and credit");
+        }
+        else {
+            var detail = [];
+            var debitsum = 0;
+            var creditsum = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1debit = parseFloat($('.debit', this).val());
+                var t1credit = parseFloat($('.credit', this).val());
+                if (isNaN(t1debit))
+                    t1debit = 0;
+                if (isNaN(t1credit)) {
+                    t1credit = 0;
+                }
+                debitsum = debitsum + t1debit;
+                creditsum = creditsum + t1credit;
+                detail.push({
+                    Accountid: $tds[0].innerText,
+                    title: $tds[1].innerText,
+                    odebit: $('.debit', this).val(),
+                    ocredit: $('.credit', this).val(),
+                });
+            });
+            //var diff = debitsum - creditsum;
+            //if (debitsum != creditsum) {
+            //    var answer = confirm("Sum of debit and credit should be equal,otherwise your trial will be out with the amount " + diff + ".Do You want to continue ?");
+            //    if (answer) {
+            //        $.ajax({
+            //            url: "/Accounts/SaveCreditLimit",
+            //            type: "POST",
+            //            data: JSON.stringify({ detail: detail }),
+            //            dataType: 'text json',
+            //            async: false,
+            //            contentType: 'application/json; charset=utf-8',
+            //            success: function (response) {
+            //                if (response != null && response.success) {
+            //                    alert(response.responseText);
+            //                    window.location.reload();
+            //                }
+            //                else {
+            //                    alert(response.responseText);
+            //                }
+            //            },
+            //            error: function (response) {
+            //                alert(response.responseText);
+            //            }
+            //        });
+            //    }
+            //}
+            //else {
+            $.ajax({
+                url: "/Accounts/SaveCreditLimit",
+                type: "POST",
+                data: JSON.stringify({ detail: detail }),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success) {
+                        alert(response.responseText);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+            //}
+        }
+    }
+</script>
+@{
+    int sumdebit = 0;
+    int sumcredit = 0;
+}
+<!--<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span11">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Customer Credit Limit</h5>
+              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for title.." style="float:right;">
+          </div>
+          <div class="widget-content nopadding">
+              <form action="OpeningBalance" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                  <div class="span12" style="overflow-y: auto; height:400px;">
+                      <table class="table table-bordered data-table" id="mytable">
+                          <thead>
+                              <tr>
+                                  <th>AccountCode</th>
+                                  <th>Title</th>
+                                  <th>Days</th>
+                                  <th>Limit</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              @if (null != ViewBag.AccCodeDetails)
+                              {
+                                  foreach (var Acc in ViewBag.AccCodeDetails)
+                                  {
+                                      sumdebit = sumdebit + Convert.ToInt32(Acc.ODebit);
+                                      sumcredit = sumcredit + Convert.ToInt32(Acc.OCredit);
+                                      <tr>
+                                          <td>@Acc.AccountId</td>
+                                          <td>@Acc.title</td>
+                                          <td><input type="number" class="span11 debit" id="txtDebit" name="txtDebit" required value="@Convert.ToInt32(Acc.ODebit)" /></td>
+                                          <td><input type="number" class="span11 credit" id="txtCredit" name="txtCredit" required value="@Convert.ToInt32(Acc.OCredit)" /></td>
+                                      </tr>
+                                  }
+                              }
+                          </tbody>
+                      </table>
+                  </div>
+                  <!--@*Already Commented*@-->
+<!--@* <center style="margin-top:4px;margin-bottom:4px">
+       <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+</center>*@-->
+<!--@*Already Commented*@-->
+<!--<div class="form-actions">
+                      <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                      <h5 id="sumcredit" style="color:maroon;float:right;padding-right:6em">Total Limit:@Convert.ToString(sumcredit)</h5>
+                      <h5 id="sumdebit" style="color:maroon;float:right;padding-right:8em">Total Days:@Convert.ToString(sumdebit)</h5>
+                  </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>-->
+<div id="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <b>Customer Credit Limit</b>
+                        </div>
+                        <div class="col-md-4 offset-md-5">
+                            <input type="text" class="form-control form-control-sm" id="myInput" onkeyup="myFunction()" placeholder="Search for title..">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form action="OpeningBalance" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                        <div style="overflow: auto; height: calc(100vh - 243px)">
+                            <table class="table table-bordered" id="mytable">
+                                <thead>
+                                    <tr class="fixed-thead">
+                                        <th>AccountCode</th>
+                                        <th>Title</th>
+                                        <th>Days</th>
+                                        <th>Limit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (null != ViewBag.AccCodeDetails)
+                                    {
+                                        foreach (var Acc in ViewBag.AccCodeDetails)
+                                        {
+                                            sumdebit = sumdebit + Convert.ToInt32(Acc.ODebit);
+                                            sumcredit = sumcredit + Convert.ToInt32(Acc.OCredit);
+                                            <tr>
+                                                <td>@Acc.AccountId</td>
+                                                <td>@Acc.title</td>
+                                                <td><input type="number" class="span11 debit" id="txtDebit" name="txtDebit" required value="@Convert.ToInt32(Acc.ODebit)" /></td>
+                                                <td><input type="number" class="span11 credit" id="txtCredit" name="txtCredit" required value="@Convert.ToInt32(Acc.OCredit)" /></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr class="fixed-tfoot">
+                                        <th>
+                                            <input type="button" value="Update" id="btnSave" class="btn btn-sm btn-success" onclick='SaveDVoucher();'>
+                                        </th>
+                                        <th></th>
+                                        <th id="sumdebit">
+                                            Total Days:@Convert.ToString(sumdebit)
+                                        </th>
+                                        <th id="sumcredit">
+                                            Total Limit:@Convert.ToString(sumcredit)
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!--@*Already Commented*@-->
+                        @* <center style="margin-top:4px;margin-bottom:4px">
+                            <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                    </center>*@
+                        <!--@*Already Commented*@-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("mytable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

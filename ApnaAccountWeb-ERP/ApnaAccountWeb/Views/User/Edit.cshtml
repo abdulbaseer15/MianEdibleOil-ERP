@@ -1,0 +1,81 @@
+﻿ @model ApnaAccountWeb.Models.User  
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span6">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Edit User</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="Edit" method="Post" enctype="multipart/form-data" class="form-horizontal">
+               <input type="hidden" id="UserId" name="UserId" value="@Model.UserId" />
+                 <div class="control-group">
+                <label class="control-label">Name:</label>
+                <div class="controls">
+                  <input type="text" id="UserName" name="UserName" required value="@Convert.ToString(Model.UserName)" />
+                </div>
+              </div>
+                 <div class="control-group">
+                     <label class="control-label">Password:</label>
+                     <div class="controls">
+                         <input type="password" id="Password" name="Password" required value="@Convert.ToString(Model.Password)" />
+                     </div>
+                 </div>
+                 @{List<SelectListItem> listItems = new List<SelectListItem>();
+                 listItems.Add(new SelectListItem
+                 {
+                     Text = "Admin",
+                     Value = "Admin"
+                 });
+                 listItems.Add(new SelectListItem
+                 {
+                     Text = "Manager",
+                     Value = "Manager"
+                 });
+                 listItems.Add(new SelectListItem
+                 {
+                     Text = "User",
+                     Value = "User"
+                 });
+                 }
+                 <div class="control-group">
+                     <label class="control-label">Type:</label>
+                     <div class="controls">
+                        @Html.DropDownListFor(u => u.UserType, listItems, Model.UserType)
+                        @Html.ValidationMessageFor(u => u.UserType)
+                     </div>
+                 </div>
+                 <div class="control-group">
+                     <label class="control-label">Office:</label>
+                     <div class="controls">
+                         <select id="Office" name="Office">
+                             @if(Model.Office=="HO")
+                             {
+                                  <option value="HO" selected>Head Office</option>
+                             <option value="FO">Factory Office</option>
+                             }
+                             else
+                             { <option value="HO" >Head Office</option>
+    <option value="FO" selected>Factory Office</option>
+                             }
+                         </select>
+                     </div>
+                 </div>
+                 <div class="control-group">
+                     <label class="control-label">Cell No:</label>
+                     <div class="controls">
+                         <input type="text" id="PhNo" name="PhNo" required value="@Convert.ToString(Model.PhNo)" />
+                     </div>
+                 </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-success">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>
+               

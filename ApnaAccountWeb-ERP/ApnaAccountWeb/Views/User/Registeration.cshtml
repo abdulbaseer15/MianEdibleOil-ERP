@@ -1,0 +1,73 @@
+﻿ @model ApnaAccountWeb.Models.Contact 
+@{
+    Layout = null;
+    }
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>ApnaAccount</title>
+ <link rel="stylesheet" href="~/Content/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="~/Content/css/bootstrap-responsive.min.css" />
+     <link rel="stylesheet" href="~/Content/Contactcss/style.css">
+    <link rel="icon" type="image/png" href="~/Content/img/favicon-a.png" />
+   <link href="~/Content/css/maruti-style.css" rel="stylesheet" />
+    @if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+        window.location.href = '@Url.Action("Login", "User")';
+    </script>
+}
+</head>
+<body @*style="background:linear-gradient(to bottom, #3366cc 0%, #3399ff 100%);"*@>
+  <div id="form-main">
+      <br />
+       <center>
+       <img src="~/Content/img/apnalogo.gif" width="130" height="100" alt="ApnaAccount" />
+    </center>
+  <div id="form-div">
+    <form action="SaveRequest" method="Post" enctype="multipart/form-data" class="form-style-9">
+<ul>
+<li style="width:100">
+    <input type="text" name="Name" id="Name" class="field-style field-split align-left" placeholder="Business Name" />
+    <input type="text" name="Address" id="Address" class="field-style field-split align-right" placeholder="Business Address" />
+</li>
+    <li>
+        <input type="text" name="Phone" id="Phone" class="field-style field-split align-right" placeholder="Business Phone" />
+    <input type="text" name="Cell" id="Cell" class="field-style field-split align-left" placeholder="Business Cell" />
+</li>
+    <li>
+        <input type="text" name="Country" id="Country" class="field-style field-split align-left" placeholder="Country" />
+         <input type="text" name="City" id="City" class="field-style field-split align-right" placeholder="City" />
+</li>
+     <li>
+        <input type="text" name="NTN" id="NTN" class="field-style field-split align-right" placeholder="NTN" />
+    <input type="text" name="STN" id="STN" class="field-style field-split align-left" placeholder="STN" />
+</li>
+<li>
+    <input type="email" name="Email" id="Email" class="field-style field-split align-left" placeholder="Email" />
+    <input type="text" name="Web" id="Web" class="field-style field-split align-right" placeholder="Website" />
+</li>
+<li>
+    <input type="text" name="ContactPerson" id="ContactPerson" class="field-style field-split align-left" placeholder="Contact Person Name" />
+    <input type="text" name="ContactPersonCell" id="ContactPersonCell" class="field-style field-split align-right" placeholder="Contact Person Cell" />
+</li>
+<li>
+    <input type="number" name="Mur" id="Mur" class="field-style field-full align-left" placeholder="Maximum User Requirement" />
+</li>
+<li>
+<center><input type="submit" value="Submit" />      <a href="@Url.Action("Login","User")">Back to login</a></center>
+</li>
+</ul>
+</form>
+  </div>
+   </div>
+   <div style="position:fixed;bottom:50px;">
+        <img src="~/Content/img/iaglogo.png" width="100" height="100" alt="ApnaAccount" /> 
+    </div>
+   <div class="row-fluid">
+  <div id="footer" class="span12" style="position: fixed;bottom: 0px;width:100%"> 2017 &copy; IAG Soft. Brought to you by <a href="http://www.iagsoft.com.pk" target="_blank">IAG Soft</a> </div>
+</div>
+</body>
+</html>

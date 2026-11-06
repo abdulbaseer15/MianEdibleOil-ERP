@@ -1,0 +1,35 @@
+﻿ @model ApnaAccountWeb.Models.BardanaType  
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span6">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Edit Bardana Type</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="Edit" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                 <input type="hidden" id="BTypeID" name="BTypeID" value="@Model.BTypeID" />
+                 <div class="control-group">
+                <label class="control-label">Name:</label>
+                <div class="controls">
+                    <input type="text" id="Title" name="Title" required value="@Convert.ToString(Model.Title)" />
+                </div>
+              </div>
+                 <div class="control-group">
+                     <label class="control-label">Bardana (Kg):</label>
+                     <div class="controls">
+                         <input type="text" id="Deduction" name="Deduction" required value="@Convert.ToString(Model.Deduction)" />
+                     </div>
+                 </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-success">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>
+               

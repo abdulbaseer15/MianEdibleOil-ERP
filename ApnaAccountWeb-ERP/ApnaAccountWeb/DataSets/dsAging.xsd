@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsAging" targetNamespace="http://tempuri.org/dsAging.xsd" xmlns:mstns="http://tempuri.org/dsAging.xsd" xmlns="http://tempuri.org/dsAging.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="ApnaAccount_IKConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ApnaAccount_IKConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.ApnaAccount_IKConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsAging" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsAging" msprop:Generator_UserDSName="dsAging">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ado" msprop:Generator_TableClassName="adoDataTable" msprop:Generator_TableVarName="tableado" msprop:Generator_TablePropName="ado" msprop:Generator_RowDeletingName="adoRowDeleting" msprop:Generator_RowChangingName="adoRowChanging" msprop:Generator_RowEvHandlerName="adoRowChangeEventHandler" msprop:Generator_RowDeletedName="adoRowDeleted" msprop:Generator_UserTableName="ado" msprop:Generator_RowChangedName="adoRowChanged" msprop:Generator_RowEvArgName="adoRowChangeEvent" msprop:Generator_RowClassName="adoRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Accountid" msdata:Caption="AccCode" msprop:Generator_ColumnVarNameInTable="columnAccountid" msprop:Generator_ColumnPropNameInRow="Accountid" msprop:Generator_ColumnPropNameInTable="AccountidColumn" msprop:Generator_UserColumnName="Accountid" type="xs:string" minOccurs="0" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" type="xs:string" minOccurs="0" />
+              <xs:element name="InvNo" msdata:Caption="Balance" msprop:Generator_ColumnVarNameInTable="columnInvNo" msprop:Generator_ColumnPropNameInRow="InvNo" msprop:Generator_ColumnPropNameInTable="InvNoColumn" msprop:Generator_UserColumnName="InvNo" type="xs:string" minOccurs="0" />
+              <xs:element name="Idate" msdata:Caption="Narration" msprop:Generator_ColumnVarNameInTable="columnIdate" msprop:Generator_ColumnPropNameInRow="Idate" msprop:Generator_ColumnPropNameInTable="IdateColumn" msprop:Generator_UserColumnName="Idate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="duedate" msdata:Caption="VID" msprop:Generator_ColumnVarNameInTable="columnduedate" msprop:Generator_ColumnPropNameInRow="duedate" msprop:Generator_ColumnPropNameInTable="duedateColumn" msprop:Generator_UserColumnName="duedate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="BillAmount" msdata:Caption="VDate" msprop:Generator_ColumnVarNameInTable="columnBillAmount" msprop:Generator_ColumnPropNameInRow="BillAmount" msprop:Generator_ColumnPropNameInTable="BillAmountColumn" msprop:Generator_UserColumnName="BillAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CDDiffer" msdata:Caption="LevelKey" msprop:Generator_ColumnVarNameInTable="columnCDDiffer" msprop:Generator_ColumnPropNameInRow="CDDiffer" msprop:Generator_ColumnPropNameInTable="CDDifferColumn" msprop:Generator_UserColumnName="CDDiffer" type="xs:decimal" minOccurs="0" />
+              <xs:element name="RDebit" msdata:Caption="OpBalance" msprop:Generator_ColumnVarNameInTable="columnRDebit" msprop:Generator_ColumnPropNameInRow="RDebit" msprop:Generator_ColumnPropNameInTable="RDebitColumn" msprop:Generator_UserColumnName="RDebit" type="xs:decimal" minOccurs="0" />
+              <xs:element name="LimitDay" msprop:Generator_ColumnVarNameInTable="columnLimitDay" msprop:Generator_ColumnPropNameInRow="LimitDay" msprop:Generator_ColumnPropNameInTable="LimitDayColumn" msprop:Generator_UserColumnName="LimitDay" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

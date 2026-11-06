@@ -1,0 +1,231 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Control Accoounts</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            @if (Convert.ToString(ViewBag.data) == "true")
+                            {
+                                <p>Account control once set can not be modified.</p>
+                                <p>  Cash Control Account HO: <h5>@Convert.ToString(ViewBag.ctrlacc.CashCtrlTitleHO)</h5></p>
+                                <p>  Cash Control Account FO: <h5>@Convert.ToString(ViewBag.ctrlacc.CashCtrlTitleFO)</h5></p>
+                                <p> Bank Control Group: <h5>@Convert.ToString(ViewBag.ctrlacc.BankCtrlTitle)</h5></p>
+                                <p> Purchase Control Group: <h5>@Convert.ToString(ViewBag.ctrlacc.PurchaseCtrlTitle)</h5></p>
+                                <p> Sale Control Group:  <h5>@Convert.ToString(ViewBag.ctrlacc.SaleCtrlTitle)</h5></p>
+                            }
+                            else
+                            {
+                                <form action="AddControl" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                    <input type="hidden" name="cashtitle" id="cashtitle" />
+                                    <input type="hidden" name="cashtitle2" id="cashtitle2" />
+                                    <input type="hidden" name="banktitle" id="banktitle" />
+                                    <input type="hidden" name="purchasetitle" id="purchasetitle" />
+                                    <input type="hidden" name="saletitle" id="saletitle" />
+                                    <div class="control-group">
+                                        <label class="control-label">Cash Control Account HO</label>
+                                        <div class="controls">
+                                            <select id="cash" name="cash">
+                                                <option value="">-- Select Account --</option>
+                                                @foreach (var Acc in ViewBag.AccCodeDetails)
+                                                {
+                                                    <option value="@Acc.AccountId">@Acc.Title</option>
+
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Cash Control Account FO</label>
+                                        <div class="controls">
+                                            <select id="cash2" name="cash2">
+                                                <option value="">-- Select Account --</option>
+                                                @foreach (var Acc in ViewBag.AccCodeDetails)
+                                                {
+                                                    <option value="@Acc.AccountId">@Acc.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Bank Control Group</label>
+                                        <div class="controls">
+                                            <select id="bank" name="bank">
+                                                <option value="">-- Select Group --</option>
+                                                @foreach (var Acc in ViewBag.AccCodeDetails1)
+                                                {
+                                                    <option value="@Acc.AccountId">@Acc.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Purchase Control Group</label>
+                                        <div class="controls">
+                                            <select id="purchase" name="purchase">
+                                                <option value="">-- Select Group --</option>
+                                                @foreach (var Acc in ViewBag.AccCodeDetails1)
+                                                {
+                                                    <option value="@Acc.AccountId">@Acc.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Sale Control Group</label>
+                                        <div class="controls">
+                                            <select id="sale" name="sale">
+                                                <option value="">-- Select Group --</option>
+                                                @foreach (var Acc in ViewBag.AccCodeDetails1)
+                                                {
+                                                    <option value="@Acc.AccountId">@Acc.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                    </div>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Control Accoounts</b>
+                    </div>
+                    <div class="card-body">
+                        @if (Convert.ToString(ViewBag.data) == "true")
+                        {
+                            <p>Account control once set can not be modified.</p>
+                            <p>Cash Control Account HO: <h5>@Convert.ToString(ViewBag.ctrlacc.CashCtrlTitleHO)</h5></p>
+                            <p>Cash Control Account FO: <h5>@Convert.ToString(ViewBag.ctrlacc.CashCtrlTitleFO)</h5></p>
+                            <p>Bank Control Group: <h5>@Convert.ToString(ViewBag.ctrlacc.BankCtrlTitle)</h5></p>
+                            <p>Purchase Control Group: <h5>@Convert.ToString(ViewBag.ctrlacc.PurchaseCtrlTitle)</h5></p>
+                            <p>Sale Control Group:  <h5>@Convert.ToString(ViewBag.ctrlacc.SaleCtrlTitle)</h5></p>
+                        }
+                        else
+                        {
+                            <form action="AddControl" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <input type="hidden" name="cashtitle" id="cashtitle" />
+                                <input type="hidden" name="cashtitle2" id="cashtitle2" />
+                                <input type="hidden" name="banktitle" id="banktitle" />
+                                <input type="hidden" name="purchasetitle" id="purchasetitle" />
+                                <input type="hidden" name="saletitle" id="saletitle" />
+                                <div class="control-group">
+                                    <label class="control-label">Cash Control Account HO</label>
+                                    <div class="controls">
+                                        <select id="cash" name="cash">
+                                            <option value="">-- Select Account --</option>
+                                            @foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                <option value="@Acc.AccountId">@Acc.Title</option>
+
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Cash Control Account FO</label>
+                                    <div class="controls">
+                                        <select id="cash2" name="cash2">
+                                            <option value="">-- Select Account --</option>
+                                            @foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                <option value="@Acc.AccountId">@Acc.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Bank Control Group</label>
+                                    <div class="controls">
+                                        <select id="bank" name="bank">
+                                            <option value="">-- Select Group --</option>
+                                            @foreach (var Acc in ViewBag.AccCodeDetails1)
+                                            {
+                                                <option value="@Acc.AccountId">@Acc.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Purchase Control Group</label>
+                                    <div class="controls">
+                                        <select id="purchase" name="purchase">
+                                            <option value="">-- Select Group --</option>
+                                            @foreach (var Acc in ViewBag.AccCodeDetails1)
+                                            {
+                                                <option value="@Acc.AccountId">@Acc.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Sale Control Group</label>
+                                    <div class="controls">
+                                        <select id="sale" name="sale">
+                                            <option value="">-- Select Group --</option>
+                                            @foreach (var Acc in ViewBag.AccCodeDetails1)
+                                            {
+                                                <option value="@Acc.AccountId">@Acc.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </div>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $('#cash').change(function () {
+        var selectedVal = $("#cash option:selected").text();
+        $('#cashtitle').val(selectedVal);
+    });
+    $('#cash2').change(function () {
+        var selectedVal = $("#cash2 option:selected").text();
+        $('#cashtitle2').val(selectedVal);
+    });
+    $('#bank').change(function () {
+        var selectedVal = $("#bank option:selected").text();
+        $('#banktitle').val(selectedVal);
+    });
+    $('#purchase').change(function () {
+        var selectedVal = $("#purchase option:selected").text();
+        $('#purchasetitle').val(selectedVal);
+    });
+    $('#sale').change(function () {
+        var selectedVal = $("#sale option:selected").text();
+        $('#saletitle').val(selectedVal);
+    });
+</script>

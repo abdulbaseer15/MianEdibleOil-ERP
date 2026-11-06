@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b946c28797e048368097e4f9d7228363" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.AccountingLevel" Width="1.5" PointX="5.75" PointY="7" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Account" Width="1.5" PointX="3" PointY="2.25" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Accounts1" Width="1.5" PointX="7.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.AccountsOpening" Width="1.5" PointX="5.25" PointY="4" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Bardana" Width="1.5" PointX="0.75" PointY="9" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.BardanaType" Width="1.5" PointX="2.75" PointY="9" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.City" Width="1.5" PointX="0.75" PointY="4" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Contact" Width="1.5" PointX="4.75" PointY="10" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Contract" Width="1.5" PointX="9.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.ContractsModeCalculation" Width="1.5" PointX="9.75" PointY="10" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.ControllAccount" Width="1.5" PointX="11.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Employ" Width="1.5" PointX="0.75" PointY="13" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.EmployGatepass" Width="1.5" PointX="11.75" PointY="6" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Farm" Width="1.5" PointX="6.75" PointY="13" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Gate" Width="1.5" PointX="11.75" PointY="11" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.GRN1" Width="1.5" PointX="8.75" PointY="14" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.GRN2" Width="1.5" PointX="13.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.GstInvoice1" Width="1.5" PointX="2.75" PointY="15" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.GuestGatePass" Width="1.5" PointX="13.75" PointY="9" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.InOutWord" Width="1.5" PointX="13.75" PointY="14" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.InvoiceDetailDelivaryChallan" Width="1.5" PointX="4.75" PointY="16" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.PartiesGatePass" Width="1.5" PointX="15.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Plant" Width="1.5" PointX="15.75" PointY="6" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Process1" Width="1.5" PointX="15.75" PointY="9" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Process4" Width="1.5" PointX="15.75" PointY="16" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Process5" Width="1.5" PointX="17.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.ProductGatepass" Width="1.5" PointX="17.75" PointY="9" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.ProductGroup" Width="1.5" PointX="17.75" PointY="12" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Product" Width="1.5" PointX="17.75" PointY="15" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.ProductSubGroup" Width="1.5" PointX="4.75" PointY="20" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.ProductUnit" Width="1.5" PointX="19.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Purchase1" Width="1.5" PointX="19.75" PointY="5" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Purchase2" Width="1.5" PointX="19.75" PointY="16" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.PurchaseOrder1" Width="1.5" PointX="21.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.PurchaseOrder2" Width="1.5" PointX="4.75" PointY="23" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Sale1" Width="1.5" PointX="10.75" PointY="23" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.SaleOrder1" Width="1.5" PointX="21.75" PointY="13" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Store" Width="1.5" PointX="12.75" PointY="23" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.UserRight" Width="1.5" PointX="0.75" PointY="24" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.User" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.VehicleType" Width="1.5" PointX="19.75" PointY="24" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Vouchers_Bank" Width="1.5" PointX="21.75" PointY="24" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Vouchers1" Width="1.5" PointX="23.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Vouchers3" Width="1.5" PointX="6.75" PointY="25" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.VouchersDetail" Width="1.5" PointX="23.75" PointY="9" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Arrival" Width="1.5" PointX="23.75" PointY="14" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Clients_Credit_Limit" Width="1.5" PointX="16.75" PointY="25" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Company" Width="1.5" PointX="23.75" PointY="23" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Gate3" Width="1.5" PointX="12.75" PointY="26" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.GstInvoice2" Width="1.5" PointX="25.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.InvoiceMasterDelivaryChallan" Width="1.5" PointX="0.75" PointY="27" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.NetWeight" Width="1.5" PointX="25.75" PointY="10" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Sale2" Width="1.5" PointX="25.75" PointY="19" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.SaleOrder2" Width="1.5" PointX="18.75" PointY="27" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.store_suppliers" Width="1.5" PointX="25.75" PointY="26" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.UrduLable" Width="1.5" PointX="14.75" PointY="28" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Vouchers2" Width="1.5" PointX="27.75" PointY="5" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Vouchers4" Width="1.5" PointX="27.75" PointY="11" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryAvgPurchaseRate" Width="1.5" PointX="27.75" PointY="17" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryBardanaRegister" Width="1.5" PointX="27.75" PointY="21" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryCreditLimit" Width="1.5" PointX="27.75" PointY="25" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryCreditLimit1" Width="1.5" PointX="25.75" PointY="29" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryGstBook" Width="1.5" PointX="27.75" PointY="28" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryInvBook" Width="1.5" PointX="2.75" PointY="30" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryInvBookFinalWeight" Width="1.5" PointX="29.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryInvBookPurSaleAccount" Width="1.5" PointX="29.75" PointY="12" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qrySaleOrderStatu" Width="1.5" PointX="29.75" PointY="19" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qrySaleOrderStatus_WDC" Width="1.5" PointX="20.75" PointY="31" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryVoucherBook" Width="1.5" PointX="29.75" PointY="25" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryVoucherBook_New" Width="1.5" PointX="29.75" PointY="30" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryVoucherBook2" Width="1.5" PointX="4.75" PointY="32" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryVoucherBookLimit" Width="1.5" PointX="6.75" PointY="32" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.qryVoucherBookWEB" Width="1.5" PointX="31.75" PointY="2" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.V_VouchersDetail" Width="1.5" PointX="31.75" PointY="7" />
+        <AssociationConnector Association="ApnaAccount_IKModel.FK_Account_Cities" />
+        <AssociationConnector Association="ApnaAccount_IKModel.FK_Accounts_Cities" />
+        <AssociationConnector Association="ApnaAccount_IKModel.FK_Accounts_Users" />
+        <AssociationConnector Association="ApnaAccount_IKModel.FK_AccountsOpening_Accounts" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.temp_VoucherSaving" Width="1.5" PointX="32.375" PointY="10.75" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.ReceiveDetailProduction" Width="1.5" PointX="15.375" PointY="30.75" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.ReceiveMasterProduction" Width="1.5" PointX="32.375" PointY="13.75" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.StoreIssueDetail" Width="1.5" PointX="32.375" PointY="17.75" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.StoreIssueMaster" Width="1.5" PointX="32.375" PointY="22.75" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.IssueDetailProduction" Width="1.5" PointX="32.375" PointY="28.75" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.IssueMasterProduction" Width="1.5" PointX="32.375" PointY="32.75" />
+        <EntityTypeShape EntityType="ApnaAccount_IKModel.Voucher" Width="1.5" PointX="9.375" PointY="33.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

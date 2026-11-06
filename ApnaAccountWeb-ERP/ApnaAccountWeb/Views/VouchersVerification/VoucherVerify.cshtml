@@ -1,0 +1,570 @@
+@model ApnaAccountWeb.Models.Account
+<script src="~/Content/js/jquery.min.js"></script>
+<script type="text/javascript">
+    var ParentId;
+    var Nature;
+    var newUrl = '@Url.Action("VoucherVerify", "VouchersVerification")';
+    var isNew = false;
+    var isUpdating = false;
+    $(document).ready(function () {
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function ()
+                {
+                    this.disabled = state;
+                });
+            }
+        });
+        $('#btnDelete').disable(true);
+        $('#ddlAType').disable(true);
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+        $(document).on('click', 'span.editrow', function () {
+            debugger;
+            //alert('ready clicked');
+            $("#Nature").val($(this).closest('tr').find('td.VId2').text());
+            $("#AccountId").val($(this).closest('tr').find('td.VID').text());
+            $("#LevelKey").val($(this).closest('tr').find('td.Vtype').text());
+            $("#Date").val($(this).closest('tr').find('td.VDate').text());
+            SearchDV2();
+        });
+    });
+    function SearchDV2() {
+        debugger;
+        var vid = $('#AccountId').val();
+        var type = $('#LevelKey').val();
+       // $('#btnSave').show();
+       // $('#btnGo').hide();
+        IsUpdate = true;
+        $.ajax({
+            type: "GET",       // make it get request instead //
+            url: "/VouchersVerification/SearchVoucher2",
+            data: { Vid: vid, Type: type },
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#mytable2 tr").remove();
+                var new_row;
+                new_row = "<tr><th>VId</th><th>Type</th><th>Title</th><th>Debit</th><th>Credit</th><th>Narration</th></tr>"
+                //$('#mytable tbody').append(new_row);
+                $.each(result, function (i, item) {
+                    new_row += "<tr id='row" + i + "' ><td class='VId'>" + item.VId + "</td><td class='Vtype'>" + item.Vtype + "</td><td class='title'>" + item.Title + "</td><td class='debit'>" + item.Debit + "</td><td class='Credit'>" + item.Credit + "</td><td class='naration'>" + item.Narration + "</td></tr>";
+                    //new_row += "<tr id='row" + i + "' ><td class='VID'> <a href='/VouchersVerification/SearchVoucher2'>" + item.Vid2 + "</a></td><td class='Vtype'>" + item.Vtype + "</td><td class='Amount'>" + item.Ttldebit + "</td><td><input type='checkbox' name='vv'></td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>View Voucher</a></span></td></tr>";
+                });
+                $('#mytable2 tbody').append(new_row);
+                $("#tempdata2").show();
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+    function NewClicked()
+    {
+        isNew = true;
+        isUpdating = false;
+        $('#IsUpdate').val('0');
+        //$('#btnSave').show();
+        //$('#btnNew').disable(true);
+        $('#btnGo').hide();
+        $('#btnNew').disable(true);
+    }
+    function ClearClicked() {
+        window.location.href = '@Url.Action("VoucherVerify", "VouchersVerification")';
+    }
+    function SelectedAccount(id,title,Type)
+    {
+        if (!isNew) {
+            $('#AccountId').val(id);
+            SearchAccount();
+        }
+        if (!isNew && !isUpdating)
+        {
+            $('#Nature').val(id + " " + title);
+           // alert("ok");
+            //if (isNew = false)
+            //{
+             //   alert("ok2");
+                //$('#AccountId').val(id);
+                //SearchAccount();
+           // }
+        }
+    }
+    function NewAccount(id,name,title)
+    {
+        if (!isUpdating)
+        {
+            $('#Nature').val(id + " " + title);
+        }
+        if (isNew)
+            {
+            var Level = +name + +1;
+            ParentId = id;
+            Nature = id.substring(0, 1);
+            if (Level >= 4) {
+                $('#ddlAType').disable(false);
+            }
+            else
+            {
+                $('#ddlAType').disable(true);
+            }
+      $.ajax({
+          url: "/Accounts/NewAccount",
+          type: "POST",
+          data: JSON.stringify({ strAccountId: id }),
+          dataType: 'text json',
+          async: false,
+          contentType: 'application/json; charset=utf-8',
+          success: function (response) {
+              if (response != null && response.success) {
+                  if (response.id == "02") {
+                      alert(response.responseText.toString());
+                 }
+                  else {
+                      $('#AccountId').val(response.responseText.toString());
+                      $('#LevelKey').val(Level);
+                      $("#Title").focus();
+                      $('#btnSave').show();
+                      $('#btnSearch').hide();
+                  }
+              }
+              else {
+                  alert(response.responseText);
+              }
+          },
+          error: function (response) {
+              alert(response.responseText);
+          }
+      });
+     }
+    }
+    //---------------------SaveAccount-----------------------------//
+    function SaveAccount()
+    {
+        $("#frmSave").submit()
+        //debugger
+        //var party=false;
+        //if ($('#cbxIsParty').is(':checked'))
+        //{
+        //    party = true;
+        //}
+        //var Account = {
+        //    AccountId: $('#AccountId').val(),
+        //    Title: $('#Title').val(),
+        //    AccType: $('#ddlAType').val(),
+        //    ParentId: ParentId,
+        //    LevelKey: $('#LevelKey').val(),
+        //    Address: $('#Address').val(),
+        //    PhoneNo: $('#PhoneNo').val(),
+        //    ContactPerson: $('#ContactPerson').val(),
+        //    SalesTaxNo: $('#SalesTaxNo').val(),
+        //    FaxNo: $('#txtFaxNo').val(),
+        //    CityId: $('#ddlCity').val(),
+        //    IsParty: party,
+        //    Nature: Nature
+        //};
+        //$.ajax({
+        //    url: "/Account/Account",
+        //    type: "POST",
+        //    data: JSON.stringify(Account),
+        //    dataType: 'text json',
+        //    async: false,
+        //    contentType: 'application/json; charset=utf-8',
+        //    success: function (response) {
+        //        debugger
+        //        if (response != null && response.success)
+        //        {
+        //            isNew = false;
+        //            alert(response.responseText);
+        //            window.location.href = newUrl;
+        //        }
+        //        else
+        //        {
+        //            alert(response.responseText);
+        //        }
+        //    },
+        //    error: function (response) {
+        //        alert("Failed!");
+        //    }
+        //});
+    }
+    function SearchAccount()
+    {
+        debugger;
+        isNew = false;
+        isUpdating = true;
+        $('#IsUpdate').val('1');
+        $.ajax({
+            url: "/Accounts/SearchAccount",
+            type: "POST",
+            data: JSON.stringify({ strAccountId: $('#AccountId').val()}),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response != null)
+                {
+                    debugger;
+                    $('#btnSave').show();
+                    $('#btnGo').hide();
+                    $('#AccountId').prop('readonly', true);
+                    $('#btnDelete').disable(false);
+                    $('#AccountId').val(response.AccountId.toString().trim());
+                    $('#Title').val(response.Title.toString().trim());
+                    if (response.FaxNo == null) {
+                        response.FaxNo = " ";
+                    }
+                    $('#FaxNo').val(response.FaxNo.toString().trim());
+                    $('#ddlAType').val(response.AccType.toString().trim());
+                    $('#Nature').val(response.ParentId.toString().trim());
+                    $('#LevelKey').val(response.LevelKey.toString().trim());
+                    if (response.LevelKey >= 4)
+                    {
+                        $('#ddlAType').disable(false);
+                    }
+                    if (response.Address == null) {
+                        response.Address = " ";
+                    }
+                    $('#Address').val(response.Address.toString().trim());
+                    if (response.PhoneNo == null) {
+                        response.PhoneNo = " ";
+                    }
+                    $('#PhoneNo').val(response.PhoneNo.toString().trim());
+                    if (response.ContactPerson == null) {
+                        response.ContactPerson = 1;
+                    }
+                    $('#ContactPerson').val(response.ContactPerson.toString().trim());
+                    if (response.SalesTaxNo == null) {
+                        response.SalesTaxNo = " ";
+                    }
+                    $('#SalesTaxNo').val(response.SalesTaxNo.toString().trim());
+                    $('#ddlCity').val(response.CityId.toString().trim());
+                    if (response.IsParty)
+                    {
+                        $('#cbxIsParty').prop('checked', true);
+                    }
+                    else
+                    {
+                        $('#cbxIsParty').prop('checked', false);
+                    }
+                }
+                else
+                {
+                    alert("!No Record Found");
+                }
+            },
+            error: function (response)
+            {
+                alert(response.responseText);
+            }
+        });
+    }
+    function SearchClicked()
+    {
+        $('#btnGo').show();
+        $('#btnSearch').hide();
+        $('#AccountId').prop('readonly', false);
+        $("#AccountId").focus();
+        $('#btnNew').disable(true);
+        isNew = false;
+        isUpdating = true;
+        $('#IsUpdate').val('1');
+    }
+    function DeleteClicked()
+    {
+        var answer = confirm("Are you sure you want to delete this account?");
+        if (answer)
+        {
+            $.ajax({
+                url: "/Accounts/DeleteAccount",
+                type: "POST",
+                data: JSON.stringify({ strAccountId: $('#AccountId').val()}),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success)
+                    {
+                        window.location.href = newUrl;
+                    } else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response)
+                {
+                    alert(response.responseText);
+                }
+            });
+        }
+    }
+</script>
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+    //alert("@*@TempData["message"]");*@
+    </script>
+}
+<div id="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <b>Search Voucher By Narration</b>
+                </div>
+                <div class="card-body" style="overflow-y: auto; max-height: calc(100vh - 205px);">
+                    @{ Html.RenderAction("_Verify", "VouchersVerification"); }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <b>Voucher Details</b>
+                </div>
+                <div class="card-body">
+                    <form id="frmSave" action="AccountCoding" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                        <input type="hidden" name="IsUpdate" id="IsUpdate" value="" />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Selected Voucher</label>
+                                    <input type="text" class="form-control form-control-sm" id="Nature" name="Nature" readonly placeholder="Selected Voucher" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Voucher ID</label>
+                                    <input type="number" class="form-control form-control-sm" id="AccountId" name="AccountId" readonly placeholder="Voucher ID" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Voucher Type</label>
+                                    <input type="text" class="form-control form-control-sm" id="LevelKey" name="LevelKey" readonly placeholder="Voucher Type" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="text" class="form-control form-control-sm" id="Date" name="Date" readonly placeholder="Date" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tempdata2">
+                            <table class="table table-bordered table-sm" id="mytable2">
+                                <thead>
+                                    <tr class="fixed-thead">
+                                        <th width="10%">VId</th>
+                                        <th width="10%">Type</th>
+                                        <th width="30%">Title</th>
+                                        <th width="10%">Debit</th>
+                                        <th width="10%">Credit</th>
+                                        <th width="20%">Narration</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="form-actions">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var keys = {};
+    $(document).keydown(function (e) {
+        keys[e.which] = true;
+        //if (e.target.nodeName.toLowerCase() !== 'input')
+        //printKeys();
+    });
+    $(document).keyup(function (e) {
+        delete keys[e.which];
+        //if (e.target.nodeName.toLowerCase() !== 'input')
+        //printKeys();
+    });
+    function printKeys() {
+        var html = '';
+        for (var i in keys) {
+            if (!keys.hasOwnProperty(i)) continue;
+            html += i;
+        }
+        //home start
+        if (html == '72') {
+            keys = {};
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+        //home end
+        //accounts start
+        if (html == '7486') {
+            keys = {};
+            window.location.href = '@Url.Action("JVoucher", "JVoucher")';
+        }
+        if (html == '6886') {
+            keys = {};
+            window.location.href = '@Url.Action("DVoucher", "DVoucher")';
+        }
+        if (html == '6786') {
+            keys = {};
+            window.location.href = '@Url.Action("CVoucher", "CVoucher")';
+        }
+        if (html == '666886') {
+            keys = {};
+            window.location.href = '@Url.Action("BankDJVoucher", "BankDJVoucher")';
+        }
+        if (html == '666774') {
+            keys = {};
+            window.location.href = '@Url.Action("BankCJVoucher", "BankCJVoucher")';
+        }
+        if (html == '748086') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseJVoucher", "PurchaseJVoucher")';
+        }
+        if (html == '748386') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleJVoucher", "SaleJVoucher")';
+        }
+        if (html == '86') {
+            keys = {};
+            window.location.href = '@Url.Action("Verify", "VouchersVerification")';
+        }
+        //accounts end
+        //coding start
+        if (html == '6567') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountCoding", "Accounts")';
+        }
+        if (html == '656679') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningBalances", "Accounts")';
+        }
+        if (html == '678085') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductUnit", "ProductUnit")';
+        }
+        if (html == '677180') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductGroup", "ProductGroup")';
+        }
+        if (html == '678083') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductSubGroup", "ProductSubGroup")';
+        }
+        if (html == '6780') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProduct", "Product")';
+        }
+        if (html == '6783') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterStores", "Stores")';
+        }
+        if (html == '7983') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningStock", "ProductsOpening")';
+        }
+        if (html == '1667') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterCity", "City")';
+        }
+        //coding end
+        //invoice start
+        if (html == '7380') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseInvoice", "PurchaseInvoice")';
+        }
+        if (html == '8082') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoicePurchaseReturn", "InvoicePurchaseReturn")';
+        }
+        if (html == '7383') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleInvoice", "SaleInvoice")';
+        }
+        if (html == '8283') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoiceSaleReturn", "InvoiceSaleReturn")';
+        }
+        //invoice end
+        //accounts report start
+        if (html == '656782') {
+            keys = {};
+            var string = "rtype=ChartofAccount";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+        if (html == '657682') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountLedger", "Reports")';
+        }
+        if (html == '666782') {
+            keys = {};
+            window.location.href = '@Url.Action("Cashbook", "Reports")';
+        }
+        if (html == '677082') {
+            keys = {};
+            window.location.href = '@Url.Action("CashFlow", "Reports")';
+        }
+        if (html == '668284') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalance", "Reports")';
+        }
+        if (html == '666884') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalanceBetweenDates", "Reports")';
+        }
+        if (html == '6884') {
+            keys = {};
+            window.location.href = '@Url.Action("DetailTrial", "Reports")';
+        }
+        if (html == '7184') {
+            keys = {};
+            window.location.href = '@Url.Action("GroupTrial", "Reports")';
+        }
+        if (html == '8384') {
+            keys = {};
+            window.location.href = '@Url.Action("SixColumnTrial", "Reports")';
+        }
+        //accounts report end
+        //inventory report start
+        if (html == '6880') {
+            keys = {};
+            window.location.href = '@Url.Action("DailyPurchase", "IReports")';
+        }
+        if (html == '6883') {
+            keys = {};
+            window.location.href = '@Url.Action("DailySale", "IReports")';
+        }
+        if (html == '7683') {
+            keys = {};
+            window.location.href = '@Url.Action("StockLedger", "IReports")';
+        }
+        if (html == '7283') {
+            keys = {};
+            window.location.href = '@Url.Action("StockInHand", "IReports")';
+        }
+        //inventory report end
+        //system start
+        if (html == '85') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterUser", "User")';
+        }
+        if (html == '1682') {
+            keys = {};
+            window.location.href = '@Url.Action("UserRights", "User")';
+        }
+        if (html == '657683') {
+            keys = {};
+            window.location.href = '@Url.Action("AddLevel", "AccountsLevel")';
+        }
+        if (html == '656877') {
+            keys = {};
+            window.location.href = '@Url.Action("DeleteCoding", "Accounts")';
+        }
+        @*if (html == '17') {
+            keys = {};
+            window.location.href = '@Url.Action("Add", "ControlAccounts")';
+        }*@
+        //system end
+    }
+</script>

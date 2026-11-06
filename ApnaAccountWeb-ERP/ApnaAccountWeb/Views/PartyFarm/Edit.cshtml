@@ -1,0 +1,45 @@
+﻿ @model ApnaAccountWeb.Models.Farm  
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span6">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Edit Party Farm</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="Edit" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                 <input type="hidden" id="FarmID" name="FarmID" value="@Model.FarmID" />
+                 <div class="control-group">
+                <label class="control-label">Name:</label>
+                <div class="controls">
+                    <input type="text" id="Title" name="Title" required value="@Convert.ToString(Model.Title)" /> 
+                </div>
+              </div>
+                 <div class="control-group">
+                     <label class="control-label">AccountID:</label>
+                     <div class="controls">
+                         @{List<SelectListItem> AccCode = new List<SelectListItem>();
+                         foreach (var Acc in ViewBag.AccCodelist)
+                         {
+                             AccCode.Add(new SelectListItem
+                             {
+                                 Text = Acc.Title,
+                                 Value = Acc.AccountId,
+                             });
+                         }
+                         }
+                         @Html.DropDownListFor(u => u.AccountID, AccCode, "-- Select Account --", new { id = "ddlTitle", @class = "ddl" })
+                     </div>
+                 </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-success">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>
+               

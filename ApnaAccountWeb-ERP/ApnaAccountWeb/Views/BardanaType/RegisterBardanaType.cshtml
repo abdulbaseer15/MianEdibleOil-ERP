@@ -1,0 +1,86 @@
+﻿@model ApnaAccountWeb.Models.BardanaType
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Create Bardana Type</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="RegisterBardanaType" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <div class="control-group">
+                                    <label class="control-label">Name:</label>
+                                    <div class="controls">
+                                        <input type="text" id="Title" name="Title" required placeholder="Title" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Bardana (Kg):</label>
+                                    <div class="controls">
+                                        <input type="number" id="Deduction" name="Deduction" required placeholder="Bardana (Kg)" />
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <a href="@Url.Action("ViewBardanaType", "BardanaType")" style="padding-right:2em;">View Bardana Types</a>
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Create Bardana Type</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="RegisterBardanaType" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Name:</label>
+                                        <input type="text" class="form-control form-control-sm" id="Title" name="Title" required placeholder="Title" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Bardana (Kg):</label>
+                                        <input type="number" class="form-control form-control-sm" id="Deduction" name="Deduction" required placeholder="Bardana (Kg)" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-2">
+                                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-10">
+                                    <div class="text-right">
+                                        <a class="btn btn-sm btn-default" href="@Url.Action("ViewBardanaType", "BardanaType")">View Bardana Types</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

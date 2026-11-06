@@ -1,0 +1,470 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    $(document).ready(function () {
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        window.onload = function () {
+            document.getElementById("txtOpening").focus();
+        };
+        $('#txtOpening').keypress(function (e) {
+            if (e.which == 13)
+                $('#txtClosing').focus();
+        });
+        $('#txtClosing').keypress(function (e) {
+            if (e.which == 13)
+                $('#dtpDateto').focus();
+        });
+        //$('#dtpDatefrom').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDatefrom').datepicker('setDate', 'now');
+        //$('#dtpDateto').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDateto').datepicker('setDate', 'now');
+        $('#ddlTitle').change(function () {
+            var selectedVal = $('#ddlTitle option:selected').attr('value');
+            $('#txtAccCode').val(selectedVal);
+            var e = document.getElementById("ddlTitle");
+            var title = e.options[e.selectedIndex].text;
+            $('#title').val(title);
+        });
+        $('#txtAccCode').keypress(function (e) {
+            debugger;
+            if (e.which == 13) {
+                $('#myModal').modal('show');
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                $('#tblPopup tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtAccCode').val($tds[0].innerText);
+                    $('#ddlTitle').val($tds[0].innerText);
+                    $('#ddlTitle').focus();
+                    $('#myModal').modal('hide');
+                });
+            }
+        });
+    });
+    function ViewClicked() {
+        var Opening = $('#txtOpening').val();
+        var Closing = $('#txtClosing').val();
+        var dtpDateto = $('#dtpDateto').val();
+        var supres = "";
+        if ($('#S').is(":checked")) {
+            supres = "S";
+        }
+        else if ($('#D').is(":checked")) {
+            supres = "D";
+        }
+        var rtype = $('#rtype').val();
+        var string = "rtype=" + rtype + "&dtpDateto=" + dtpDateto + "" + "&title=" + supres + "&Opening=" + Opening + "&Closing=" + Closing + "";
+        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+    function ExportExcel() {
+        var excel = "Yes";
+        var Opening = $('#txtOpening').val();
+        var Closing = $('#txtClosing').val();
+        var dtpDateto = $('#dtpDateto').val();
+        var supres = "";
+        if ($('#S').is(":checked")) {
+            supres = "S";
+        }
+        else if ($('#D').is(":checked")) {
+            supres = "D";
+        }
+        var rtype = $('#rtype').val();
+        var string = "rtype=" + rtype + "&dtpDateto=" + dtpDateto + "" + "&title=" + supres + "&Opening=" + Opening + "&Closing=" + Closing + "&excel=" + excel + "";
+        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                </div>
+                <div class="span5">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Profit Loss Report</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <input type="hidden" id="rtype" name="rtype" value="rptProfitLoss" />
+                                <input type="hidden" id="title" name="title" />
+                              
+                                <div class="control-group">
+                                    <label class="control-label">To Date:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDateto" name="dtpDateto" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <label>
+                                            <input type="radio" class="checkbox" name="sz" id="D" value="D" checked />
+                                            Detail
+                                        </label>
+                                        <label>
+                                            <input type="radio" class="checkbox" name="sz" id="S" value="S" />
+                                            Summary
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <input type="button" value="View" id="btnSearch" class="btn btn-success" onclick='ViewClicked();' />
+                                    <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-success" style="background-color: #062f70" onclick='ExportExcel();'>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Profit Loss Report</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <input type="hidden" id="rtype" name="rtype" value="rptProfitLoss" />
+                            <input type="hidden" id="title" name="title" />
+                            
+                                <div class="col-md-6">
+                                    <div class="controls">
+                                        <label class="control-label">Opening Stock:</label>
+                                    </div>
+                                    <div class="controls">
+                                        <input type="text" class="form-control form-control-sm" value="0" id="txtOpening" name="txtOpening" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Closing Stock:</label>
+                                    <div class="controls">
+                                        <input type="text" class="form-control form-control-sm" value="0" id="txtClosing" name="txtClosing" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>To Date:</label>
+                                            <div class="input-group date" data-target-input="nearest">
+                                                <input type="text" class="form-control form-control-sm" id="dtpDateto" name="dtpDateto" />
+                                                <div class="input-group-append" id="dtpDatetoIcon" data-target="#dtpDateto" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-radio">
+                                                <input class="custom-control-input" value="D" type="radio" id="D" checked name="sz">
+                                                <label for="D" class="custom-control-label">Detail</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input class="custom-control-input" value="S" type="radio" id="S" name="sz">
+                                                <label for="S" class="custom-control-label">Summary</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-2">
+                                        <input type="button" value="View" id="btnSearch" class="btn btn-sm btn-success" onclick='ViewClicked();' />
+                                        <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-success" style="background-color: #062f70" onclick='ExportExcel();'>
+                                    </div>
+                                    @*<div class="col-md-6 col-sm-6 col-10">
+                    <div class="text-right">
+                        <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-sm btn-primary" onclick='ExportExcel();'>
+                    </div>
+                </div>*@
+                                </div>
+</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+     var keys = {};
+     $(document).keydown(function (e) {
+         keys[e.which] = true;
+         if (e.target.nodeName.toLowerCase() !== 'input')
+         printKeys();
+     });
+     $(document).keyup(function (e) {
+         delete keys[e.which];
+         if (e.target.nodeName.toLowerCase() !== 'input')
+         printKeys();
+     });
+     function printKeys() {
+         var html = '';
+         for (var i in keys) {
+             if (!keys.hasOwnProperty(i)) continue;
+             html += i;
+         }
+         //home start
+         if (html == '72') {
+             keys = {};
+             window.location.href = '@Url.Action("Index", "Home")';
+        }
+        //home end
+        //accounts start
+        if (html == '7486') {
+            keys = {};
+            window.location.href = '@Url.Action("JVoucher", "JVoucher")';
+        }
+        if (html == '6886') {
+            keys = {};
+            window.location.href = '@Url.Action("DVoucher", "DVoucher")';
+        }
+        if (html == '6786') {
+            keys = {};
+            window.location.href = '@Url.Action("CVoucher", "CVoucher")';
+        }
+        if (html == '666886') {
+            keys = {};
+            window.location.href = '@Url.Action("BankDJVoucher", "BankDJVoucher")';
+        }
+        if (html == '666774') {
+            keys = {};
+            window.location.href = '@Url.Action("BankCJVoucher", "BankCJVoucher")';
+        }
+        if (html == '748086') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseJVoucher", "PurchaseJVoucher")';
+        }
+        if (html == '748386') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleJVoucher", "SaleJVoucher")';
+        }
+        if (html == '86') {
+            keys = {};
+            window.location.href = '@Url.Action("Verify", "VouchersVerification")';
+        }
+        //accounts end
+        //coding start
+        if (html == '6567') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountCoding", "Accounts")';
+        }
+        if (html == '656679') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningBalances", "Accounts")';
+        }
+        if (html == '678085') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductUnit", "ProductUnit")';
+        }
+        if (html == '677180') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductGroup", "ProductGroup")';
+        }
+        if (html == '678083') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductSubGroup", "ProductSubGroup")';
+        }
+        if (html == '6780') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProduct", "Product")';
+        }
+        if (html == '6783') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterStores", "Stores")';
+        }
+        if (html == '7983') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningStock", "ProductsOpening")';
+        }
+        if (html == '1667') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterCity", "City")';
+        }
+        //coding end
+        //invoice start
+        if (html == '7380') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseInvoice", "PurchaseInvoice")';
+        }
+        if (html == '8082') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoicePurchaseReturn", "InvoicePurchaseReturn")';
+        }
+        if (html == '7383') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleInvoice", "SaleInvoice")';
+        }
+        if (html == '8283') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoiceSaleReturn", "InvoiceSaleReturn")';
+        }
+        //invoice end
+        //accounts report start
+        if (html == '656782') {
+            keys = {};
+            var string = "rtype=ChartofAccount";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+        if (html == '657682') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountLedger", "Reports")';
+        }
+        if (html == '666782') {
+            keys = {};
+            window.location.href = '@Url.Action("Cashbook", "Reports")';
+        }
+        if (html == '677082') {
+            keys = {};
+            window.location.href = '@Url.Action("CashFlow", "Reports")';
+        }
+        if (html == '668284') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalance", "Reports")';
+        }
+        if (html == '666884') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalanceBetweenDates", "Reports")';
+        }
+        if (html == '6884') {
+            keys = {};
+            window.location.href = '@Url.Action("DetailTrial", "Reports")';
+        }
+        if (html == '7184') {
+            keys = {};
+            window.location.href = '@Url.Action("GroupTrial", "Reports")';
+        }
+        if (html == '8384') {
+            keys = {};
+            window.location.href = '@Url.Action("SixColumnTrial", "Reports")';
+        }
+        //accounts report end
+        //inventory report start
+        if (html == '6880') {
+            keys = {};
+            window.location.href = '@Url.Action("DailyPurchase", "IReports")';
+        }
+        if (html == '6883') {
+            keys = {};
+            window.location.href = '@Url.Action("DailySale", "IReports")';
+        }
+        if (html == '7683') {
+            keys = {};
+            window.location.href = '@Url.Action("StockLedger", "IReports")';
+        }
+        if (html == '7283') {
+            keys = {};
+            window.location.href = '@Url.Action("StockInHand", "IReports")';
+        }
+        //inventory report end
+        //system start
+        if (html == '85') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterUser", "User")';
+        }
+        if (html == '1682') {
+            keys = {};
+            window.location.href = '@Url.Action("UserRights", "User")';
+        }
+        if (html == '657683') {
+            keys = {};
+            window.location.href = '@Url.Action("AddLevel", "AccountsLevel")';
+        }
+        if (html == '656877') {
+            keys = {};
+            window.location.href = '@Url.Action("DeleteCoding", "Accounts")';
+        }
+        @*if (html == '17') {
+            keys = {};
+            window.location.href = '@Url.Action("Add", "ControlAccounts")';
+        }*@
+        //system end
+    }
+</script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#dtpDatefrom').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDateto').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDatefromIcon').click(function () {
+                $('#dtpDatefrom').datepicker('show');
+            });
+            $('#dtpDatetoIcon').click(function () {
+                $('#dtpDateto').datepicker('show');
+            });
+            $('#dtpDatefrom').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDatefrom').datepicker('setDate', 'now');
+
+            $('#dtpDateto').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDateto').datepicker('setDate', 'now');
+        });
+    </script>
+}  

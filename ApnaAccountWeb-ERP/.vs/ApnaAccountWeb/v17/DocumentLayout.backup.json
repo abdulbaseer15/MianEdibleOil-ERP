@@ -1,0 +1,139 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\apnaaccountweb\\views\\salereturn\\salereturn.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|solutionrelative:apnaaccountweb\\views\\salereturn\\salereturn.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\apnaaccountweb\\controllers\\salereturncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|solutionrelative:apnaaccountweb\\controllers\\salereturncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|c:\\github\\erp-standard-base-ifm-\\apnaaccountweb-erp\\apnaaccountweb\\viewmodels\\dbconection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|solutionrelative:apnaaccountweb\\viewmodels\\dbconection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\apnaaccountweb\\views\\saleinvoice\\saleinvoice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|solutionrelative:apnaaccountweb\\views\\saleinvoice\\saleinvoice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\apnaaccountweb\\controllers\\reportscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|solutionrelative:apnaaccountweb\\controllers\\reportscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\apnaaccountweb\\controllers\\saleinvoicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|solutionrelative:apnaaccountweb\\controllers\\saleinvoicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\apnaaccountweb\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{82869564-907C-4ED2-9F62-F609A1BB7BF0}|ApnaAccountWeb\\ApnaAccountWeb.csproj|solutionrelative:apnaaccountweb\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SaleInvoice.cshtml",
+              "DocumentMoniker": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Views\\SaleInvoice\\SaleInvoice.cshtml",
+              "RelativeDocumentMoniker": "ApnaAccountWeb\\Views\\SaleInvoice\\SaleInvoice.cshtml",
+              "ToolTip": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Views\\SaleInvoice\\SaleInvoice.cshtml",
+              "RelativeToolTip": "ApnaAccountWeb\\Views\\SaleInvoice\\SaleInvoice.cshtml",
+              "ViewState": "AgIAAKgLAAAAAAAAAAAuwLELAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-03T23:16:00.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SaleReturnController.cs",
+              "DocumentMoniker": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Controllers\\SaleReturnController.cs",
+              "RelativeDocumentMoniker": "ApnaAccountWeb\\Controllers\\SaleReturnController.cs",
+              "ToolTip": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Controllers\\SaleReturnController.cs",
+              "RelativeToolTip": "ApnaAccountWeb\\Controllers\\SaleReturnController.cs",
+              "ViewState": "AgIAAJsAAAAAAAAAAAAAAK4AAABtAgAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-03T22:03:22.066Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SaleReturn.cshtml",
+              "DocumentMoniker": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Views\\SaleReturn\\SaleReturn.cshtml",
+              "RelativeDocumentMoniker": "ApnaAccountWeb\\Views\\SaleReturn\\SaleReturn.cshtml",
+              "ToolTip": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Views\\SaleReturn\\SaleReturn.cshtml",
+              "RelativeToolTip": "ApnaAccountWeb\\Views\\SaleReturn\\SaleReturn.cshtml",
+              "ViewState": "AgIAAF4MAAAAAAAAAIAwwGgMAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-03T21:54:46.903Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ReportsController.cs",
+              "DocumentMoniker": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Controllers\\ReportsController.cs",
+              "RelativeDocumentMoniker": "ApnaAccountWeb\\Controllers\\ReportsController.cs",
+              "ToolTip": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Controllers\\ReportsController.cs",
+              "RelativeToolTip": "ApnaAccountWeb\\Controllers\\ReportsController.cs",
+              "ViewState": "AgIAAF0RAAAAAAAAAAAlwGYRAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-03T21:43:24.113Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SaleInvoiceController.cs",
+              "DocumentMoniker": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Controllers\\SaleInvoiceController.cs",
+              "RelativeDocumentMoniker": "ApnaAccountWeb\\Controllers\\SaleInvoiceController.cs",
+              "ToolTip": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Controllers\\SaleInvoiceController.cs",
+              "RelativeToolTip": "ApnaAccountWeb\\Controllers\\SaleInvoiceController.cs",
+              "ViewState": "AgIAAFkDAAAAAAAAAAAlwGgDAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-03T21:43:24.269Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Web.config",
+              "DocumentMoniker": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Web.config",
+              "RelativeDocumentMoniker": "ApnaAccountWeb\\Web.config",
+              "ToolTip": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\Web.config",
+              "RelativeToolTip": "ApnaAccountWeb\\Web.config",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAEAAAACxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2026-09-03T21:41:51.677Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DbConection.cs",
+              "DocumentMoniker": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\ViewModels\\DbConection.cs",
+              "RelativeDocumentMoniker": "ApnaAccountWeb\\ViewModels\\DbConection.cs",
+              "ToolTip": "C:\\Github\\ERP-Standard-base-IFM-\\ApnaAccountWeb-ERP\\ApnaAccountWeb\\ViewModels\\DbConection.cs",
+              "RelativeToolTip": "ApnaAccountWeb\\ViewModels\\DbConection.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABcAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-03T21:39:58.274Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

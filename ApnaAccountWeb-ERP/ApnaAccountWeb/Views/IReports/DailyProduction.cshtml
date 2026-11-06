@@ -1,0 +1,392 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+    tr.highlighted td {
+        color: white;
+        background-color: red;
+    }
+</style>
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $('#txtAccCode').focus();
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        //$('#dtpDatefrom').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDatefrom').datepicker('setDate', 'now');
+        //$('#dtpDateto').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDateto').datepicker('setDate', 'now');
+        $('#ddlTitle').change(function () {
+            var selectedVal = $('#ddlTitle option:selected').attr('value');
+            $('#txtAccCode').val(selectedVal);
+            var e = document.getElementById("ddlTitle");
+            var title = e.options[e.selectedIndex].text;
+            $('#title').val(title);
+        });
+        $('#txtAccCode').keypress(function (e) {
+            $('#myModal').modal('show');
+            if (e.which == 13) {
+                forOrder();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                $('#tblPopup tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtAccCode').val($tds[0].innerText);
+                    $('#ddlTitle').val($tds[0].innerText);
+                    $('#ddlTitle').focus();
+                    $('#myModal').modal('hide');
+                });
+            }
+        });
+    });
+    function forOrder() {
+        var flag = true;
+        var trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtAccCode').val($tds[0].innerText);
+                                $('#ddlTitle').val($tds[0].innerText);
+                                $('#myInput').val("");
+                                $('#myModal').modal('hide');
+                                isTrue = 1;
+                                $('#dtpDatefrom').focus();
+                                //$('#txtunit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtAccCode').val($tds[0].innerText);
+                                $('#ddlTitle').val($tds[0].innerText);
+                                $('#myInput').val("");
+                                $('#myModal').modal('hide');
+                                isTrue = 1;
+                                $('#dtpDatefrom').focus();
+                                // $('#txtunit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopup)
+                            $tds = row.find("td");
+                            $('#txtAccCode').val($tds[0].innerText);
+                            $('#ddlTitle').val($tds[0].innerText);
+                            $('#myInput').val("");
+                            $('#myModal').modal('hide');
+                            isTrue = 1;
+                            $('#dtpDatefrom').focus();
+                            //$('#txtunit').focus();
+                            //alert(countrow);
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function ViewClicked() {
+        var supres = "";
+        if ($('#DPOA').is(":checked")) {
+            supres = "DailyProductionOverAll";
+        }
+        else if ($('#IFRR').is(":checked")) {
+            supres = "IndividualFormulaRunReport";
+        }
+        else if ($('#DAOA').is(":checked")) {
+            supres = "DailyAdjustmentOverAll";
+        }
+        else if ($('#IFA').is(":checked")) {
+            supres = "IndividualFormulaAdjustment";
+        }
+        var dtpDateto = $('#dtpDateto').val();
+        var dtpDatefrom = $('#dtpDatefrom').val();
+        var rtype = $('#rtype').val();
+        var string = "rtype=" + rtype + "&dtpDatefrom=" + dtpDatefrom + "&dtpDateto=" + dtpDateto + "&group=" + supres + "";
+        var url = '@(Url.Action("Report", "IReports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                </div>
+                <div class="span5">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Production Report</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <input type="hidden" id="rtype" name="rtype" value="rptProduction" />
+                                <input type="hidden" id="title" name="title" />
+                                <div class="control-group">
+                                    <label class="control-label">From:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDatefrom" name="dtpDatefrom" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">To:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDateto" name="dtpDateto" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Select Report</label>
+                                    <div class="controls">
+                                        <label>
+                                            <input type="radio" name="radios" id="DPOA" checked />
+                                            Daily Production Over All
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="radios" id="IFRR" />
+                                            Individual Formula Run Report
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="radios" id="DAOA" />
+                                            Daily Adjustment Over All
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="radios" id="IFA" />
+                                            Individual Formula Adjustment
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <input type="button" value="View" id="btnSearch" class="btn btn-success" onclick='ViewClicked();' />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Production Report</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <input type="hidden" id="rtype" name="rtype" value="rptProduction" />
+                            <input type="hidden" id="title" name="title" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>From:</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDatefrom" name="dtpDatefrom" />
+                                            <div class="input-group-append" id="dtpDatefromIcon" data-target="#dtpDatefrom" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>To:</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDateto" name="dtpDateto" />
+                                            <div class="input-group-append" id="dtpDatetoIcon" data-target="#dtpDateto" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <b>Select Report:</b>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="DPOA" checked name="DPOA">
+                                            <label for="DPOA" class="custom-control-label">Daily Production Over All</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="IFRR" name="IFRR">
+                                            <label for="IFRR" class="custom-control-label">Individual Formula Run Report</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="DAOA" name="DAOA">
+                                            <label for="DAOA" class="custom-control-label">Daily Adjustment Over All</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="IFA" name="IFA">
+                                            <label for="IFA" class="custom-control-label">Individual Formula Adjustment</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-3 col-6">
+                                            <input type="button" value="View" id="btnSearch" class="btn btn-sm w-100 btn-success" onclick='ViewClicked();' />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#dtpDatefrom').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDateto').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDatefromIcon').click(function () {
+                $('#dtpDatefrom').datepicker('show');
+            });
+            $('#dtpDatetoIcon').click(function () {
+                $('#dtpDateto').datepicker('show');
+            });
+            $('#dtpDatefrom').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDatefrom').datepicker('setDate', 'now');
+
+            $('#dtpDateto').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDateto').datepicker('setDate', 'now');
+        });
+    </script>
+}

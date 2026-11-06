@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsInOut" targetNamespace="http://tempuri.org/dsInOut.xsd" xmlns:mstns="http://tempuri.org/dsInOut.xsd" xmlns="http://tempuri.org/dsInOut.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="ApnaAccount_IKConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ApnaAccount_IKConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.ApnaAccount_IKConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsInOut" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsInOut" msprop:Generator_UserDSName="dsInOut">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ado" msprop:Generator_TableClassName="adoDataTable" msprop:Generator_TableVarName="tableado" msprop:Generator_TablePropName="ado" msprop:Generator_RowDeletingName="adoRowDeleting" msprop:Generator_RowChangingName="adoRowChanging" msprop:Generator_RowEvHandlerName="adoRowChangeEventHandler" msprop:Generator_RowDeletedName="adoRowDeleted" msprop:Generator_UserTableName="ado" msprop:Generator_RowChangedName="adoRowChanged" msprop:Generator_RowEvArgName="adoRowChangeEvent" msprop:Generator_RowClassName="adoRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="CompID" msprop:Generator_ColumnVarNameInTable="columnCompID" msprop:Generator_ColumnPropNameInRow="CompID" msprop:Generator_ColumnPropNameInTable="CompIDColumn" msprop:Generator_UserColumnName="CompID" type="xs:decimal" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Product" msprop:Generator_ColumnVarNameInTable="columnProduct" msprop:Generator_ColumnPropNameInRow="Product" msprop:Generator_ColumnPropNameInTable="ProductColumn" msprop:Generator_UserColumnName="Product" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="VchType" msprop:Generator_ColumnVarNameInTable="columnVchType" msprop:Generator_ColumnPropNameInRow="VchType" msprop:Generator_ColumnPropNameInTable="VchTypeColumn" msprop:Generator_UserColumnName="VchType" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Purpose" msprop:Generator_ColumnVarNameInTable="columnPurpose" msprop:Generator_ColumnPropNameInRow="Purpose" msprop:Generator_ColumnPropNameInTable="PurposeColumn" msprop:Generator_UserColumnName="Purpose" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Remarks" msprop:Generator_ColumnVarNameInTable="columnRemarks" msprop:Generator_ColumnPropNameInRow="Remarks" msprop:Generator_ColumnPropNameInTable="RemarksColumn" msprop:Generator_UserColumnName="Remarks" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DateOut" msprop:Generator_ColumnVarNameInTable="columnDateOut" msprop:Generator_ColumnPropNameInRow="DateOut" msprop:Generator_ColumnPropNameInTable="DateOutColumn" msprop:Generator_UserColumnName="DateOut" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Timeout" msprop:Generator_ColumnVarNameInTable="columnTimeout" msprop:Generator_ColumnPropNameInRow="Timeout" msprop:Generator_ColumnPropNameInTable="TimeoutColumn" msprop:Generator_UserColumnName="Timeout" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="OutID" msprop:Generator_ColumnVarNameInTable="columnOutID" msprop:Generator_ColumnPropNameInRow="OutID" msprop:Generator_ColumnPropNameInTable="OutIDColumn" msprop:Generator_UserColumnName="OutID" type="xs:int" minOccurs="0" />
+              <xs:element name="IType" msprop:Generator_ColumnVarNameInTable="columnIType" msprop:Generator_ColumnPropNameInRow="IType" msprop:Generator_ColumnPropNameInTable="ITypeColumn" msprop:Generator_UserColumnName="IType" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

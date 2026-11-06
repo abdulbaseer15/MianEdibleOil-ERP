@@ -1,0 +1,1408 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+
+    tr.highlighted td {
+        color: white;
+        background-color: red;
+    }
+</style>
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    var isTrue = 0;
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        $('#txtweight').disable(true);
+        $('#mode').disable(true);
+        $('#ratecalc').disable(true);
+        $('#milltype').disable(true);
+        $('#txtbrorate').disable(true);
+        $('#txtRemarks').disable(true);
+        $('#txtbagsbatch').disable(true);
+        $('#txtBatches').disable(true);
+        $('#txtBarCode').disable(true);
+        $('#ddlTitlesupbar').disable(true);
+        $('#nettotal').disable(true);
+        $('#txtproCode').disable(true);
+        $('#txtsupCode').disable(true);
+        $('#txtpurCode').disable(true);
+        $('#ddlTitlesup').disable(true);
+        $('#ddlTitlepur').disable(true);
+        $('#ddlTitlepro').disable(true);
+                   $('#txtunit').disable(true);
+                   $('#txtbox').disable(true);
+                   $('#txtPiece').disable(true);
+                   $('#ddlTitleinv').hide();
+                   $('#comDateIn').disable(true);
+                   $('#comDateOut').disable(true);
+                   $('#txtTotalHours').disable(true);
+        $('#txtquan').disable(true);
+        $('#txtrate').disable(true);
+        $('#txtamount').disable(true);
+        //$('#comDate').disable(true);
+        $('#compno').disable(true);
+        $('#youDate').disable(true);
+        $('#invono').disable(true);
+        $('#btnDelete').disable(true);
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+        $("#divSelectDis").hide();
+        $("#tempdata").hide();
+        //$('#comDate').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#comDate').datepicker('setDate', 'now');
+        //$('#youDate').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#youDate').datepicker('setDate', 'now');
+        var i = 0;
+        currentRow = null;
+        $('#txtamount').keypress(function (e) {
+            if (e.which == 13) {
+                AddGridClicked();
+            }
+        });
+        $(document).on('click', 'span.deleterow', function () {
+            $(this).parents('tr').remove();
+            return false;
+        });
+        $(document).on('click', 'span.editrow', function () {
+            currentRow = $(this).parents('tr');
+            $("#txtproCode").val($(this).closest('tr').find('td.accCode').text());
+            $("#ddlTitlepro").val($(this).closest('tr').find('td.title').text());
+            $("#txtquan").val($(this).closest('tr').find('td.unitid').text());
+            $("#txtweight").val($(this).closest('tr').find('td.unitname').text());
+            $("#txtrate").val($(this).closest('tr').find('td.rate').text());
+            $("#txtamount").val($(this).closest('tr').find('td.naration').text());
+        });
+        $('#cbxPrintJV').change(function () {
+            if (this.checked) {
+                IsPrintJV = true;
+            }
+            else {
+                IsPrintJV = false;
+            }
+        });
+        $('#compno').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder2();
+                $('#myModalinvoices').modal('show');
+                $('#myInputinv').focus();
+                $('.textboxSearch').focus();
+                var $rows = $('#tblPopupinv tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopupinv tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#compno').val($tds[0].innerText);
+                    $('#comDate').val($tds[1].innerText);
+                    $('#myModalinvoices').modal('hide');
+                    $('#comDate').disable(true);
+                    $('#compno').disable(true);
+                });
+            }
+        });
+        $('#invono').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1)
+            {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue==0) {
+                $('#youDate').focus();
+            }
+        });
+        $('#youDate').keypress(function (e) {
+            if (e.which == 13) {
+                $('#txtsupCode').focus();
+            }
+        });
+        $('#txtsupCode').keypress(function (e) {
+            if (e.which == 13) {
+                $('#txtBatches').focus();
+            }
+        });
+        $('#ddlTitlesup').click(function (e) {
+            $('#txtbagsbatch').focus();
+        });
+        $('#txtbagsbatch').keypress(function (e) {
+            if (e.which == 13) {
+                $('#txtRemarks').focus();
+            }
+        });
+        $('#txtRemarks').keypress(function (e) {
+            if (e.which == 13) {
+                $('#comDateIn').focus();
+            }
+        });
+        $('#comDateIn').keypress(function (e) {
+            if (e.which == 13) {
+                $('#comDateOut').focus();
+            }
+        });
+        $('#comDateOut').keypress(function (e) {
+            if (e.which == 13) {
+                $('#txtTotalHours').focus();
+            }
+        });
+        $('#comDateOut').focusout(function (e) {
+            var start = Date.parse($("input#comDateIn").val()); //get timestamp
+            //value end
+            var end = Date.parse($("input#comDateOut").val()); //get timestamp
+            var ftext = '';
+                var seconds = Math.floor((end - start) / 1000);
+                var days = Math.floor(seconds / (3600 * 24));
+                seconds -= days * 3600 * 24;
+                var hrs = Math.floor(seconds / 3600);
+                seconds -= hrs * 3600;
+                var mnts = Math.floor(seconds / 60);
+                seconds -= mnts * 60;
+                ftext =days + " days, " + hrs + " Hrs, " + mnts + " Minutes, " + seconds + " Seconds";
+            $('#txtTotalHours').val(ftext);
+        });
+        $('#txtunit').click(function (e) {
+                $('#txtbox').focus();
+        });
+        $('#ratecalc').click(function (e) {
+            $('#milltype').focus();
+        });
+        $('#milltype').click(function (e) {
+            $('#txtbrorate').focus();
+        });
+        $('#txtbrorate').keypress(function (e) {
+            if (e.which == 13) {
+                $('#mode').focus();
+            }
+        });
+        $('#mode').click(function (e) {
+            $('#txtproCode').focus();
+        });
+        $('#txtbox').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1)
+            {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue==0) {
+                $('#txtPiece').focus();
+            }
+        });
+        $('#txtPiece').keypress(function (e) {
+            if (e.which == 13) {
+                $('#txtrate').focus();
+            }
+        });
+        $('#txtquan').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 0) {
+                var quan = parseFloat($('#txtquan').val());
+                var rate = parseFloat($('#txtrate').val());
+                if (isNaN(quan))
+                    quan = 0;
+                if (isNaN(rate))
+                    rate = 0;
+                $('#txtamount').val((quan * rate).toFixed(2));
+                $('#txtweight').focus();
+            }
+        });
+        $('#txtweight').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 0) {
+                if (e.which == 13) {
+                    var quan = parseFloat($('#txtweight').val());
+                    var rate = parseFloat($('#txtrate').val());
+                    if (isNaN(quan))
+                        quan = 0;
+                    if (isNaN(rate))
+                        rate = 0;
+                    $('#txtamount').val((quan * rate).toFixed(2));
+                    $('#txtrate').focus();
+                }
+            }
+        });
+        $('#txtrate').keypress(function (e) {
+            if (e.which == 13)
+            {
+                var quan = parseFloat($('#txtweight').val());
+                var rate = parseFloat($('#txtrate').val());
+                if (isNaN(quan))
+                    quan = 0;
+                if (isNaN(rate))
+                    rate = 0;
+                $('#txtamount').val((quan*rate).toFixed(2));
+                $('#txtamount').focus();
+            }
+        });
+    });
+    function forOrder4() {
+        var flag = true;
+        var trows = document.getElementById('tblPopup2').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup2').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup2').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup2").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopup2)
+                                $tds = row.find("td");
+                                $('#txtpurCode').val($tds[0].innerText);
+                                $('#ddlTitlepur').val($tds[0].innerText);
+                                $('#myInput2').val("");
+                                $('#myModalpur').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtproCode').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup2)
+                                $tds = row.find("td");
+                                $('#txtpurCode').val($tds[0].innerText);
+                                $('#ddlTitlepur').val($tds[0].innerText);
+                                $('#myInput2').val("");
+                                $('#myModalpur').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtproCode').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopup2)
+                            $tds = row.find("td");
+                            $('#txtpurCode').val($tds[0].innerText);
+                            $('#ddlTitlepur').val($tds[0].innerText);
+                            $('#myInput2').val("");
+                            $('#myModalpur').modal('hide');
+                            //$('#txtbox').focus();
+                            isTrue = 1;
+                            $('#txtproCode').focus();
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder3() {
+        var flag = true;
+        var trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtsupCode').val($tds[0].innerText);
+                                $('#ddlTitlesup').val($tds[0].innerText);
+                                $('#myInput').val("");
+                                $('#myModalsup').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtRemarks').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtsupCode').val($tds[0].innerText);
+                                $('#ddlTitlesup').val($tds[0].innerText);
+                                $('#myInput').val("");
+                                $('#myModalsup').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtRemarks').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopup)
+                            $tds = row.find("td");
+                            $('#txtsupCode').val($tds[0].innerText);
+                            $('#ddlTitlesup').val($tds[0].innerText);
+                            $('#myInput').val("");
+                            $('#myModalsup').modal('hide');
+                            //$('#txtbox').focus();
+                            isTrue = 1;
+                            $('#txtRemarks').focus();
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder2() {
+        var flag = true;
+        var trows = document.getElementById('tblPopupinv').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopupinv').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopupinv').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopupinv").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#compno').val($tds[0].innerText);
+                                $('#comDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#comDate').disable(true);
+                                $('#compno').disable(true);
+                                $('#myModalinvoices').modal('hide');
+                                isTrue = 1;
+                               // $('#invono').focus();
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#compno').val($tds[0].innerText);
+                                $('#comDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#comDate').disable(true);
+                                $('#compno').disable(true);
+                                $('#myModalinvoices').modal('hide');
+                                isTrue = 1;
+                                //$('#invono').focus();
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopupinv)
+                            $tds = row.find("td");
+                            $('#compno').val($tds[0].innerText);
+                            $('#comDate').val($tds[1].innerText);
+                            $('#myModalinvoices').modal('hide');
+                            $('#comDate').disable(true);
+                            $('#compno').disable(true);
+                            $('#myModalinvoices').modal('hide');
+                            isTrue = 1;
+                            //$('#invono').focus();
+                            $('#btnGo').focus();
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder() {
+        var flag = true;
+        var trows = document.getElementById('tblPopup3').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup3').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup3').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup3").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopup3)
+                                $tds = row.find("td");
+                                $('#txtproCode').val($tds[0].innerText);
+                                $('#ddlTitlepro').val($tds[1].innerText);
+                                //$('#txtrate').val(parseFloat($tds[2].innerText));
+                                //$('#txtunit').val($tds[3].innerText);
+                                //$('#piecesperbox').val($tds[4].innerText);
+                                $('#myInput3').val("");
+                                $('#myModalpro').modal('hide');
+                                isTrue = 1;
+                                $('#txtweight').focus();
+                                //$('#txtunit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup3)
+                                $tds = row.find("td");
+                                $('#txtproCode').val($tds[0].innerText);
+                                $('#ddlTitlepro').val($tds[1].innerText);
+                                //$('#txtrate').val(parseFloat($tds[2].innerText));
+                                //$('#txtunit').val($tds[3].innerText);
+                                //$('#piecesperbox').val($tds[4].innerText);
+                                $('#myInput3').val("");
+                                $('#myModalpro').modal('hide');
+                                isTrue = 1;
+                                $('#txtweight').focus();
+                               // $('#txtunit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopup3)
+                            $tds = row.find("td");
+                            $('#txtproCode').val($tds[0].innerText);
+                            $('#ddlTitlepro').val($tds[1].innerText);
+                            //$('#txtrate').val(parseFloat($tds[2].innerText));
+                            //$('#txtunit').val($tds[3].innerText);
+                            //$('#piecesperbox').val($tds[4].innerText);
+                            $('#myInput3').val("");
+                            $('#myModalpro').modal('hide');
+                            isTrue = 1;
+                            $('#txtweight').focus();
+                           //$('#txtunit').focus();
+                            //alert(countrow);
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function ClearClicked() {
+        window.location.href = '@Url.Action("EmployGatePass", "EmployGatePass")';
+     }
+    function NewClicked() {
+        var date = $('#comDate').val();
+        //if (date == "" || date == null) {
+        //    alert("Date can not be null");
+        //}
+        //else {
+            $('#btnNew').disable(true);
+            $.ajax({
+                url: "/EmployGatePass/GetInvoiceID",
+                type: "POST",
+                data: JSON.stringify({ date: date }),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success) {
+                        $('#compno').val(response.responseText.toString());
+                        $('#txtRemarks').disable(false);
+                        $('#txtbagsbatch').disable(false);
+                        $('#txtBatches').disable(false);
+                        $('#txtBarCode').disable(false);
+                        $('#ddlTitlesupbar').disable(false);
+                        $('#txtproCode').disable(false);
+                        $('#txtsupCode').disable(false);
+                        $('#txtpurCode').disable(false);
+                        $('#ddlTitlesup').disable(false);
+                        $('#ddlTitlepur').disable(false);
+                        $('#ddlTitlepro').disable(false);
+                        $('#txtquan').disable(false);
+                        $('#txtrate').disable(false);
+                        $('#txtamount').disable(false);
+                        //$('#txtunit').disable(false);
+                        $('#txtbox').disable(false);
+                        $('#txtPiece').disable(false);
+                        $('#comDateIn').disable(false);
+                        $('#comDateOut').disable(false);
+                        $('#txtTotalHours').disable(false);
+                        $('#txtweight').disable(false);
+                        $('#mode').disable(false);
+                        $('#ratecalc').disable(false);
+                        $('#milltype').disable(false);
+                        $('#txtbrorate').disable(false);
+                        $('#youDate').disable(false);
+                        $('#invono').disable(false);
+                        $('#ddlTitlesup').focus();
+                        $('#btnSave').show();
+                        $('#btnSearch').hide();
+                    }
+                    else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    //}
+    function IntiateFields() {
+        $('#txtproCode').val("");
+        $('#ddlTitlepro').val("");
+        $('#txtquan').val("");
+        $('#txtrate').val("");
+        $('#txtamount').val("");
+       // $('#ddlTitlepro').focus();
+        $('#txtweight').val("");
+        $('#txtPiece').val("");
+        $('#txtbox').val("");
+        dvcid = null;
+        RowNo = null;
+    }
+    function SearchDV() {
+       // $('#ddlTitleinv').show();
+        //var dvid = $('#ddlTitleinv').val();
+        var dvid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null)
+        {
+            alert("Date or voucher id can not be null");
+        }
+        else {
+            $('#btnSave').show();
+            $('#btnGo').hide();
+            IsUpdate = true;
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/EmployGatePass/SearchInvoice",
+                data: { Date: date, VId: dvid },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        var new_row;
+                        var tamount = 0;
+                        $.each(result, function (i, item) {
+                            var date = item.DateIN;
+                            var parsedDate = new Date(parseInt(date.substr(6)));
+                            var newDate = new Date(parsedDate);
+                            var time = newDate.toLocaleTimeString();
+                            var getMonth = newDate.getMonth() + 1;
+                            var getDay = newDate.getDate();
+                            var getYear = newDate.getFullYear();
+                            var pad = "00";
+                            var result = (pad + getMonth).slice(-pad.length);
+                            var result2 = (pad + getDay).slice(-pad.length);
+                            var result3 = (pad + newDate.getHours()).slice(-pad.length);
+                            var result4 = (pad + newDate.getMinutes()).slice(-pad.length);
+                            var standardDate = getYear + '-' + result + '-' + result2 + 'T' + result3 + ':' + result4;
+                            $('#ddlTitlesup').val(item.EmployeID);
+                            $('#txtRemarks').val(item.Remarks);
+                            $('#txtbagsbatch').val(item.Purpose);
+                            $('#comDateIn').val(standardDate);
+                            var dateo = item.Dateout;
+                            var parsedDateo = new Date(parseInt(dateo.substr(6)));
+                            var newDateo = new Date(parsedDateo);
+                            var timeo = newDateo.toLocaleTimeString();
+                            var getMontho = newDateo.getMonth() + 1;
+                            var getDayo = newDateo.getDate();
+                            var getYearo = newDateo.getFullYear();
+                            var pado = "00";
+                            var resulto = (pado + getMontho).slice(-pado.length);
+                            var result2o = (pado + getDayo).slice(-pado.length);
+                            var result3o = (pado + newDateo.getHours()).slice(-pado.length);
+                            var result4o = (pado + newDateo.getMinutes()).slice(-pado.length);
+                            var standardDateo = getYearo + '-' + resulto + '-' + result2o + 'T' + result3o + ':' + result4o;
+                            $('#comDateOut').val(standardDateo);
+                            $('#txtTotalHours').val(item.TotalTime);
+                            $('#comDateIn').disable(false);
+                            $('#comDateOut').disable(false);
+                            $('#txtTotalHours').disable(false);
+                        });
+                    }
+                    else {
+                        alert("No record found");
+                        window.location.reload();
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+            @*var string = "Date=" + date + "&DVId=" + dvid + "";
+        $("#divPartial").load('@(Url.Action("SearchVoucher", "CVoucher", null, Request.Url.Scheme))?' + string);*@
+            $('#txtRemarks').disable(false);
+            $('#txtbagsbatch').disable(false);
+            $('#txtBatches').disable(false);
+            $('#mode').disable(false);
+            $('#txtweight').disable(false);
+            $('#txtproCode').focus();
+            $('#txtVochNo').disable(true);
+            $('#dtpDate').disable(true);
+            $('#btnDelete').disable(false);
+            $('#cbxPrintJV').disable(false);
+        }
+    }
+    function SearchClicked() {
+        $('#compno').disable(false);
+        $('#compno').focus();
+        $('#txtproCode').disable(false);
+        $('#txtsupCode').disable(false);
+        $('#txtpurCode').disable(false);
+        $('#ddlTitlesup').disable(false);
+        $('#ddlTitlepur').disable(false);
+        $('#ddlTitlepro').disable(false);
+        $('#txtquan').disable(false);
+        $('#txtrate').disable(false);
+        $('#txtamount').disable(false);
+        $('#txtbox').disable(false);
+        $('#txtPiece').disable(false);
+        //$('#ddlTitleinv').show();
+        //$('#compno').hide();
+        $('#youDate').disable(false);
+        $('#invono').disable(false);
+        $('#btnNew').disable(true);
+        $('#btnSearch').hide();
+        $('#btnGo').show();
+    }
+    var i = 0;
+    currentRow = null;
+    function AddGridClicked() {
+        var accCode = $('#txtproCode').val();
+        var product = $('#ddlTitlepro').val();
+        var quan = parseFloat($('#txtquan').val());
+        var weight = $('#txtweight').val();
+        var rate = parseFloat($('#txtrate').val());
+        var amount = $('#txtamount').val();
+        if ($('#txtproCode').val() == "" || $('#txtproCode').val() == null || $("#ddlTitlepro option:selected").text() == "-- Select Account --") {
+            alert("Cant Save You Must Select Account Code");
+            $('#txtproCode').focus();
+        }
+        else {
+            if ((amount == "" || amount == null || amount == 0 || amount < 0) || (rate == "" || rate == null || rate == 0 || rate < 0)) {
+                alert("Amount or rate Cannot Empty or Zero")
+                $('#txtrate').focus();
+            }
+            else {
+                i++;
+                var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + accCode + "</td><td class='title'>" + product + "</td><td class='unitname'>" + weight + "</td><td class='rate'>" + rate + "</td><td class='naration'>" + amount + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                if (currentRow) {
+                    $('#mytable').find($(currentRow)).replaceWith(new_row);
+                    currentRow = null;
+                }
+                else {
+                    $('#mytable').append(new_row);
+                }
+                var tamount = 0;
+                $('#mytable tbody tr').each(function () {
+                    var $row = $(this), $tds = $row.find("td");
+                    var t1amount = parseFloat($tds[4].innerText);
+                    if (isNaN(t1amount)) {
+                        t1amount = 0;
+                    }
+                    tamount = tamount + t1amount;
+                });
+                $('#nettotal').val(tamount);
+                $("#tempdata").show();
+                IntiateFields();
+                $('#txtproCode').focus();
+            }
+        }
+    }
+    function SaveDVoucher() {
+        var bagsbatch =$('#txtbagsbatch').val();
+        var start = $("input#comDateIn").val(); //get timestamp
+        var end = $("input#comDateOut").val(); //get timestamp
+        var totalhours = $('#txtTotalHours').val();
+        var date = $('#comDate').val();
+        if (date==null)
+        {
+            alert("Date can not be null");
+        }
+        else {
+            var gateno = $('#txtsupCode').val();
+            var supid= $('#ddlTitlesup').val();
+            var supname= $("#ddlTitlesup option:selected").text();
+            var purid= $('#ddlTitlepur').val();
+            var purname= $("#ddlTitlepur option:selected").text();
+            if ((supid == "" || supid == null || supname == "" || supname == null))
+            {
+                alert("Supplier account can not be empty or null");
+            }
+        else{
+        var rowCount = 2;
+        if (rowCount <= 0) {
+            alert("Must have rows to save.")
+        }
+        else {
+            var answer = confirm("Do You really want to Save this?");
+            if (answer) {
+                $('#btnSave').disable(true);
+                var date = $('#comDate').val();
+                var vid = $('#compno').val();
+                var Remarks = $('#txtRemarks').val();
+                //if (vid == "" || vid == null) {
+                //    vid = $('#ddlTitleinv').val();
+                //}
+                var detail = [];
+                var totalquantity = 0;
+                var model = {
+                    vid: vid,
+                    comdate: date,
+                    yourinvoice: Remarks,
+                    yourdate: start,
+                    supid: $("#ddlTitlesup option:selected").val(),
+                    supname: $("#ddlTitlesup option:selected").text(),
+                    purid: end,
+                    purname: $("#ddlTitlepur option:selected").text(),
+                    discount: bagsbatch,
+                    nettotal: $('#nettotal').val(),
+                    store: totalhours,
+                    totalquantity: gateno,
+                    isupdate: IsUpdate,
+                    isprint: IsPrintJV,
+                    detail: detail
+                };
+                //  alert(JSON.stringify(model));
+                $.ajax({
+                    url: "/EmployGatePass/SaveInvoice",
+                    type: "POST",
+                    data: JSON.stringify({ model: model }),
+                    dataType: 'text json',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response != null && response.success) {
+                            alert(response.responseText);
+                            if (IsPrintJV) {
+                                @*//alert("hurrah");
+                                var string = "rtype=rptPurchaseInvoice" + "&txtAccCode=" + vid + "";
+                                var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+                                window.open(url, "_blank");*@
+                            }
+                            window.location.reload();
+                        }
+                        else {
+                            alert(response.responseText);
+                        }
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+                IsUpdate = false;
+                IsPrintJV = false;
+            }
+        }
+        }
+    }
+    }
+    function DeleteClicked() {
+        //var dvid = $('#ddlTitleinv').val();
+       var dvid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or invoice id can not be null");
+        }
+        else {
+            var answer = confirm("Do You really want to Delete this?");
+            if (answer) {
+                $('#btnSave').show();
+                $('#btnGo').hide();
+                IsUpdate = true;
+                var string = "Date=" + date + "&DVId=" + dvid + "";
+                var url = '@(Url.Action("DeleteInvoice", "EmployGatePass", null, Request.Url.Scheme))?' + string;
+                window.location.href = url;
+            }
+        }
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span8">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Employ Gate Pass</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="#" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <input type="hidden" class="span11" id="piecesperbox" name="piecesperbox" />
+                                <table class="table table-bordered data-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Code #<br />
+                                                <input type="text" class="span11" id="compno" name="compno" />
+                                            </td>
+                                            <td>Date<br /><input type="text" class="span11 datepicker" id="comDate" name="comDate" /></td>
+                                            <td>
+                                                Employee<br />
+                                                @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                                    foreach (var Acc in ViewBag.AccCodelist)
+                                                    {
+                                                        AccCodelist.Add(new SelectListItem
+                                                        {
+                                                            Text = Convert.ToString(Acc.Title),
+                                                            Value = Convert.ToString(Acc.CompID)
+                                                        });
+                                                    }
+                                                }
+                                                @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitlesup", @class = "span11 ddl" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Purpose<input type="text" class="span11" id="txtbagsbatch" name="txtbagsbatch" /> </td>
+                                            <td colspan="3">Remarks<br /><input type="text" class="span11" id="txtRemarks" name="txtRemarks" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Date/Time In<br /><input type="datetime-local" class="span11" id="comDateIn" name="comDateIn" /></td>
+                                            <td>DateTime/Out<br /><input type="datetime-local" class="span11" id="comDateOut" name="comDateOut" /></td>
+                                            <td>Total Hours<br /><input type="text" class="span11" id="txtTotalHours" name="txtTotalHours" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="span12">
+                                </div>
+                                @*<div class="span12">
+                                        <input type="checkbox" style="float:left" id="cbxPrintJV" name="cbxPrintJV">Print Invoice<br>
+                                    </div>*@
+                                <div class="form-actions">
+                                    @* <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();' >New</button>*@
+                                    <input type="button" value="New" id="btnNew" class="btn btn-primary" onclick='NewClicked();'>
+                                    <input type="button" value="Save" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                                    <input type="button" id="btnDelete" class="btn btn-danger" value="Delete" onclick='DeleteClicked();'>
+                                    <input type="button" value="Search" id="btnSearch" class="btn btn-default" onclick='SearchClicked();' />
+                                    <input type="button" id="btnGo" value="Go" class="btn btn-success" onclick='SearchDV();'>
+                                    <input type="button" id="btnClose" value="Clear" class="btn btn-warning" onclick='ClearClicked();'>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Employ Gate Pass</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="#" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <input type="hidden" class="form-control form-control-sm" id="piecesperbox" name="piecesperbox" />
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Code #</label>
+                                        <input type="text" class="form-control form-control-sm" id="compno" name="compno" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="comDate" name="comDate" />
+                                            <div class="input-group-append" id="comDateIcon" data-target="#comDate" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Employee</label>
+                                        @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodelist)
+                                            {
+                                                AccCodelist.Add(new SelectListItem
+                                                {
+                                                    Text = Convert.ToString(Acc.Title),
+                                                    Value = Convert.ToString(Acc.CompID)
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitlesup", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Purpose</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtbagsbatch" name="txtbagsbatch" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Remarks</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtRemarks" name="txtRemarks" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Date/Time In</label>
+                                        <input type="datetime-local" class="form-control form-control-sm" id="comDateIn" name="comDateIn" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>DateTime/Out</label>
+                                        <input type="datetime-local" class="form-control form-control-sm" id="comDateOut" name="comDateOut" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Total Hours</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtTotalHours" name="txtTotalHours" />
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" id="cbxPrintJV" name="cbxPrintJV">
+                                            <label for="cbxPrintJV" class="custom-control-label">Print Invoice</label>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                            @* <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();' >New</button>*@
+                                            <input type="button" value="New" id="btnNew" class="btn btn-sm w-100 btn-primary" onclick='NewClicked();'>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                            <input type="button" value="Save" id="btnSave" class="btn btn-sm w-100 btn-success" onclick='SaveDVoucher();'>
+                                            <input type="button" value="Search" id="btnSearch" class="btn btn-sm w-100 btn-default" onclick='SearchClicked();' />
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                            <input type="button" id="btnDelete" class="btn btn-sm w-100 btn-danger" value="Delete" onclick='DeleteClicked();'>
+                                            <input type="button" id="btnGo" value="Go" class="btn btn-sm w-100 btn-success" onclick='SearchDV();'>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                            <input type="button" id="btnClose" value="Clear" class="btn btn-sm w-100 btn-warning" onclick='ClearClicked();'>
+                                            <input type="button" id="btnPrint" value="Print Preview" class="btn btn-sm w-100 btn-success" style="background-color: #f4429b" onclick='PrintReport();' hidden>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div id="myModalinvoices" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Invoice</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Invoices List</h5>
+                            <input type="text" id="myInputinv" onkeyup="myFunctioninv()" placeholder="Search for title.." style="float:right;">
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopupinv" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Date</th>
+                                        <th>Party</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        string dbcon = Convert.ToString(Session["con"]);
+                                        ApnaAccountWeb.ViewModels.DbConection obj = new ApnaAccountWeb.ViewModels.DbConection();
+                                        string condb = obj.Connect(dbcon);
+                                        ApnaAccountWeb.Models.ApnaAccountEntities db = new ApnaAccountWeb.Models.ApnaAccountEntities(condb);
+                                        var lstDVChilds = (from t1 in db.EmployGatepasses
+                                                           where t1.IType == "EG"
+                                                           select new { t1.CompID, t1.JDate, t1.Title }).ToList();
+                                        foreach (var Acc in lstDVChilds)
+                                        {
+                                            <tr>
+                                                <td>@Convert.ToString(Acc.CompID)</td>
+                                                <td>@Acc.JDate.Value.ToString("dd/MM/yyyy")</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunction2() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup2");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunction3() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput3");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup3");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunctioninv() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputinv");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopupinv");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#comDate').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#youDate').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#comDateIcon').click(function () {
+                $('#comDate').datepicker('show');
+            });
+            $('#youDateIcon').click(function () {
+                $('#youDate').datepicker('show');
+            });
+            $('#comDate').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#comDate').datepicker('setDate', 'now');
+            $('#youDate').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#youDate').datepicker('setDate', 'now');
+        });
+    </script>
+}   

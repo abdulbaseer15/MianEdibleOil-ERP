@@ -1,0 +1,2713 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+
+
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    .modal-header {
+        background-color: #ffffff;
+    }
+</style>
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+
+    tr.highlighted td {
+        color: white;
+        background-color: red;
+    }
+</style>
+
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = true;
+    var RowNo;
+    var isTrue = 0;
+    var visibleArrayLength = 0;
+    var counter = 0;
+    var arrVisible = new Array();
+    $(document).ready(function () {
+        $(document).scrollTop($(document).height());
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+
+        $('#btnNew').focus();
+
+        var selectedVal = $('#ddlTitlesup option:selected').attr('value');
+        $('#txtsupCode').val(selectedVal);
+
+
+
+        var selectedVal = $('#ddlTitlepur option:selected').attr('value');
+        $('#txtpurCode').val(selectedVal);
+
+
+
+
+
+
+        $("#discount").change(function () {
+            var dis = parseFloat($('#discount').val());
+
+            var tamount = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+
+
+                var t1amount = parseFloat($tds[4].innerText);
+
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+
+                }
+
+
+
+                tamount = tamount + t1amount;
+
+            });
+
+            var discountamount = tamount * (dis / 100);
+            $('#disamt').val(discountamount.toFixed(2));
+            $('#nettotal').val((tamount - discountamount).toFixed(2));
+        });
+
+
+        $('#txtproCode').keyup(function (e) {
+            if (e.which == 27) {
+                $('#txtDiscount').focus();
+
+            }
+        });
+        $('#comDate').keypress(function (e) {
+
+            if (e.which == 13) {
+
+                $('#invono').focus();
+
+            }
+        });
+        //$('#invono').keypress(function (e) {
+        //    if (e.which == 13) {
+
+        //        $('#youDate').focus();
+
+        //    }
+        //});
+
+        $('#invono').keypress(function (e) {
+            debugger;
+
+            if (e.which == 13) {
+                forOrderIssue();
+
+                $('#myModalIssue').modal('show');
+                $('#myInputIssue').focus();
+                $('.textboxSearch').focus();
+
+
+                var $rows = $('#tblPopupIssue tr');
+
+                $('.textboxSearch').keyup(function (e) {
+
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+
+                });
+
+                if (e.keyCode == 27) {
+
+                    $.modal.close();
+
+                }
+                $('#tblPopupIssue tr').click(function () {
+
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+
+                    $('#invono').val($tds[0].innerText);
+                    $('#youDate').val($tds[1].innerText);
+                    $('#txtquanIssue').val($tds[3].innerText);
+                    $('#txtWeightIssue').val($tds[4].innerText);
+                    $('#txtBatch').val($tds[2].innerText);
+                    $('#myModalIssue').modal('hide');
+
+                    $('#txtBatch').attr('readonly', true);
+                    $('#youDate').attr('readonly', true);
+                    $('#youDate').focus();
+                  //  $('#invono').disable(true);
+                });
+            }
+        });
+
+
+        $('#youDate').keypress(function (e) {
+
+            if (e.which == 13 && isTrue==1) {
+                isTrue = 0;
+                $('#youDate').focus();
+
+            }
+            else if (e.which == 13 && isTrue == 0) {
+
+                $('#txtBatch').focus();
+
+            }
+
+
+
+        });
+        $('#txtBatch').keypress(function (e) {
+
+            if (e.which == 13) {
+
+                $('#ddlTitlePlant').focus();
+
+            }
+        });
+
+        $('#ddlTitlePlant').change(function () {
+
+            $('#ddlStore').focus();
+        });
+        $('#ddlStore').change(function () {
+
+            $('#txtproCode').focus();
+        });
+        $('#txtdesc').keypress(function (e) {
+
+            if (e.which == 13) {
+
+
+                $('#txtquan').focus();
+
+            }
+        });
+        $('#txtquan').keypress(function (e) {
+
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                //$('#txtrate').focus();
+                $('#txtquan').focus();
+                return;
+            }
+
+            else if (e.which == 13 && isTrue == 0)
+                {
+                //$('#txtrate').focus();
+                $('#txtWeight').focus();
+            }
+        });
+        $('#txtrate').keypress(function (e) {
+
+            if (e.which == 13) {
+
+
+                $('#txtamount').focus();
+
+            }
+        });
+        $("#disamt").change(function () {
+            var dis = parseFloat($('#disamt').val());
+
+            var tamount = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+
+
+                var t1amount = parseFloat($tds[4].innerText);
+
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+
+                }
+
+
+
+                tamount = tamount + t1amount;
+
+            });
+
+            var discountper = (100 * dis) / tamount;
+
+            $('#discount').val(discountper.toFixed(2));
+            $('#nettotal').val((tamount - dis).toFixed(2));
+        });
+        $("#txtquan").change(function () {
+            var q = $('#txtquan').val();
+            var rate = $('#txtrate').val();
+            if (isNaN(q))
+                q = 0;
+            if (isNaN(rate))
+                rate = 0;
+            document.getElementById('txtamount').value = q * rate;
+
+            $('#txtrate').focus();
+        });
+        $("#txtrate").change(function () {
+            var q = $('#txtquan').val();
+            var rate = $('#txtrate').val();
+            if (isNaN(q))
+                q = 0;
+            if (isNaN(rate))
+                rate = 0;
+            document.getElementById('txtamount').value = q * rate;
+            $('#txtamount').focus();
+
+        });
+        $('#nettotal').disable(true);
+
+        $('#txtproCode').disable(true);
+        $('#txtsupCode').disable(true);
+        $('#txtpurCode').disable(true);
+
+        $('#ddlTitlesup').disable(true);
+        $('#ddlTitlepur').disable(true);
+        $('#ddlTitlepro').disable(true);
+
+        $('#txtquan').disable(true);
+        $('#txtrate').disable(true);
+        $('#txtamount').disable(true);
+
+        //$('#comDate').disable(true);
+        $('#compno').disable(true);
+        $('#youDate').disable(true);
+        $('#invono').disable(true);
+        $('#btnDelete').disable(true);
+
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+
+        $("#divSelectDis").hide();
+        $("#tempdata").hide();
+
+
+
+        //$('#comDate').datepicker({
+        //    "format": "mm/dd/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+
+        //$('#comDate').datepicker('setDate', 'now');
+
+        //$('#youDate').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+
+        //$('#youDate').datepicker('setDate', 'now');
+        var i = 0;
+        currentRow = null;
+        $('#txtWeight').keypress(function (e) {
+            if (e.which == 13) {
+                var accCode = $('#ddlTitlepro').val();
+                var quan = $('#txtquan').val();
+                var weight = $('#txtWeight').val();
+               // var amount = quan * rate;
+                var title = $("#ddlTitlepro option:selected").text();
+
+                if ($('#txtproCode').val() == "" || $('#txtproCode').val() == null || $("#ddlTitlepro option:selected").text() == "-- Select Account --") {
+                    alert("Cant Save You Must Select Account Code");
+                    $('#txtproCode').focus();
+                }
+                else {
+                    if ((weight == "" || weight == null || weight == 0 || weight < 0) || (quan == "" || quan == null || quan == 0 || quan < 0)) {
+                        alert("Quantity / Weight Cannot Empty or Zero")
+                        $('#txtquan').focus();
+                    }
+                    else {
+
+
+                        i++;
+                        var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + accCode + "</td><td class='title'>" + title + "</td><td class='debit'>" + quan + "</td><td class='weight'>" + weight + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+
+                        if (currentRow) {
+
+                            $('#mytable').find($(currentRow)).replaceWith(new_row);
+                            currentRow = null;
+                        }
+                        else {
+                            $('#mytable').append(new_row);
+                        }
+
+                        var tquan = 0;
+                        var tamount = 0;
+                        $('#mytable tbody tr').each(function () {
+                            var $row = $(this), $tds = $row.find("td");
+
+                            var t1quan = parseFloat($tds[2].innerText);
+                            var t1amount = parseFloat($tds[3].innerText);
+                            if (isNaN(t1quan))
+                                t1quan = 0;
+                            if (isNaN(t1amount)) {
+                                t1amount = 0;
+
+                            }
+
+
+                            tquan = tquan + t1quan;
+                            tamount = tamount + t1amount;
+
+                        });
+                        $('#netweight').val(tamount);
+                        $('#nettotal').val(tquan);
+                        $("#tempdata").show();
+                        IntiateFields();
+                        $('#txtproCode').focus();
+                    }
+                }
+
+
+
+
+
+            }
+        });
+
+        $(document).on('click', 'span.deleterow', function () {
+            $(this).parents('tr').remove();
+            var tquan = 0;
+            var tamount = 0;
+            var tdiscount = 0;
+            var tnetamount = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+
+                var t1quan = parseFloat($tds[3].innerText);
+                var t1amount = parseFloat($tds[4].innerText);
+                if (isNaN(t1quan))
+                    t1quan = 0;
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+
+                }
+
+
+                tquan = tquan + t1quan;
+                tamount = tamount + t1amount;
+
+            });
+            $('#netweight').val(tamount);
+            $('#nettotal').val(tquan);
+            $('#disamt').val(0);
+
+            return false;
+        });
+        $(document).on('click', 'span.editrow', function () {
+            currentRow = $(this).parents('tr');
+            $("#txtproCode").val($(this).closest('tr').find('td.accCode').text());
+
+            $("#ddlTitlepro").val($(this).closest('tr').find('td.accCode').text());
+            $("#txtquan").val($(this).closest('tr').find('td.debit').text());
+            $("#txtWeight").val($(this).closest('tr').find('td.weight').text());
+            $("#txtquan").focus();
+            //$("#txtamount").val($(this).closest('tr').find('td.naration').text());
+        });
+
+        $('#ddlTitlesup').change(function () {
+            var selectedVal = $('#ddlTitlesup option:selected').attr('value');
+            $('#txtsupCode').val(selectedVal);
+
+        });
+        $('#ddlTitlepur').change(function () {
+            var selectedVal = $('#ddlTitlepur option:selected').attr('value');
+            $('#txtpurCode').val(selectedVal);
+
+        });
+        $('#ddlTitlepro').change(function () {
+            var selectedVal = $('#ddlTitlepro option:selected').attr('value');
+            $('#txtproCode').val(selectedVal);
+            $('#txtquan').focus();
+            var code = selectedVal;
+            $.ajax({
+                url: "/Receive/GetProductRate",
+                type: "Post",
+                data: JSON.stringify({ code: code }),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null) {
+                        $('#txtrate').val(response.responseText.toString());
+                        $('#txtunit').val(response.unit.toString());
+                    }
+
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        });
+
+        $('#cbxPrintJV').change(function () {
+            if (this.checked) {
+                IsPrintJV = true;
+            }
+            else {
+                IsPrintJV = false;
+            }
+        });
+
+        $('#txtproCode').keypress(function (e) {
+            debugger;
+
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+
+            else if (e.which == 13 && isTrue == 0)
+            {
+
+                var code = parseFloat($('#txtproCode').val());
+                if (isNaN(code))
+                    code = 0;
+
+
+                if (code != 0) {
+
+                    var code =parseInt( $('#txtproCode').val());
+
+                    $('#tblPopup3 tbody tr').each(function () {
+                        var $row = $(this), $tds = $row.find("td");
+
+                        if ($tds[0].innerText == code) {
+                            $('#txtproCode').val($tds[0].innerText);
+                            $('#ddlTitlepro').val($tds[0].innerText);
+
+
+                            $.ajax({
+                                url: "/Receive/GetProductRate",
+                                type: "Post",
+                                data: JSON.stringify({ code: code }),
+                                dataType: 'text json',
+                                async: false,
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (response) {
+                                    if (response != null) {
+                                        $('#txtrate').val(response.responseText.toString());
+                                        $('#txtunit').val(response.unit.toString());
+                                    }
+
+                                },
+                                error: function (response) {
+                                    alert(response.responseText);
+                                }
+                            });
+
+                            $('#txtquan').focus();
+                            return;
+                        }
+                    });
+
+
+                }
+                else {
+
+                    forOrder();
+
+                    $('#myModalpro').modal('show');
+                    $('#myInput3').focus();
+
+                    var $rows = $('#tblPopup3 tr');
+
+                    $('.textboxSearch').keyup(function (e) {
+
+                        var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                        reg = RegExp(val, 'i'),
+                        text;
+
+                        $rows.show().filter(function () {
+                            text = $(this).text().replace(/\s+/g, ' ');
+                            return !reg.test(text);
+                            $(this).select();
+                        }).hide();
+                    });
+
+                    $('#tblPopup3 tr').click(function () {
+
+                        var $row = $(this).closest("tr"),
+                        $tds = $row.find("td");
+
+                        $('#txtproCode').val($tds[0].innerText);
+                        $('#ddlTitlepro').val($tds[0].innerText);
+
+                        $('#txtquan').focus();
+
+
+                        $('#myModalpro').modal('hide');
+                        $('#myInput3').val("");
+
+
+                        $.ajax({
+                            url: "/Receive/GetProductRate",
+                            type: "Post",
+                            data: JSON.stringify({ code: $tds[0].innerText }),
+                            dataType: 'text json',
+                            async: false,
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (response) {
+                                if (response != null) {
+                                    $('#txtrate').val(response.responseText.toString());
+                                    $('#txtunit').val(response.unit.toString());
+                                }
+
+                            },
+                            error: function (response) {
+                                alert(response.responseText);
+                            }
+                        });
+
+                    });
+                }
+            }
+        });
+        $('#txtsupCode').keypress(function (e) {
+            debugger;
+            var code = parseFloat($('#txtsupCode').val());
+            if (isNaN(code))
+                code = 0;
+
+            if (code != 0) {
+                $('#ddlTitlesup').val(code);
+            }
+          else  if (e.which == 13) {
+                forOrder3();
+                $('#myModalsup').modal('show');
+                $('#myInput').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+
+                $('.textboxSearch').keyup(function (e) {
+
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+
+                    $.modal.close();
+
+                }
+                $('#tblPopup tr').click(function () {
+
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+
+                    $('#txtsupCode').val($tds[0].innerText);
+                    $('#ddlTitlesup').val($tds[0].innerText);
+                    $('#ddlTitlesup').focus();
+                    $('#myModalsup').modal('hide');
+                    $('#myInput').val("");
+
+                });
+            }
+        });
+        $('#compno').keypress(function (e) {
+            debugger;
+
+            if (e.which == 13) {
+                forOrder2();
+
+                $('#myModalinvoices').modal('show');
+                $('#myInputinv').focus();
+                $('.textboxSearch').focus();
+
+
+                var $rows = $('#tblPopupinv tr');
+
+                $('.textboxSearch').keyup(function (e) {
+
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+
+                });
+
+                if (e.keyCode == 27) {
+
+                    $.modal.close();
+
+                }
+                $('#tblPopupinv tr').click(function () {
+
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+
+                    $('#compno').val($tds[0].innerText);
+                    $('#comDate').val($tds[1].innerText);
+                    $('#myModalinvoices').modal('hide');
+
+                    $('#comDate').disable(true);
+                    $('#compno').disable(true);
+                });
+            }
+        });
+        $('#txtpurCode').keypress(function (e) {
+            debugger;
+            var code = parseFloat($('#txtpurCode').val());
+            if (isNaN(code))
+                code = 0;
+
+            if (code != 0) {
+                $('#ddlTitlepur').val(code);
+            }
+          else  if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+
+            else if (e.which == 13 && isTrue == 0) {
+                forOrder4();
+
+                $('#myModalpur').modal('show');
+                $('#myInput2').focus();
+                //$('.textboxSearch').focus()
+                var $rows = $('#tblPopup2 tr');
+
+                $('.textboxSearch').keyup(function (e) {
+
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+
+                    $.modal.close();
+
+                }
+                $('#tblPopup2 tr').click(function () {
+
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+
+                    $('#txtpurCode').val($tds[0].innerText);
+                    $('#ddlTitlepur').val($tds[0].innerText);
+
+                    $('#txtproCode').focus();
+                    $('#myModalpur').modal('hide');
+                    $('#myInput2').val("");
+
+                });
+            }
+        });
+    });
+
+    function forOrder4() {
+        debugger;
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopup2').rows, t = trows.length, trow;
+
+        var i = 0;
+        visibleArrayLength = arrVisible.length;
+
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+
+        }
+
+        function highlightRow(gethighlight) {
+            debugger;
+            gethighlight = gethighlight === true;
+
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+
+            if (visibleArrayLength == (trows.length) - 1) {
+
+
+                while (--t > -1) {
+                    trow = trows[t];
+
+                    if (gethighlight && trow.className === 'highlighted')
+                    { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+
+                        trow.className = 'normal';
+                    }
+                }
+
+
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+
+
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+
+                    return;
+                }
+            }
+
+
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+
+
+
+        function movehighlight(way, e) {
+            debugger;
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+
+        function processkey(e) {
+            debugger;
+            e = e || event;
+
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup2').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup2').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup2").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup2)
+                                $tds = row.find("td");
+
+                                $('#txtpurCode').val($tds[0].innerText);
+                                $('#ddlTitlepur').val($tds[0].innerText);
+
+
+                                $('#myInput2').val("");
+                                $('#myModalpur').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtproCode').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup2)
+                                $tds = row.find("td");
+                                $('#txtpurCode').val($tds[0].innerText);
+                                $('#ddlTitlepur').val($tds[0].innerText);
+
+
+                                $('#myInput2').val("");
+                                $('#myModalpur').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtproCode').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                        }
+
+                    }
+                }
+
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+
+    }
+
+    function forOrder2() {
+        debugger;
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopupinv').rows, t = trows.length, trow;
+
+        var i = 0;
+        visibleArrayLength = arrVisible.length;
+
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+
+        }
+
+        function highlightRow(gethighlight) {
+            debugger;
+            gethighlight = gethighlight === true;
+
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+
+            if (visibleArrayLength == (trows.length) - 1) {
+
+
+                while (--t > -1) {
+                    trow = trows[t];
+
+                    if (gethighlight && trow.className === 'highlighted')
+                    { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+
+                        trow.className = 'normal';
+                    }
+                }
+
+
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+
+
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+
+                    return;
+                }
+            }
+
+
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+
+
+
+        function movehighlight(way, e) {
+            debugger;
+
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+
+        function processkey(e) {
+            debugger;
+            e = e || event;
+
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopupinv').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopupinv').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopupinv").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+
+                                $('#compno').val($tds[0].innerText);
+                                $('#comDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+
+                                $('#comDate').disable(true);
+                                $('#compno').disable(true);
+                                $('#myModalinvoices').modal('hide');
+                                isTrue = 1;
+                                //$('#invono').focus();
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+
+                                $('#compno').val($tds[0].innerText);
+                                $('#comDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+
+                                $('#comDate').disable(true);
+                                $('#compno').disable(true);
+                                $('#myModalinvoices').modal('hide');
+
+                                isTrue = 1;
+                                //$('#invono').focus();
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                        }
+
+                    }
+                }
+
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+
+    }
+
+
+
+    function forOrderIssue() {
+        debugger;
+        var searched = false;
+        var flag = true;
+        var trows = document.getElementById('tblPopupIssue').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+
+        function processkey(e) {
+            debugger;
+            e = e || event;
+
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopupIssue').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopupIssue').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopupIssue").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupIssue)
+                                $tds = row.find("td");
+
+                                $('#invono').val($tds[0].innerText);
+                                $('#youDate').val($tds[1].innerText);
+                                $('#txtquanIssue').val($tds[3].innerText);
+                                $('#txtWeightIssue').val($tds[4].innerText);
+                                $('#txtBatch').val($tds[2].innerText);
+                                $('#txtBatch').attr('readonly', true);
+                                $('#myModalIssue').modal('hide');
+
+                                $('#youDate').attr('readonly', true);
+                                //$('#invono').disable(true);
+                                //$('#myModalIssue').modal('hide');
+                                isTrue = 1;
+                                $('#youDate').focus();
+                               // $('#btnGo').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupIssue)
+                                $tds = row.find("td");
+
+                                $('#invono').val($tds[0].innerText);
+                                $('#youDate').val($tds[1].innerText);
+                                $('#txtquanIssue').val($tds[3].innerText);
+                                $('#txtWeightIssue').val($tds[4].innerText);
+                                $('#txtBatch').val($tds[2].innerText);
+                                $('#txtBatch').attr('readonly', true);
+                                $('#myModalIssue').modal('hide');
+
+                                $('#youDate').attr('readonly', true);
+                                //$('#invono').disable(true);
+                                //$('#myModalIssue').modal('hide');
+
+                               isTrue = 1;
+                                $('#youDate').focus();
+                               // $('#btnGo').focus();
+                                $('#youDate').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                        }
+
+                    }
+                }
+
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+
+    }
+
+    function forOrder() {
+        debugger;
+        var searched = true;
+        var flag = true;
+        var trows = document.getElementById('tblPopup3').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+
+        function processkey(e) {
+            debugger;
+            e = e || event;
+
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup3').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup3').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup3").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup3)
+                                $tds = row.find("td");
+
+                                $('#txtproCode').val($tds[0].innerText);
+                                $('#ddlTitlepro').val($tds[0].innerText);
+
+                                $.ajax({
+                                    url: "/Receive/GetProductRate",
+                                    type: "Post",
+                                    data: JSON.stringify({ code: $tds[0].innerText }),
+                                    dataType: 'text json',
+                                    async: false,
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function (response) {
+                                        if (response != null) {
+                                            $('#txtrate').val(response.responseText.toString());
+                                            $('#txtunit').val(response.unit.toString());
+                                        }
+
+                                    },
+                                    error: function (response) {
+                                        alert(response.responseText);
+                                    }
+                                });
+
+
+                                $('#myInput3').val("");
+                                $('#myModalpro').modal('hide');
+                                isTrue = 1;
+
+                                $('#txtquan').focus();
+
+                                //$('#txtunit').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup3)
+                                $tds = row.find("td");
+                                $('#txtproCode').val($tds[0].innerText);
+                                $('#ddlTitlepro').val($tds[0].innerText);
+
+
+                                $.ajax({
+                                    url: "/Receive/GetProductRate",
+                                    type: "Post",
+                                    data: JSON.stringify({ code: $tds[0].innerText }),
+                                    dataType: 'text json',
+                                    async: false,
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function (response) {
+                                        if (response != null) {
+                                            $('#txtrate').val(response.responseText.toString());
+                                            $('#txtunit').val(response.unit.toString());
+                                        }
+
+                                    },
+                                    error: function (response) {
+                                        alert(response.responseText);
+                                    }
+                                });
+
+                                $('#myInput3').val("");
+                                $('#myModalpro').modal('hide');
+                                isTrue = 1;
+
+                                $('#txtquan').focus();
+                                // $('#txtunit').focus();
+                                countrow = -1;
+                                counter = 0;
+                                return;
+                            }
+                        }
+
+                    }
+                }
+
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+
+    }
+
+
+    function forOrder3() {
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+
+        var i = 0;
+
+        visibleArrayLength = arrVisible.length;
+
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+
+        }
+
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+
+            if (visibleArrayLength == (trows.length) - 1) {
+
+
+                while (--t > -1) {
+                    trow = trows[t];
+
+                    if (gethighlight && trow.className === 'highlighted')
+                    { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+
+                        trow.className = 'normal';
+                    }
+                }
+
+
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+
+
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+
+                    return;
+                }
+            }
+
+
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+
+
+
+        function movehighlight(way, e) {
+
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+
+        function processkey(e) {
+            e = e || event;
+
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup').focus();
+
+
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup').focus();
+                    flag = true;
+
+                    return movehighlight(1, e);
+
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+
+                                $('#txtsupCode').val($tds[0].innerText);
+                                $('#ddlTitlesup').val($tds[0].innerText);
+
+                                var code = $('#txtsupCode').val();
+
+                                $('#myInput').val("");
+                                $('#myModalsup').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtpurCode').focus();
+                                countrow = -1;
+
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtsupCode').val($tds[0].innerText);
+                                $('#ddlTitlesup').val($tds[0].innerText);
+
+                                var code = $('#txtsupCode').val();
+
+
+                                $('#myInput').val("");
+                                $('#myModalsup').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#txtpurCode').focus();
+                                countrow = -1;
+
+                                return;
+                            }
+                        }
+
+                    }
+                }
+
+                default: {
+                    return true;
+                }
+            }
+        }
+
+        document.onkeydown = processkey;
+
+    }
+
+
+
+    function ClearClicked() {
+        window.location.href = '@Url.Action("ReceiveInvoice", "Receive")';
+    }
+    function NewClicked() {
+
+        var date = $('#comDate').val();
+        //if (date == "" || date == null) {
+        //    alert("Date can not be null");
+        //}
+        //else {
+        $('#btnNew').disable(true);
+
+
+
+        $.ajax({
+            url: "/Receive/GetInvoiceID",
+            type: "POST",
+            data: JSON.stringify({ date: date }),
+            dataType: 'text json',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response != null && response.success) {
+                    $('#compno').val(response.responseText.toString());
+
+                    $('#txtproCode').disable(false);
+                    $('#txtsupCode').disable(false);
+                    $('#txtpurCode').disable(false);
+
+                    $('#ddlTitlesup').disable(false);
+                    $('#ddlTitlepur').disable(false);
+                    $('#ddlTitlepro').disable(false);
+
+                    $('#txtquan').disable(false);
+                    //$('#txtrate').disable(false);
+                    $('#txtamount').disable(false);
+
+                    $('#youDate').disable(false);
+                    $('#invono').disable(false);
+                    $('#btnSave').show();
+                    $('#btnSearch').hide();
+
+                    $('#comDate').focus();
+                }
+                else {
+                    alert(response.responseText);
+                }
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+    //}
+    function IntiateFields() {
+        $('#txtproCode').val("");
+        $('#ddlTitlepro').val("");
+        $('#txtquan').val("");
+        $('#txtWeight').val("")
+        $('#txtrate').val("");
+        $('#txtamount').val("");
+        $('#ddlTitlepro').focus();
+        $('#txtunit').val("");
+        dvcid = null;
+        RowNo = null;
+    }
+
+
+
+
+
+
+
+    function SearchDV() {
+        var dvid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or voucher id can not be null");
+        }
+        else
+        {
+
+            $('#btnSave').show();
+            $('#btnGo').hide();
+            IsUpdate = true;
+
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/Receive/SearchInvoice",
+                data: { VId: dvid },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.lstDVChilds.length > 0) {
+                        debugger;
+                        var new_row;
+                        var tquan = 0;
+                        var tamount = 0;
+                        var disamt = 0;
+                        var nettotall = 0;
+                        $.each(result.lstDVChilds1, function (i, item) {
+                           // debugger;
+                            //tquan = tquan + item.QtyDr;
+                            //tamount = tamount + item.InvTotal;
+                            //disamt += item.Discount;
+                            //nettotall += item.NetTotal;
+                            new_row += "<tr id='row" + i + "' ><td class='accCode'>" + item.ProductID + "</td><td class='title'>" + item.ProductName + "</td><td class='debit'>" + item.Qty + "</td><td class='weight'>" + item.Weight + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+
+                            //$('#youDate').val(item.YourDate);
+
+                        });
+
+                        $('#invono').val(result.lstDVChilds[0].RefNo);
+                        $('#txtBatch').val(result.lstDVChilds[0].Batch);
+                        $('#ddlTitlePlant').val(result.lstDVChilds[0].PlantId);
+                        $('#ddlStore').val(result.lstDVChilds[0].StoreID);
+                        $('#netweight').val(result.lstDVChilds[0].NetWeight);
+                        $('#nettotal').val(result.lstDVChilds[0].NetQty);
+
+                        var date = result.lstDVChilds[0].ReceiveDate;
+                        var date1 = result.lstDVChilds[0].RefDate;
+
+                        var parsedDate = new Date(parseInt(date.substr(6)));
+
+                        var newDate = new Date(parsedDate);
+
+                        var getMonth = newDate.getMonth() + 1;
+                        var getDay = newDate.getDate();
+                        var getYear = newDate.getFullYear();
+
+                        var pad = "00";
+
+                        var result = (pad + getMonth).slice(-pad.length);
+                        var result1 = (pad + getDay).slice(-pad.length);
+
+
+                        var standardDate = result1 + '/' + result + '/' + getYear;
+
+                        $('#comDate').datepicker('setDate', standardDate);
+
+                       // $('#comDate').disable(true);
+                        debugger;
+
+
+
+
+                        var parsedDate1 = new Date(parseInt(date1.substr(6)));
+
+                        var newDate1 = new Date(parsedDate1);
+
+                        var getMonth1 = newDate1.getMonth() + 1;
+                        var getDay1 = newDate1.getDate();
+                        var getYear1 = newDate1.getFullYear();
+
+                        var pad = "00";
+
+                        var result1 = (pad + getMonth1).slice(-pad.length);
+                        var result11 = (pad + getDay1).slice(-pad.length);
+
+
+                        var standardDate1 = result11 + '/' + result1 + '/' + getYear1;
+
+                        $('#youDate').datepicker('setDate', standardDate1);
+
+                        ////$('#comDate').disable(true);
+                        //$('#compno').val(result.lstDVChilds.IssueID);
+                        //$('#invono').val(result.lstDVChilds[0].RefNo);
+                        //$('#txtBatch').val(result.lstDVChilds[0].Batch);
+                        $('#mytable tbody').append(new_row);
+
+                        $("#tempdata").show();
+                        debugger;
+                        //$('#compno').val(result.lstDVChilds.IssueID);
+
+                    }
+                    else {
+                        alert("No record found");
+                        window.location.reload();
+                    }
+                },
+                error: function (response) {
+
+                    alert(response.responseText);
+                }
+            });
+
+            @*var string = "Date=" + date + "&DVId=" + dvid + "";
+
+        $("#divPartial").load('@(Url.Action("SearchVoucher", "CVoucher", null, Request.Url.Scheme))?' + string);*@
+            $('#txtVochNo').disable(true);
+            $('#dtpDate').disable(true);
+            $('#btnDelete').disable(false);
+            $('#cbxPrintJV').disable(false);
+        }
+    }
+
+    function SearchClicked() {
+        $('#compno').disable(false);
+        $('#compno').focus();
+
+        $('#txtproCode').disable(false);
+        $('#txtsupCode').disable(false);
+        $('#txtpurCode').disable(false);
+
+        $('#ddlTitlesup').disable(false);
+        $('#ddlTitlepur').disable(false);
+        $('#ddlTitlepro').disable(false);
+
+        $('#txtquan').disable(false);
+        $('#txtrate').disable(false);
+        $('#txtamount').disable(false);
+
+
+
+        $('#youDate').disable(false);
+        $('#invono').disable(false);
+
+        $('#btnNew').disable(true);
+        $('#btnSearch').hide();
+        $('#btnGo').show();
+
+
+    }
+    var i = 0;
+    currentRow = null;
+    function AddGridClicked() {
+
+        var accCode = $('#ddlTitlepro').val();
+        var quan = $('#txtquan').val();
+        var weight = $('#txtWeight').val();
+        //var amount = quan*rate;
+        var title = $("#ddlTitlepro option:selected").text();
+
+        if ($('#txtproCode').val() == "" || $('#txtproCode').val() == null || $("#ddlTitlepro option:selected").text() == "-- Select Account --") {
+            alert("Cant Save You Must Select Account Code");
+            $('#txtproCode').focus();
+        }
+        else {
+            if (weight == "" || weight == null || weight == 0) {
+                alert("Weight  Cannot Empty or Zero")
+                $('#txtWeight').focus();
+            }
+            else {
+
+
+                i++;
+                var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + accCode + "</td><td class='title'>" + title + "</td><td class='debit' hidden>" + quan + "</td><td class='weight'>" + weight + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                if (currentRow) {
+
+                    $('#mytable').find($(currentRow)).replaceWith(new_row);
+                    currentRow = null;
+                }
+                else {
+                    $('#mytable').append(new_row);
+                }
+
+                var tquan = 0;
+                var tamount = 0;
+                $('#mytable tbody tr').each(function () {
+                    var $row = $(this), $tds = $row.find("td");
+
+                    var t1quan = parseFloat($tds[2].innerText);
+                    var t1amount = parseFloat($tds[3].innerText);
+                    if (isNaN(t1quan))
+                        t1quan = 0;
+                    if (isNaN(t1amount)) {
+                        t1amount = 0;
+
+                    }
+
+
+                    tquan = tquan + t1quan;
+                    tamount = tamount + t1amount;
+
+                });
+                $('#netweight').val(tamount);
+                $('#nettotal').val(tquan);
+                $("#tempdata").show();
+                IntiateFields();
+
+            }
+        }
+
+    }
+
+    function SaveDVoucher() {
+
+
+        var date = $('#comDate').val();
+        if (date == "" || date == null)
+        {
+            alert("Date can not be null");
+        }
+        else {
+            var supid= $('#ddlTitlesup').val();
+            var supname= $("#ddlTitlesup option:selected").text();
+            var purid= $('#ddlTitlepur').val();
+            var purname= $("#ddlTitlepur option:selected").text();
+
+        //    if ((supid == "" || supid == null || supname == "" || supname == null) || (purid == "" || purid == null || purname == "" || purname == null))
+        //    {
+        //        alert("Supplier or purchase account can not be empty or null");
+        //    }
+        //else{
+        var rowCount = $('#mytable tbody tr').length;
+
+        if (rowCount <= 0) {
+            alert("Must have rows to save.")
+        }
+        else {
+            //var answer = confirm("Do You really want to Save this?");
+
+            //if (answer) {
+
+                var date = $('#comDate').val();
+                var vid = $('#compno').val();
+
+                var detail = [];
+                var totalquantity = 0;
+                var totalweight = 0;
+
+                $('#mytable tbody tr').each(function () {
+                    var $row = $(this), $tds = $row.find("td");
+                    totalquantity += parseFloat($tds[2].innerText);
+                    totalweight += parseFloat($tds[3].innerText);
+                    detail.push({
+                        accCode: $tds[0].innerText,
+                        title: $tds[1].innerText,
+                        debit: $tds[2].innerText,
+                        weight: $tds[3].innerText,
+                       // naration: $tds[4].innerText,
+                    });
+
+                });
+
+                var model = {
+                    vid: vid,
+                    comdate: date,
+                    yourinvoice: $('#invono').val(),
+                    storeid: $('#ddlStore').val(),
+                    yourdate: $('#youDate').val(),
+                    Batch: $('#txtBatch').val(),
+                    Plant: $('#ddlTitlePlant').val(),
+                    totalquantity: totalquantity,
+                    TotalWeight: totalweight,
+                    isupdate: IsUpdate,
+                    isprint: IsPrintJV,
+                    detail: detail
+                };
+
+                //  alert(JSON.stringify(model));
+                $.ajax({
+                    url: "/Receive/SaveInvoice",
+                    type: "POST",
+                    data: JSON.stringify({ model: model }),
+                    dataType: 'text json',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+
+
+
+                    success: function (response) {
+                        if (response != null && response.success) {
+                            //alert(response.responseText);
+                            //$('#txtVochNo').val(response.responseText.toString());
+                            //$('#txtAccCode').disable(false);
+                            //$('#ddlTitle').disable(false);
+                            //$('#txtDebit').disable(false);
+                            //$('#txtCredit').disable(false);
+                            //$('#txtNarration').disable(false);
+
+                            //$("#txtAccCode").focus();
+                            //$('#btnSave').show();
+                            //$('#btnSearch').hide();
+                            if (IsPrintJV) {
+                                //alert("hurrah");
+
+                                var string = "rtype=rptReceiveInvoice" + "&txtAccCode=" + vid + "";
+                                var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+                                window.open(url, "_blank");
+
+                            }
+                            window.location.reload();
+                        }
+                        else {
+                            alert(response.responseText);
+                        }
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+                @* var date = $('#dtpDate').val();
+            var vid = $('#txtVochNo').val();
+            var string = "Date=" + date + "&ISUpdate=" + IsUpdate + "&IsPrintDV=" + IsPrintJV + "&VID=" + vid + "";
+            var url = '@(Url.Action("SaveDVVoucher", "DVoucher", null, Request.Url.Scheme))?' + string
+            window.location.href = url;
+            IsUpdate = false;
+            IsPrintJV = false;*@
+                        IsUpdate = false;
+                        IsPrintJV = false;
+                    //}
+                }
+            }
+       // }
+    }
+
+    function PrintReport() {
+        var vid = $('#compno').val();
+        if (vid == "" || vid == null) {
+            alert("Invoice id can not be null");
+        }
+        else {
+            var string = "rtype=rptReceiveInvoice" + "&txtAccCode=" + vid + "";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+
+    }
+
+    function DeleteClicked() {
+        var dvid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or invoice id can not be null");
+        }
+        else {
+            var answer = confirm("Do You really want to Delete this?");
+            if (answer) {
+
+
+                $('#btnSave').show();
+                $('#btnGo').hide();
+                IsUpdate = true;
+
+                var string = "Date=" + date + "&DVId=" + dvid + "";
+
+                var url = '@(Url.Action("DeleteInvoice", "Receive", null, Request.Url.Scheme))?' + string;
+                window.location.href = url;
+            }
+        }
+    }
+
+</script>
+
+
+
+<div id="content">
+
+    <div class="container-fluid">
+
+        <div class="row-fluid">
+
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"> <i class="icon-align-justify"></i> </span>
+                        <h5>Receive From Production</h5>
+                    </div>
+
+                    <div class="widget-content nopadding">
+                        <form action="#" method="Post" enctype="multipart/form-data" class="form-horizontal">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="compno">Receive #</label>
+                                    <input type="text" class="form-control form-control-sm" id="compno" name="compno" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="comDate">Receive Date</label>
+                                    <div class="input-group date" data-target-input="nearest">
+                                        <input type="text" class="form-control form-control-sm" id="comDate" name="comDate" />
+                                        <div class="input-group-append" data-target="#comDate" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="invono">Issue No</label>
+                                    <input type="text" class="form-control form-control-sm" id="invono" name="invono" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="youDate">Issue Date</label>
+                                    <div class="input-group date" data-target-input="nearest">
+                                        <input type="text" class="form-control form-control-sm" id="youDate" name="youDate" />
+                                        <div class="input-group-append" data-target="#youDate" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="txtBatch">Batch #</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtBatch" name="txtBatch" />
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <label>Plant</label>
+                                    @{
+                                        List<SelectListItem> Plantlist = new List<SelectListItem>();
+                                        foreach (var Acc in ViewBag.PlantCoding)
+                                        {
+                                            Plantlist.Add(new SelectListItem
+                                            {
+                                                Text = Acc.Title,
+                                                Value = Convert.ToString(Acc.Code),
+                                            });
+                                        }
+                                    }
+                                    @Html.DropDownListFor(u => u.AccTitle, Plantlist, new { id = "ddlTitlePlant", @class = "form-control form-control-sm" })
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Store</label>
+                                    @{
+                                        List<SelectListItem> AccCodelistStore = new List<SelectListItem>();
+                                        foreach (var Acc in ViewBag.StoreDetails)
+                                        {
+                                            AccCodelistStore.Add(new SelectListItem
+                                            {
+                                                Text = Acc.Title,
+                                                Value = Convert.ToString(Acc.Code),
+                                            });
+                                        }
+                                    }
+                                    @Html.DropDownListFor(u => u.AccTitle, AccCodelistStore, new { id = "ddlStore", @class = "form-control form-control-sm" })
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="txtquanIssue">Issue Quantity</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtquanIssue" name="txtquanIssue" readonly />
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="txtWeightIssue">Issue Weight</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtWeightIssue" name="txtWeightIssue" readonly />
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-2">
+                                    <label for="txtproCode">Code</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtproCode" name="txtproCode" data-toggle="tooltip" title="Press enter and select product code" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Product Name</label>
+                                    @{
+                                        List<SelectListItem> ProCodelist = new List<SelectListItem>();
+                                        foreach (var Acc in ViewBag.AccCodeDetails)
+                                        {
+                                            ProCodelist.Add(new SelectListItem
+                                            {
+                                                Text = Acc.Title,
+                                                Value = Convert.ToString(Acc.Code),
+                                            });
+                                        }
+                                    }
+                                    @Html.DropDownListFor(u => u.AccTitle, ProCodelist, "-- Select Product --", new { id = "ddlTitlepro", @class = "form-control form-control-sm" })
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="txtquan">Quantity</label>
+                                    <input type="number" class="form-control form-control-sm" id="txtquan" name="txtquan" />
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="txtWeight">Weight</label>
+                                    <input type="number" class="form-control form-control-sm" id="txtWeight" name="txtWeight" />
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="button" value="Add" id="btnaddgrid" class="btn btn-default" style="width: 100%; margin-top: 25px;" onclick='AddGridClicked();' />
+                                </div>
+                             </div>
+
+
+                            <div id="tempdata" style="height:400px;overflow:auto;" class="mt-3">
+                                <table class="table table-bordered" id="mytable">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Weight</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="form-inline">
+                                            <label for="nettotal" class="mr-2">Net Qty</label>
+                                            <input type="text" name="nettotal" id="nettotal" class="form-control form-control-sm" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-inline">
+                                            <label for="netweight" class="mr-2">Net Weight</label>
+                                            <input type="text" name="netweight" id="netweight" class="form-control form-control-sm" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <input type="checkbox" id="cbxPrintJV" name="cbxPrintJV" checked> Print Invoice
+                                </div>
+                            </div>
+
+                            <div class="form-actions mt-3">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <input type="button" value="New" id="btnNew" class="btn btn-primary btn-block" onclick='NewClicked();'>
+                                        
+                                     </div>
+
+                                    <div class="col-md-1">
+            
+                                        <input type="button" id="btnDelete" class="btn btn-danger btn-block" value="Delete" onclick='DeleteClicked();'>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="button" value="Save" id="btnSave" class="btn btn-success btn-block" onclick='SaveDVoucher();'>
+                                        <input type="button" value="Search" id="btnSearch" class="btn btn-default btn-block" onclick='SearchClicked();' />
+                                        <input type="button" id="btnGo" value="Go" class="btn btn-success btn-block" onclick='SearchDV();'>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="button" id="btnClose" value="Clear" class="btn btn-warning btn-block" onclick='ClearClicked();'>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="button" id="btnPrint" value="Print Preview" class="btn btn-success btn-block" style="background-color: #f4429b" onclick='PrintReport();'>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div id="myModalpro" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search product</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+
+
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Products List</h5>
+                            <input type="text" id="myInput3" onkeyup="myFunction3()" placeholder="Search for product.." style="float:right;">
+
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopup3" class="table table-bordered data-table" tabindex="3">
+                                <thead>
+                                    <tr>
+                                        <th>Product Code</th>
+                                        <th>Product Name</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var Acc in ViewBag.AccCodeDetails)
+                                    {
+                                        <tr>
+                                            <td>@Acc.Code</td>
+                                            <td>@Acc.Title</td>
+                                        </tr>
+                                    }
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="myModalIssue" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Issue #</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+
+
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Issue List</h5>
+                            <input type="text" id="myInputIssue" onkeyup="myFunctionIssue()" placeholder="Search for title.." style="float:right;">
+
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopupIssue" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>Issue ID</th>
+                                        <th>Date</th>
+                                        <th>Batch No</th>
+                                        <th>Quantity</th>
+                                        <th>Weight</th>
+                                        @*<th>Amount</th>*@
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        string dbcon1 = Convert.ToString(Session["con"]);
+                                        ApnaAccountWeb.ViewModels.DbConection obj1 = new ApnaAccountWeb.ViewModels.DbConection();
+                                        string condb1 = obj1.Connect(dbcon1);
+                                        ApnaAccountWeb.Models.ApnaAccountEntities db1 = new ApnaAccountWeb.Models.ApnaAccountEntities(condb1);
+                                        var lstDVChilds1 = (from t1 in db1.IssueMasterProductions
+                                                            join t2 in db1.IssueDetailProductions on t1.IssueID equals t2.IssueID
+
+                                                            select new { t1.IssueID, t1.IssueDate, t1.Batch, t1.NetQty, t1.NetWeight }).Distinct().OrderByDescending(x => x.IssueID).ToList();
+
+                                        foreach (var Acc in lstDVChilds1)
+                                        {
+                                            <tr>
+                                                <td>@Convert.ToString(Acc.IssueID)</td>
+                                                <td>@Acc.IssueDate.Value.ToString("dd/MM/yyyy")</td>
+                                                <td>@Acc.Batch</td>
+                                                <td>@Convert.ToInt32(Acc.NetQty)</td>
+                                                <td>@Acc.NetWeight</td>
+                                                @*<td>@Acc.NetTotal</td>*@
+                                            </tr>
+                                        }
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div id="myModalsup" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Account</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+
+
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Accounts List</h5>
+                            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for title.." style="float:right;">
+
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopup" class="table table-bordered data-table" tabindex="0">
+                                <thead>
+                                    <tr>
+                                        <th>AccountCode</th>
+                                        <th>Title</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var Acc in ViewBag.AccCodelist)
+                                    {
+                                        <tr>
+                                            <td>@Acc.AccountID</td>
+                                            <td>@Acc.Title</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="myModalpur" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Account</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+
+
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Accounts List</h5>
+                            <input type="text" id="myInput2" onkeyup="myFunction2()" placeholder="Search for title.." style="float:right;">
+
+                        </div>
+                        <div class="widget-content nopgg">
+                            <table id="tblPopup2" class="table table-bordered data-table" tabindex="0">
+                                <thead>
+                                    <tr>
+                                        <th>AccountCode</th>
+                                        <th>Title</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var Acc in ViewBag.PurAccCodelist)
+                                    {
+                                        <tr>
+                                            <td>@Acc.AccountID</td>
+                                            <td>@Acc.Title</td>
+                                        </tr>
+                                    }
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="myModalinvoices" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Invoice</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+
+
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Invoices List</h5>
+                            <input type="text" id="myInputinv" onkeyup="myFunctioninv()" placeholder="Search for title.." style="float:right;">
+
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopupinv" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>Issue ID</th>
+                                        <th>Date</th>
+                                        <th>Ref No</th>
+                                        @*<th>Amount</th>*@
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        string dbcon = Convert.ToString(Session["con"]);
+                                        ApnaAccountWeb.ViewModels.DbConection obj = new ApnaAccountWeb.ViewModels.DbConection();
+                                        string condb = obj.Connect(dbcon);
+                                        ApnaAccountWeb.Models.ApnaAccountEntities db = new ApnaAccountWeb.Models.ApnaAccountEntities(condb);
+                                        var lstDVChilds = (from t1 in db.ReceiveMasterProductions
+                                                           join t2 in db.ReceiveDetailProductions on t1.ReceiveID equals t2.ReceiveID
+
+                                                           select new { t1.ReceiveID, t1.ReceiveDate, t1.RefNo }).Distinct().OrderByDescending(x => x.ReceiveID).ToList();
+
+                                        foreach (var Acc in lstDVChilds)
+                                        {
+                                            <tr>
+                                                <td>@Convert.ToString(Acc.ReceiveID)</td>
+                                                <td>@Acc.ReceiveDate</td>
+                                                <td>@Acc.RefNo</td>
+                                                @*<td>@Acc.NetTotal</td>*@
+                                            </tr>
+                                        }
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrder3();
+    }
+    function myFunction2() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup2");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrder4();
+    }
+
+
+
+
+
+
+
+
+    function myFunction3() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput3");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup3");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrder();
+    }
+
+    function myFunctioninv() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputinv");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopupinv");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrder2();
+    }
+    function myFunctionIssue() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputIssue");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopupIssue");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            td1 = tr[i].getElementsByTagName("td")[1];
+            td2 = tr[i].getElementsByTagName("td")[2];
+            if (td || td1 || td2) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                }
+                else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                }
+                else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        counter = 0;
+        forOrderIssue();
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#comDate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "slideDown",
+        });
+        $('#youDate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "slideDown",
+        });
+        $('#comDateIcon').click(function () {
+            $('#comDate').datepicker('show');
+        });
+        $('#youDateIcon').click(function () {
+            $('#youDate').datepicker('show');
+        });
+        $('#comDate').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#comDate').datepicker('setDate', 'now');
+        $('#youDate').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#youDate').datepicker('setDate', 'now');
+    });
+</script>
+
+
+

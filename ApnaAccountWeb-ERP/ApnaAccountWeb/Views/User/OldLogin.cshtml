@@ -1,0 +1,134 @@
+﻿@model ApnaAccountWeb.Models.Ini_Company
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <title>ApnaAccount</title><meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="~/Content/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="~/Content/css/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" href="~/Content/css/maruti-login.css" />
+    <link rel="icon" type="image/png" href="~/Content/img/favicon-a.png" />   
+    <link href="~/Content/css/maruti-style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/css/uniform.css" />
+<link rel="stylesheet" href="~/Content/css/select2.css" />
+  <style>
+        input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+    </style>
+                </head>
+                    <body style=" background:linear-gradient(to bottom, #3366cc 0%, #3399ff 100%);">
+                         <div style="position:fixed;padding-left:2em;">
+                        <h3 style="color:white; opacity:0.4">5 level double entry</h3>
+                        <h1 style="color:white;display:inline;opacity:0.4">Financial Accounting System</h1>
+                             <h6 style="color:white;opacity:0.4;margin-top:0em">(Bookkeeping and financial reports)</h6>
+                           <ul style="color:white;">
+                               <li><h5 style="opacity:0.4">Account Ledger</h5></li>
+                               <li><h5 style="opacity:0.4">Vouchers</h5></li>
+                               <li><h5 style="opacity:0.4">Cash book/Bank book</h5></li>
+                                <li><h5 style="opacity:0.4">Journal ledger</h5></li>
+                                <li><h5 style="opacity:0.4">Trial Balance</h5></li>
+                               <li><h5 style="opacity:0.4">Profit and loss</h5></li>
+                                <li><h5 style="opacity:0.4">Balance sheet</h5></li>
+                           </ul>
+                           </div>
+                        <br /><br />
+                        <div class="span8">
+                            <div class="span6">
+                                <br /><br />
+                                 <br /><br />
+                @* <br /><br />*@
+                @* <br /><br />*@
+                                </div>
+                <div class="span7">
+                    <center style="float:right;">
+                       <img src="~/Content/img/apnalogo4.gif" width="300" height="100" alt="ApnaAccount" />
+                    </center>
+                        </div>
+                        </div>
+                         <div >
+                       <div id="loginbox" >
+                             <form action="Login" method="Post" enctype="multipart/form-data" class="form-vertical" style="background-color:lightblue">
+                                 <div class="normal_text">@*<img src="~/Content/img/logo.png" width="150" height="150" alt="ApnaAccount" />*@ <h3> Sign in!</h3></div>
+                                 <br />
+                                  <div class="controls">
+                                        <div class="main_input_box">
+                                            <span class="add-on"><i class="icon-user"></i></span><input type="text" id="UserName" name="UserName" required placeholder="Username" value="a" />
+                                        </div>
+                                    </div>
+                                 <div class="controls">
+                                        <div class="main_input_box">
+                                            <span class="add-on"><i class="icon-lock"></i></span><input type="password" id="Password" name="Password" required placeholder="Password" value="a" />
+                                        </div>
+                                    </div>
+                                 <div class="controls">
+                                        <div class="main_input_box">
+                                            <span class="add-on"><i class="icon-lock"></i></span><input type="text" id="code" name="code" required placeholder="Company Code" value="1829" />
+                                        </div>
+                                    </div>
+                                @* <div class="control-group">
+                <div class="controls main_input_box">
+                  <select id="ddlTitle" >
+                      <option value="0">----Select Company----</option>
+                       @foreach (var Acc in ViewBag.AccCodeDetails)
+                          {
+                            <option value="@Acc.Code">@Acc.Title</option>
+                          }
+                  </select>
+                </div>
+              </div>*@
+                              @if (null != TempData["message"])
+              {
+    <p style="padding-left:2em;">@TempData["message"]</p>
+              }
+                                <div class="form-actions">
+                                     <span class="pull-right"> <button type="submit" class="btn btn-success">Login</button><br /></span>
+                                     <div >Don't have an Account? <a href="@Url.Action("Registeration","User")">Register Now!</a></div>
+                                </div>
+                            </form>
+                @* <br />
+           <center>
+           <div>Don't have an Account? <a href="@Url.Action("Registeration","User")">Register Now!</a></div>
+       </center>*@
+                               </div>
+                           </div>
+                    <div class="span12" style="position: fixed;bottom:50px;">
+                        <img src="~/Content/img/iaglogo.png" width="100" height="100" alt="ApnaAccount" style="display:inline;" />
+                    </div>
+                    <h6 style="color:darkblue;display:inline;position: fixed;bottom:30px; padding-left:11em">IAG Soft ( International account guide ) provides accounts,inventory and customized software solutions.</h6>
+                        <div class="row-fluid">
+                  <div id="footer" class="span12" style="position: fixed;bottom: 0px;">Copyright (&copy;) 2017 IAG Soft.All rights reserved.Brought to you by <a href="http://www.iagsoft.com.pk" target="_blank">IAG Soft</a> </div>
+                </div>
+                        <script src="~/Content/js/jquery.min.js"></script>  
+        <script src="~/Content/js/maruti.login.js"></script> 
+        <script src="~/Content/js/select2.min.js"></script> 
+        <script src="~/Content/js/maruti.form_common.js"></script>
+        <script src="~/Content/js/jquery.uniform.js"></script>
+         <script type="text/javascript">
+             $('#ddlTitle').change(function () {
+                 var selectedVal = $('#ddlTitle option:selected').attr('value');
+                 $('#code').val(selectedVal);
+             });
+             $("p").fadeOut(6000);
+                      </script> 
+<script>
+    $('#UserName').focus();
+    $(document).ready(function () {
+        $('#UserName').keypress(function (e) {
+            $('#Password').focus();
+        });
+        $('#Password').keypress(function (e) {
+            $('#code').focus();
+        });
+    });
+</script>
+    </body>
+</html>

@@ -1,0 +1,507 @@
+@model ApnaAccountWeb.Models.Account
+<script src="~/Content/js/jquery.min.js"></script>
+<script type="text/javascript">
+    var ParentId;
+    var Nature;
+    var newUrl = '@Url.Action("AccountCoding","Accounts")';
+    var isNew = false;
+    var isUpdating = false;
+    $(document).ready(function () {
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function ()
+                {
+                    this.disabled = state;
+                });
+            }
+        });
+        $('#btnDelete').disable(true);
+        $('#ddlAType').disable(true);
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+    });
+    function NewClicked()
+    {
+        isNew = true;
+        //$('#btnSave').show();
+        //$('#btnNew').disable(true);
+        $('#btnGo').hide();
+        $('#btnNew').disable(true);
+    }
+    function ClearClicked() {
+        window.location.href = '@Url.Action("AccountCoding", "Accounts")';
+    }
+    function SelectedAccount(id,title,Type)
+    {
+        if (!isNew && !isUpdating)
+        {
+            $('#Nature').val(id + " " + title);
+        }
+    }
+    function NewAccount(id,name,title)
+    {
+        if (!isUpdating)
+        {
+            $('#Nature').val(id + " " + title);
+        }
+        if (isNew)
+            {
+            var Level = +name + +1;
+            ParentId = id;
+            Nature = id.substring(0, 1);
+            if (Level >= 4) {
+                $('#ddlAType').disable(false);
+            }
+            else
+            {
+                $('#ddlAType').disable(true);
+            }
+      $.ajax({
+          url: "/Accounts/NewAccount",
+          type: "POST",
+          data: JSON.stringify({ strAccountId: id }),
+          dataType: 'text json',
+          async: false,
+          contentType: 'application/json; charset=utf-8',
+          success: function (response) {
+              if (response != null && response.success) {
+                  $('#AccountId').val(response.responseText.toString());
+                  $('#LevelKey').val(Level);
+                  $("#Title").focus();
+                  $('#btnSave').show();
+                  $('#btnSearch').hide();
+              }
+              else {
+                  alert(response.responseText);
+              }
+          },
+          error: function (response) {
+              alert(response.responseText);
+          }
+      });
+     }
+    }
+    //---------------------SaveAccount-----------------------------//
+    function SaveAccount()
+    {
+        $("#frmSave").submit()
+        //debugger
+        //var party=false;
+        //if ($('#cbxIsParty').is(':checked'))
+        //{
+        //    party = true;
+        //}
+        //var Account = {
+        //    AccountId: $('#AccountId').val(),
+        //    Title: $('#Title').val(),
+        //    AccType: $('#ddlAType').val(),
+        //    ParentId: ParentId,
+        //    LevelKey: $('#LevelKey').val(),
+        //    Address: $('#Address').val(),
+        //    PhoneNo: $('#PhoneNo').val(),
+        //    ContactPerson: $('#ContactPerson').val(),
+        //    SalesTaxNo: $('#SalesTaxNo').val(),
+        //    FaxNo: $('#txtFaxNo').val(),
+        //    CityId: $('#ddlCity').val(),
+        //    IsParty: party,
+        //    Nature: Nature
+        //};
+        //$.ajax({
+        //    url: "/Account/Account",
+        //    type: "POST",
+        //    data: JSON.stringify(Account),
+        //    dataType: 'text json',
+        //    async: false,
+        //    contentType: 'application/json; charset=utf-8',
+        //    success: function (response) {
+        //        debugger
+        //        if (response != null && response.success)
+        //        {
+        //            isNew = false;
+        //            alert(response.responseText);
+        //            window.location.href = newUrl;
+        //        }
+        //        else
+        //        {
+        //            alert(response.responseText);
+        //        }
+        //    },
+        //    error: function (response) {
+        //        alert("Failed!");
+        //    }
+        //});
+    }
+    function SearchAccount()
+    {
+        $.ajax({
+            url: "/Accounts/SearchAccount",
+            type: "POST",
+            data: JSON.stringify({ strAccountId: $('#AccountId').val()}),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response != null)
+                {
+                    $('#btnSave').show();
+                    $('#btnGo').hide();
+                    $('#AccountId').prop('readonly', true);
+                    $('#btnDelete').disable(false);
+                    isUpdating = true;
+                    $('#AccountId').val(response.AccountId.toString().trim());
+                    $('#Title').val(response.Title.toString().trim());
+                    $('#ddlAType').val(response.AccType.toString().trim());
+                    $('#Nature').val(response.ParentId.toString().trim());
+                    $('#LevelKey').val(response.LevelKey.toString().trim());
+                    if (response.LevelKey >= 4)
+                    {
+                        $('#ddlAType').disable(false);
+                    }
+                    $('#Address').val(response.Address.toString().trim());
+                    $('#PhoneNo').val(response.PhoneNo.toString().trim());
+                    $('#ContactPerson').val(response.ContactPerson.toString().trim());
+                    $('#SalesTaxNo').val(response.SalesTaxNo.toString().trim());
+                    $('#txtFaxNo').val(response.FaxNo.toString().trim());
+                    $('#ddlCity').val(response.CityId.toString().trim());
+                    if (response.IsParty)
+                    {
+                        $('#cbxIsParty').prop('checked', true);
+                    }
+                    else
+                    {
+                        $('#cbxIsParty').prop('checked', false);
+                    }
+                }
+                else
+                {
+                    alert("!No Record Found");
+                }
+            },
+            error: function (response)
+            {
+                alert(response.responseText);
+            }
+        });
+    }
+    function SearchClicked()
+    {
+        $('#btnGo').show();
+        $('#btnSearch').hide();
+        $('#AccountId').prop('readonly', false);
+        $("#AccountId").focus();
+        $('#btnNew').disable(true);
+        isNew = false;
+    }
+    function DeleteClicked()
+    {
+        var answer = confirm("Are you sure you want to delete Account from the database?");
+        if (answer)
+        {
+            $.ajax({
+                url: "/Accounts/DeleteAccount",
+                type: "POST",
+                data: JSON.stringify({ strAccountId: $('#AccountId').val()}),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success)
+                    {
+                        alert(response.responseText);
+                        window.location.href = newUrl;
+                    } else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response)
+                {
+                    alert(response.responseText);
+                }
+            });
+        }
+    }
+</script>
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+        window.location.href = '@Url.Action("Index", "Home")';
+    </script>
+}
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Chart of Account</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            @{ Html.RenderAction("_AccountTree", "Accounts"); }
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Account Detail</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="DeleteCoding" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <div class="control-group">
+                                    <label class="control-label">Selected Code:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" id="Nature" name="Nature" readonly="true" placeholder="Selected Code" />
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" id="btnNew" class="btn btn-danger">Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Chart of Account</b>
+                    </div>
+                    <div class="card-body" style="overflow-y: auto; max-height: calc(100vh - 190px);">
+                        @{ Html.RenderAction("_AccountTree", "Accounts"); }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Account Detail</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="DeleteCoding" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Selected Code:</label>
+                                        <input type="text" class="form-control form-control-sm" id="Nature" name="Nature" readonly placeholder="Selected Code" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-2">
+                                    <button type="submit" id="btnNew" class="btn btn-sm btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    var keys = {};
+    $(document).keydown(function (e) {
+        keys[e.which] = true;
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    $(document).keyup(function (e) {
+        delete keys[e.which];
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    function printKeys() {
+        var html = '';
+        for (var i in keys) {
+            if (!keys.hasOwnProperty(i)) continue;
+            html += i;
+        }
+        //home start
+        if (html == '72') {
+            keys = {};
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+        //home end
+        //accounts start
+        if (html == '7486') {
+            keys = {};
+            window.location.href = '@Url.Action("JVoucher", "JVoucher")';
+        }
+        if (html == '6886') {
+            keys = {};
+            window.location.href = '@Url.Action("DVoucher", "DVoucher")';
+        }
+        if (html == '6786') {
+            keys = {};
+            window.location.href = '@Url.Action("CVoucher", "CVoucher")';
+        }
+        if (html == '666886') {
+            keys = {};
+            window.location.href = '@Url.Action("BankDJVoucher", "BankDJVoucher")';
+        }
+        if (html == '666774') {
+            keys = {};
+            window.location.href = '@Url.Action("BankCJVoucher", "BankCJVoucher")';
+        }
+        if (html == '748086') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseJVoucher", "PurchaseJVoucher")';
+        }
+        if (html == '748386') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleJVoucher", "SaleJVoucher")';
+        }
+        if (html == '86') {
+            keys = {};
+            window.location.href = '@Url.Action("Verify", "VouchersVerification")';
+        }
+        //accounts end
+        //coding start
+        if (html == '6567') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountCoding", "Accounts")';
+        }
+        if (html == '656679') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningBalances", "Accounts")';
+        }
+        if (html == '678085') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductUnit", "ProductUnit")';
+        }
+        if (html == '677180') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductGroup", "ProductGroup")';
+        }
+        if (html == '678083') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductSubGroup", "ProductSubGroup")';
+        }
+        if (html == '6780') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProduct", "Product")';
+        }
+        if (html == '6783') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterStores", "Stores")';
+        }
+        if (html == '7983') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningStock", "ProductsOpening")';
+        }
+        if (html == '1667') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterCity", "City")';
+        }
+        //coding end
+        //invoice start
+        if (html == '7380') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseInvoice", "PurchaseInvoice")';
+        }
+        if (html == '8082') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoicePurchaseReturn", "InvoicePurchaseReturn")';
+        }
+        if (html == '7383') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleInvoice", "SaleInvoice")';
+        }
+        if (html == '8283') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoiceSaleReturn", "InvoiceSaleReturn")';
+        }
+        //invoice end
+        //accounts report start
+        if (html == '656782') {
+            keys = {};
+            var string = "rtype=ChartofAccount";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+        if (html == '657682') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountLedger", "Reports")';
+        }
+        if (html == '666782') {
+            keys = {};
+            window.location.href = '@Url.Action("Cashbook", "Reports")';
+        }
+        if (html == '677082') {
+            keys = {};
+            window.location.href = '@Url.Action("CashFlow", "Reports")';
+        }
+        if (html == '668284') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalance", "Reports")';
+        }
+        if (html == '666884') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalanceBetweenDates", "Reports")';
+        }
+        if (html == '6884') {
+            keys = {};
+            window.location.href = '@Url.Action("DetailTrial", "Reports")';
+        }
+        if (html == '7184') {
+            keys = {};
+            window.location.href = '@Url.Action("GroupTrial", "Reports")';
+        }
+        if (html == '8384') {
+            keys = {};
+            window.location.href = '@Url.Action("SixColumnTrial", "Reports")';
+        }
+        //accounts report end
+        //inventory report start
+        if (html == '6880') {
+            keys = {};
+            window.location.href = '@Url.Action("DailyPurchase", "IReports")';
+        }
+        if (html == '6883') {
+            keys = {};
+            window.location.href = '@Url.Action("DailySale", "IReports")';
+        }
+        if (html == '7683') {
+            keys = {};
+            window.location.href = '@Url.Action("StockLedger", "IReports")';
+        }
+        if (html == '7283') {
+            keys = {};
+            window.location.href = '@Url.Action("StockInHand", "IReports")';
+        }
+        //inventory report end
+        //system start
+        if (html == '85') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterUser", "User")';
+        }
+        if (html == '1682') {
+            keys = {};
+            window.location.href = '@Url.Action("UserRights", "User")';
+        }
+        if (html == '657683') {
+            keys = {};
+            window.location.href = '@Url.Action("AddLevel", "AccountsLevel")';
+        }
+        if (html == '656877') {
+            keys = {};
+            window.location.href = '@Url.Action("DeleteCoding", "Accounts")';
+        }
+        @*if (html == '17') {
+            keys = {};
+            window.location.href = '@Url.Action("Add", "ControlAccounts")';
+        }*@
+        //system end
+    }
+</script>

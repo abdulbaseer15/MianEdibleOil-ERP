@@ -1,0 +1,91 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script> 
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    $(document).ready(function () {
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        $('#dtpDatefrom').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#dtpDatefrom').datepicker('setDate', 'now');
+        $('#dtpDateto').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#dtpDateto').datepicker('setDate', 'now');
+    });
+    function ViewClicked() {
+      var excel = "No";
+        var dtpDateto = $('#dtpDateto').val();
+        var dtpDatefrom = $('#dtpDatefrom').val();
+        var string = "rtype=rptDaybook" + "&dtpDatefrom=" + dtpDatefrom + "&excel=" + excel + "&dtpDateto=" + dtpDateto + "";
+        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+    function ExportExcel() {
+        var excel = "Yes";
+        var dtpDateto = $('#dtpDateto').val();
+        var dtpDatefrom = $('#dtpDatefrom').val();
+        var string = "rtype=rptDaybook" + "&dtpDatefrom=" + dtpDatefrom + "&excel=" + excel + "&dtpDateto=" + dtpDateto + "";
+        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+</script>
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3">
+            </div>
+         <div class="span5">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Day Book</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal" >
+                  <div class="control-group">
+                <label class="control-label">From:</label>
+                <div class="controls">
+                  <input type="text" class="span11 datepicker" id="dtpDatefrom" name="dtpDatefrom" />
+                </div>
+              </div>
+                  <div class="control-group">
+                <label class="control-label">To:</label>
+                <div class="controls">
+                  <input type="text" class="span11 datepicker" id="dtpDateto" name="dtpDateto" />
+                </div>
+              </div>
+              <div class="form-actions">
+                <input type="button" value="View" id="btnSearch" class="btn btn-success" onclick='ViewClicked();'/>
+                  <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-success" style="background-color: #062f70" onclick='ExportExcel();'>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>
+               

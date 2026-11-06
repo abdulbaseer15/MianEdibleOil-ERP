@@ -1,0 +1,93 @@
+﻿@model ApnaAccountWeb.Models.AccountingLevel
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span6">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Create Level</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            @if (Convert.ToString(ViewBag.data) == "true")
+                            {
+                                <p>Accounting level once set can not be modified.</p>
+                                <h5>Current Level is: @Convert.ToString(ViewBag.level)</h5>
+                            }
+                            else
+                            {
+                                <form action="AddLevel" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                    <div class="control-group">
+                                        <label class="control-label">Account Level:</label>
+                                        <div class="controls">
+                                            <select id="AccountLevel" name="AccountLevel">
+                                                <option>4</option>
+                                                <option>5</option>
+                                                <option>6</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                    </div>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Create Level</b>
+                    </div>
+                    <div class="card-body">
+                        @if (Convert.ToString(ViewBag.data) == "true")
+                        {
+                            <p>Accounting level once set can not be modified.</p>
+                            <h5>Current Level is: @Convert.ToString(ViewBag.level)</h5>
+                        }
+                        else
+                        {
+                            <form action="AddLevel" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Account Level:</label>
+                                            <select class="form-control form-control-sm" id="AccountLevel" name="AccountLevel">
+                                                <option>4</option>
+                                                <option>5</option>
+                                                <option>6</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-2">
+                                        <button type="submit" class="btn btn-sm btn-success">Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}           

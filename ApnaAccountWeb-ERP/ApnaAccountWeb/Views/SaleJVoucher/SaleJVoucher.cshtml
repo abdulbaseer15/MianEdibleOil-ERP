@@ -1,0 +1,1040 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel 
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+    tr.highlighted td {
+        color: white;
+        background-color: red;
+    }
+</style>
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    var isTrue = 0;
+    $(document).ready(function () {
+        $('#txtVochNo').attr('disabled', 'disabled');
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        $('#txtAccCode').disable(true);
+        $('#ddlTitle').disable(true);
+        $('#txtDebit').disable(true);
+        $('#txtCredit').disable(true);
+        $('#txtNarration').disable(true);
+        $('#btnDelete').disable(true);
+        $('#ddlAType').disable(true);
+        $('#btnDelete').hide();
+        $('#btnNew').hide();
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+        //$('#cbxPrintJV').disable(true);
+        $("#divSelectDis").hide();
+        $("#tempdata").hide();
+        $("#tempdata1").hide();
+        $('#dtpDate').datepicker({
+            "format": "dd/mm/yyyy",
+            "todayHighlight": true,
+            "autoclose": true
+        });
+        $('#dtpDate').datepicker('setDate', 'now');
+        var i = 0;
+        currentRow = null;
+        $('#txtNarration').keypress(function (e) {
+            if (e.which == 13) {
+                var res = $('#ddlTitle').val().split(",");
+                //var accCode = $('#ddlTitle').val();
+                var debit = $('#txtDebit').val();
+                var credit = $('#txtCredit').val();
+                var narration = $('#txtNarration').val();
+                var title = $("#ddlTitle option:selected").text();
+                if ($('#txtAccCode').val() == "" || $('#txtAccCode').val() == null || $("#ddlTitle option:selected").text() == "-- Select Account --") {
+                    alert("Cannot Save, You Must Select Account Code");
+                    $('#txtAccCode').focus();
+                }
+                else {
+                    if ((debit == "" || debit == null || debit == 0 || debit < 0) && (credit == "" || credit == null || credit == 0 || credit<0)) {
+                        alert("Debit and Credit Cannot be Empty or Zero")
+                        $('#txtDebit').focus();
+                    }
+                    else {
+                        if ((debit != "" && debit != null && debit != 0) && (credit != "" && credit != null && credit != 0)) {
+                            alert("Enter in debit or credit not both")
+                            $('#txtDebit').focus();
+                        }
+                        else {
+                i++;
+                var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + res[0] + "</td><td class='title'>" + title + "</td><td class='debit'>" + debit + "</td><td class='credit'>" + credit + "</td><td class='naration'>" + narration + "</td><td class='isctrl' style = display:none>" + res[1] + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                if (currentRow) {
+                    $('#mytable').find($(currentRow)).replaceWith(new_row);
+                    currentRow = null;
+                }
+                else {
+                    $('#mytable').append(new_row);
+                }
+                var tdebit = 0;
+                var tcredit = 0;
+                $('#mytable tbody tr').each(function () {
+                    var $row = $(this), $tds = $row.find("td");
+                    var t1debit = parseFloat($tds[2].innerText);
+                    var t1credit = parseFloat($tds[3].innerText);
+                    if (isNaN(t1debit))
+                        t1debit = 0;
+                    if (isNaN(t1credit)) {
+                        t1credit = 0;
+                    }
+                    tdebit = tdebit + t1debit;
+                    tcredit = tcredit + t1credit;
+                });
+                document.getElementById('sumcredit').innerHTML = tcredit;
+                document.getElementById('sumdebit').innerHTML = tdebit;
+                $("#tempdata1").show();
+                $("#tempdata").show();
+                IntiateFields();
+                //SaveDVChild();
+                        }
+                    }
+                }
+            }
+        });
+        $(document).on('click', 'span.deleterow', function () {
+            var s1debit = parseFloat($("#sumdebit").text());
+            var s1credit = parseFloat($("#sumcredit").text());
+            var sdebit = parseFloat($(this).closest('tr').find('td.debit').text());
+            var scredit = parseFloat($(this).closest('tr').find('td.credit').text());
+            var sumdebit = -1;
+            var sumcredit = -1;
+            // if (scredit >0) {
+            if (isNaN(sdebit))
+                sdebit = 0;
+            if (isNaN(scredit)) {
+                scredit = 0;
+            }
+            sumcredit = s1credit - scredit;
+            document.getElementById('sumcredit').innerHTML = sumcredit;
+            // }
+            // if (sdebit > 0) {
+            sumdebit = s1debit - sdebit;
+            document.getElementById('sumdebit').innerHTML = sumdebit;
+            //}
+            if ((sumdebit == 0 && sumcredit == 0)) {
+                $("#tempdata1").hide();
+            }
+            $(this).parents('tr').remove();
+            return false;
+        });
+        $(document).on('click', 'span.editrow', function () {
+            currentRow = $(this).parents('tr');
+            $("#txtAccCode").val($(this).closest('tr').find('td.accCode').text());
+            var code = $(this).closest('tr').find('td.accCode').text() + "," + $(this).closest('tr').find('td.isctrl').text()
+            $("#ddlTitle").val(code);
+            $("#txtDebit").val($(this).closest('tr').find('td.debit').text());
+            $("#txtCredit").val($(this).closest('tr').find('td.credit').text());
+            $("#txtNarration").val($(this).closest('tr').find('td.naration').text());
+            var tdebit = 0;
+            var tcredit = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1debit = parseFloat($tds[2].innerText);
+                var t1credit = parseFloat($tds[3].innerText);
+                if (isNaN(t1debit))
+                    t1debit = 0;
+                if (isNaN(t1credit)) {
+                    t1credit = 0;
+                }
+                tdebit = tdebit + t1debit;
+                tcredit = tcredit + t1credit;
+            });
+            document.getElementById('sumcredit').innerHTML = tcredit;
+            document.getElementById('sumdebit').innerHTML = tdebit;
+            if ((tdebit == 0 && tcredit == 0)) {
+                $("#tempdata1").hide();
+            }
+        });
+        $('#ddlTitle').change(function () {
+            var selectedVal = $('#ddlTitle option:selected').attr('value');
+            var res = selectedVal.split(",");
+            $('#txtAccCode').val(res[0]);
+            if (res[1] == 1) {
+                $('#txtDebit').val(0);
+                $('#txtDebit').disable(true);
+                $('#txtCredit').focus();
+            }
+            else {
+                $('#txtDebit').disable(false);
+                $('#txtDebit').focus();
+            }
+        });
+        $('#cbxPrintJV').change(function () {
+            if (this.checked) {
+                IsPrintJV = true;
+            }
+            else {
+                IsPrintJV = false;
+            }
+        });
+        $('#txtVochNo').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder2();
+                $('#myModalinvoices').modal('show');
+                $('#myInputinv').focus();
+                $('.textboxSearch').focus();
+                var $rows = $('#tblPopupinv tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopupinv tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtVochNo').val($tds[0].innerText);
+                    $('#dtpDate').val($tds[1].innerText);
+                    $('#myModalinvoices').modal('hide');
+                    $('#dtpDate').disable(true);
+                    $('#txtVochNo').disable(true);
+                });
+            }
+        });
+        $('#txtAccCode').keypress(function (e) {
+            if (e.which == 13) {
+                $('#myModal').modal('show');
+                $('#myInput').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                   var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                        reg = RegExp(val, 'i'),
+                   text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                       return !reg.test(text);
+                       $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    var res = $tds[2].innerText;
+                    $('#txtAccCode').val($tds[0].innerText);
+                    $('#ddlTitle').val($tds[0].innerText + "," + res);
+                    $('#ddlTitle').focus();
+                    $('#myModal').modal('hide');
+                    $('#myInput').val("");
+                    $('#txtDebit').focus();
+                    var res = $tds[2].innerText;
+                    if (res == 1) {
+                        $('#txtDebit').val(0);
+                        $('#txtDebit').disable(true);
+                        $('#txtCredit').focus();
+                    }
+                    else {
+                        $('#txtDebit').disable(false);
+                    }
+                });
+            }
+        });
+    });
+    function forOrder2() {
+        var flag = true;
+        var trows = document.getElementById('tblPopupinv').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopupinv').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopupinv').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopupinv").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#txtVochNo').val($tds[0].innerText);
+                                $('#dtpDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#dtpDate').disable(true);
+                                $('#txtVochNo').disable(true);
+                                // isTrue = 1;
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#txtVochNo').val($tds[0].innerText);
+                                $('#dtpDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#dtpDate').disable(true);
+                                $('#txtVochNo').disable(true);
+                                //isTrue = 1;
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopupinv)
+                            $tds = row.find("td");
+                            $('#txtVochNo').val($tds[0].innerText);
+                            $('#dtpDate').val($tds[1].innerText);
+                            $('#myModalinvoices').modal('hide');
+                            $('#dtpDate').disable(true);
+                            $('#txtVochNo').disable(true);
+                            //isTrue = 1;
+                            $('#btnGo').focus();
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function ClearClicked() {
+        window.location.href = '@Url.Action("SaleJVoucher", "SaleJVoucher")';
+    }
+    function NewClicked() {
+        $('#btnNew').disable(true);
+        var date = $('#dtpDate').val();
+        $.ajax({
+            url: "/SaleJVoucher/GetVoucherID",
+            type: "POST",
+            data: JSON.stringify({ date: date }),
+            dataType: 'text json',
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response != null && response.success) {
+                    $('#txtVochNo').val(response.responseText.toString());
+                    $('#txtAccCode').disable(false);
+                    $('#ddlTitle').disable(false);
+                    $('#txtDebit').disable(false);
+                    $('#txtCredit').disable(false);
+                    $('#txtNarration').disable(false);
+                    $("#txtAccCode").focus();
+                    $('#btnSave').show();
+                    $('#btnSearch').hide();
+                }
+                else {
+                    alert(response.responseText);
+                }
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+    function IntiateFields() {
+        $('#txtAccCode').val("");
+        $('#ddlTitle').val("");
+        $('#txtDebit').val("");
+        $('#txtCredit').val("");
+        //$('#txtNarration').val("");
+        $('#ddlTitle').focus();
+        dvcid = null;
+        RowNo = null;
+    }
+    //function UpdateDVoucher(id, rowNo) {
+    //    dvcid = id;
+    //    RowNo = rowNo;
+    //}
+    function SearchDV() {
+        var dvid = $('#txtVochNo').val();
+        var date = $('#dtpDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or voucher id can not be null");
+        }
+        else {
+            //$('#btnSave').show();
+            $('#btnGo').hide();
+            IsUpdate = true;
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/SaleJVoucher/SearchVoucher",
+                data: { Date: date, VId: dvid },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        var new_row;
+                        $.each(result, function (i, item) {
+                            new_row += "<tr id='row" + i + "' ><td class='accCode'>" + item.AccountId + "</td><td class='title'>" + item.Title + "</td><td class='debit'>" + item.Debit + "</td><td class='credit'>" + item.Credit + "</td><td class='naration'>" + item.Narration + "</td><td class='isctrl' style = display:none>" + item.IsCtrlAcc + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                        });
+                        $('#mytable tbody').append(new_row);
+                        $("#tempdata").show();
+                    }
+                    else {
+                        alert("No record found");
+                        window.location.reload();
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+            @*var string = "Date=" + date + "&DVId=" + dvid + "";
+        $("#divPartial").load('@(Url.Action("SearchVoucher", "SaleJVoucher", null, Request.Url.Scheme))?' + string);*@
+            $('#txtVochNo').disable(true);
+            $('#dtpDate').disable(true);
+            $('#btnDelete').disable(false);
+            $('#cbxPrintJV').disable(false);
+        }
+    }
+    function SearchClicked() {
+        $('#txtAccCode').disable(false);
+        $('#ddlTitle').disable(false);
+        $('#txtDebit').disable(false);
+        $('#txtCredit').disable(false);
+        $('#txtNarration').disable(false);
+        $('#btnNew').disable(true);
+        $('#btnSearch').hide();
+        $('#btnGo').show();
+        $('#txtVochNo').disable(false);
+        $('#txtVochNo').focus();
+    }
+    var i = 0;
+    currentRow = null;
+    function AddGridClicked() {
+        var res = $('#ddlTitle').val().split(",");
+        //var accCode = $('#ddlTitle').val();
+        var debit = $('#txtDebit').val();
+        var credit = $('#txtCredit').val();
+        var narration = $('#txtNarration').val();
+        var title = $("#ddlTitle option:selected").text();
+        if ($('#txtAccCode').val() == "" || $('#txtAccCode').val() == null || $("#ddlTitle option:selected").text() == "-- Select Account --") {
+            alert("Cannot Save, You Must Select Account Code");
+            $('#txtAccCode').focus();
+        }
+        else {
+            if ((debit == "" || debit == null || debit == 0 || debit < 0) && (credit == "" || credit == null || credit == 0 || credit < 0)) {
+                alert("Debit and Credit Cannot be Empty or Zero")
+                $('#txtDebit').focus();
+            }
+            else {
+                if ((debit != "" && debit != null && debit != 0) && (credit != "" && credit != null && credit != 0)) {
+                    alert("Enter in debit or credit not both")
+                    $('#txtDebit').focus();
+                }
+                else {
+                    i++;
+                    var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + res[0] + "</td><td class='title'>" + title + "</td><td class='debit'>" + debit + "</td><td class='credit'>" + credit + "</td><td class='naration'>" + narration + "</td><td class='isctrl' style = display:none>" + res[1] + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                    if (currentRow) {
+                        $('#mytable').find($(currentRow)).replaceWith(new_row);
+                        currentRow = null;
+                    }
+                    else {
+                        $('#mytable').append(new_row);
+                    }
+                    var tdebit = 0;
+                    var tcredit = 0;
+                    $('#mytable tbody tr').each(function () {
+                        var $row = $(this), $tds = $row.find("td");
+                        var t1debit = parseFloat($tds[2].innerText);
+                        var t1credit = parseFloat($tds[3].innerText);
+                        if (isNaN(t1debit))
+                            t1debit = 0;
+                        if (isNaN(t1credit)) {
+                            t1credit = 0;
+                        }
+                        tdebit = tdebit + t1debit;
+                        tcredit = tcredit + t1credit;
+                    });
+                    document.getElementById('sumcredit').innerHTML = tcredit;
+                    document.getElementById('sumdebit').innerHTML = tdebit;
+                    $("#tempdata1").show();
+                    $("#tempdata").show();
+                    IntiateFields();
+                    //SaveDVChild();
+                }
+            }
+        }
+    }
+    function SaveDVoucher() {
+        var date = $('#dtpDate').val();
+        if (date == "" || date == null) {
+            alert("Date can not be null");
+        }
+        else {
+            var tdebit = parseFloat($('#sumdebit').text());
+            var tcredit = parseFloat($('#sumcredit').text());
+            var rowCount = $('#mytable tbody tr').length;
+            if (rowCount <= 0) {
+                alert("Must have rows to save.")
+            }
+            else {
+                if (tdebit != tcredit) {
+                    alert("Debit & Credit Total Must Be Equal.")
+                }
+                else {
+                    var answer = confirm("Do You really want to Save this?");
+                    if (answer) {
+                        var date = $('#dtpDate').val();
+                        var vid = $('#txtVochNo').val();
+                        var detail = [];
+                        $('#mytable tbody tr').each(function () {
+                            var $row = $(this), $tds = $row.find("td");
+                            detail.push({
+                                accCode: $tds[0].innerText,
+                                title: $tds[1].innerText,
+                                debit: $tds[2].innerText,
+                                credit: $tds[3].innerText,
+                                naration: $tds[4].innerText,
+                                isctrlacc: $tds[5].innerText
+                            });
+                        });
+                        var model = {
+                            vid: vid,
+                            date: date,
+                            isupdate: IsUpdate,
+                            isprint: IsPrintJV,
+                            detail: detail
+                        };
+                        $.ajax({
+                            url: "/SaleJVoucher/SaveVoucher",
+                            type: "POST",
+                            data: JSON.stringify({ model: model }),
+                            dataType: 'text json',
+                            async: false,
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (response) {
+                                if (response != null && response.success) {
+                                    alert(response.responseText);
+                                    if (IsPrintJV) {
+                                        var string = "rtype=rptSJVReceipt" + "&txtAccCode=" + vid + "";
+                                        var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+                                        window.open(url, "_blank");
+                                    }
+                                    window.location.reload();
+                                }
+                                else {
+                                    alert(response.responseText);
+                                }
+                            },
+                            error: function (response) {
+                                alert(response.responseText);
+                            }
+                        });
+                        IsUpdate = false;
+                        IsPrintJV = false;
+                    }
+                }
+            }
+        }
+    }
+    function DeleteClicked() {
+        var dvid = $('#txtVochNo').val();
+        var date = $('#dtpDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or voucher id can not be null");
+        }
+        else {
+            var answer = confirm("Do You really want to Delete this?");
+            if (answer) {
+                $('#btnSave').show();
+                $('#btnGo').hide();
+                IsUpdate = true;
+                var string = "Date=" + date + "&DVId=" + dvid + "";
+                var url = '@(Url.Action("DeleteVoucher", "SaleJVoucher", null, Request.Url.Scheme))?' + string;
+                window.location.href = url;
+            }
+        }
+    }
+</script>
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span11">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Sale Voucher</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="DDVoucher" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                 <table class="table table-bordered data-table">
+              <tbody>
+                   <tr>
+                       <td>Voucher#<input type="number" class="span11" id="txtVochNo" name="txtVochNo" /></td>
+                       <td>Date<input type="text" class="span11 datepicker" id="dtpDate" name="dtpDate" /></td>
+                   </tr>
+                  <tr>
+                      @*Text = Acc.AccountId + " | " + Acc.Title,*@
+                       <td>Account Code<input type="text" class="span11" id="txtAccCode" name="txtAccCode" data-toggle="tooltip"  title="Press enter and select account code" /></td>
+                      <td>Title
+                          @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                          foreach (var Acc in ViewBag.AccCodelist)
+                          {
+                              AccCodelist.Add(new SelectListItem
+                             {
+                                  Text =Acc.Title,
+                                  Value =Acc.AccountId+","+Acc.IsCtrlAccount
+                              });
+                          }
+                          }
+                          @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitle", @class = "span11 ddl" })
+                      </td>
+<td>Debit<input type="number" class="span11" id="txtDebit" name="txtDebit"  /></td>
+                      <td>Credit<input type="number" class="span11" id="txtCredit" name="txtCredit"  /></td>
+                   <td>Narration<input type="text" class="span11" id="txtNarration" name="txtNarration" data-toggle="tooltip"  title="Enter narration and press enter or add button to save"  placeholder="Narration" /></td>
+                   <td><br /><input type="button" value="Add" id="btnaddgrid" class="btn btn-default" onclick='AddGridClicked();'/>
+                  </tr>
+              </tbody>
+            </table>
+                 <div id="tempdata">
+                     <table class="table table-bordered data-table" id="mytable">
+                         <thead>
+                             <tr>
+                                 <th>AccountCode</th>
+                                 <th>Title</th>
+                                 <th>Debit</th>
+                                 <th>Credit</th>
+                                 <th>Narration</th>
+                                 <th style="display:none">IsCtrl</th>
+                                 <th>Action</th>
+                             </tr>
+                         </thead>
+                         <tbody></tbody>
+                     </table>
+                 </div>
+                              <div class="span12">
+                 </div>
+                 <div id="tempdata1">
+                      <div class="span12">
+                    <div class="span6">
+                        </div>
+                      <div class="span6">
+                    <div class="span8">
+                        <h5 style="color:maroon;float:right;"> Total Debit:</h5>                     
+                    </div>
+                        <div class="span4">                       
+                            <h5 id="sumdebit" style="color:maroon;">0</h5>
+                        </div>                 
+     </div>  
+                          </div>
+                     <div class="span12">
+                         <div class="span6">
+                        </div>
+                                        <div class="span6">
+                    <div class="span8">
+                          <h5 style="color:maroon;float:right;">Total Credit:</h5>
+                    </div>
+                        <div class="span4">
+                           <h5 id="sumcredit" style="color:maroon;">0</h5>
+                        </div>  
+     </div>
+                        </div>                  
+</div>
+                 <div class="span12">
+                     <input type="checkbox" style="float:left" id="cbxPrintJV" name="cbxPrintJV">Print voucher<br>
+                 </div>
+              <div class="form-actions">
+                <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();' >New</button>
+                  <input type="button" value="Save" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                    <input type="button" id="btnDelete"  class="btn btn-danger" value="Delete" onclick='DeleteClicked();'>
+                  <input type="button" value="Search" id="btnSearch" class="btn btn-default" onclick='SearchClicked();'/>
+                  <input type="button" id="btnGo" value="Go" class="btn btn-success" onclick='SearchDV();'>
+                  <input type="button" id="btnClose" value="Clear" class="btn btn-warning" onclick='ClearClicked();'>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>
+<div id="myModal" class="modal hide">
+              <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>Search Account</h3>
+              </div>
+              <div class="modal-body">
+        <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+          <div class="widget-box">
+          <div class="widget-title">
+             <span class="icon"><i class="icon-th"></i></span> 
+            <h5>Accounts List</h5>
+              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search For Title.." style="float:right;">
+          </div>
+          <div class="widget-content nopadding">
+            <table id="tblPopup" class="table table-bordered data-table">
+              <thead>
+                <tr>
+                  <th>AccountCode</th>
+                  <th>Title</th>
+                </tr>
+              </thead>
+              <tbody>
+                    @foreach (var Acc in ViewBag.AccCodelist)
+            {
+                <tr>
+                    <td>@Acc.AccountId</td>
+                    <td>@Acc.Title</td>
+                    <td style="display:none;">@Acc.IsCtrlAccount</td>
+                </tr>
+            }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>   
+            </div>
+</div>
+<div id="myModalinvoices" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Vouchers</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Vouchers List</h5>
+                            <input type="text" id="myInputinv" onkeyup="myFunctioninv()" placeholder="Search for title.." style="float:right;">
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopupinv" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>Vch No</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var Acc in ViewBag.AccCodeDetails2)
+                                    {
+                                        <tr>
+                                            <td>@Convert.ToString(Acc.Code)</td>
+                                            <td>@Acc.Pdate.ToString("dd/MM/yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunctioninv() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputinv");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopupinv");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<script>
+    var keys = {};
+    $(document).keydown(function (e) {
+        keys[e.which] = true;
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    $(document).keyup(function (e) {
+        delete keys[e.which];
+        if (e.target.nodeName.toLowerCase() !== 'input')
+        printKeys();
+    });
+    function printKeys() {
+        var html = '';
+        for (var i in keys) {
+            if (!keys.hasOwnProperty(i)) continue;
+            html += i;
+        }
+        //home start
+        if (html == '72') {
+            keys = {};
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+        //home end
+        //accounts start
+        if (html == '7486') {
+            keys = {};
+            window.location.href = '@Url.Action("JVoucher", "JVoucher")';
+        }
+        if (html == '6886') {
+            keys = {};
+            window.location.href = '@Url.Action("DVoucher", "DVoucher")';
+        }
+        if (html == '6786') {
+            keys = {};
+            window.location.href = '@Url.Action("CVoucher", "CVoucher")';
+        }
+        if (html == '666886') {
+            keys = {};
+            window.location.href = '@Url.Action("BankDJVoucher", "BankDJVoucher")';
+        }
+        if (html == '666774') {
+            keys = {};
+            window.location.href = '@Url.Action("BankCJVoucher", "BankCJVoucher")';
+        }
+        if (html == '748086') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseJVoucher", "PurchaseJVoucher")';
+        }
+        if (html == '748386') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleJVoucher", "SaleJVoucher")';
+        }
+        if (html == '86') {
+            keys = {};
+            window.location.href = '@Url.Action("Verify", "VouchersVerification")';
+        }
+        //accounts end
+        //coding start
+        if (html == '6567') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountCoding", "Accounts")';
+        }
+        if (html == '656679') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningBalances", "Accounts")';
+        }
+        if (html == '678085') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductUnit", "ProductUnit")';
+        }
+        if (html == '677180') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductGroup", "ProductGroup")';
+        }
+        if (html == '678083') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProductSubGroup", "ProductSubGroup")';
+        }
+        if (html == '6780') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterProduct", "Product")';
+        }
+        if (html == '6783') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterStores", "Stores")';
+        }
+        if (html == '7983') {
+            keys = {};
+            window.location.href = '@Url.Action("OpeningStock", "ProductsOpening")';
+        }
+        if (html == '1667') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterCity", "City")';
+        }
+        //coding end
+        //invoice start
+        if (html == '7380') {
+            keys = {};
+            window.location.href = '@Url.Action("PurchaseInvoice", "PurchaseInvoice")';
+        }
+        if (html == '8082') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoicePurchaseReturn", "InvoicePurchaseReturn")';
+        }
+        if (html == '7383') {
+            keys = {};
+            window.location.href = '@Url.Action("SaleInvoice", "SaleInvoice")';
+        }
+        if (html == '8283') {
+            keys = {};
+            window.location.href = '@Url.Action("InvoiceSaleReturn", "InvoiceSaleReturn")';
+        }
+        //invoice end
+        //accounts report start
+        if (html == '656782') {
+            keys = {};
+            var string = "rtype=ChartofAccount";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+        if (html == '657682') {
+            keys = {};
+            window.location.href = '@Url.Action("AccountLedger", "Reports")';
+        }
+        if (html == '666782') {
+            keys = {};
+            window.location.href = '@Url.Action("Cashbook", "Reports")';
+        }
+        if (html == '677082') {
+            keys = {};
+            window.location.href = '@Url.Action("CashFlow", "Reports")';
+        }
+        if (html == '668284') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalance", "Reports")';
+        }
+        if (html == '666884') {
+            keys = {};
+            window.location.href = '@Url.Action("TrialBalanceBetweenDates", "Reports")';
+        }
+        if (html == '6884') {
+            keys = {};
+            window.location.href = '@Url.Action("DetailTrial", "Reports")';
+        }
+        if (html == '7184') {
+            keys = {};
+            window.location.href = '@Url.Action("GroupTrial", "Reports")';
+        }
+        if (html == '8384') {
+            keys = {};
+            window.location.href = '@Url.Action("SixColumnTrial", "Reports")';
+        }
+        //accounts report end
+        //inventory report start
+        if (html == '6880') {
+            keys = {};
+            window.location.href = '@Url.Action("DailyPurchase", "IReports")';
+        }
+        if (html == '6883') {
+            keys = {};
+            window.location.href = '@Url.Action("DailySale", "IReports")';
+        }
+        if (html == '7683') {
+            keys = {};
+            window.location.href = '@Url.Action("StockLedger", "IReports")';
+        }
+        if (html == '7283') {
+            keys = {};
+            window.location.href = '@Url.Action("StockInHand", "IReports")';
+        }
+        //inventory report end
+        //system start
+        if (html == '85') {
+            keys = {};
+            window.location.href = '@Url.Action("RegisterUser", "User")';
+        }
+        if (html == '1682') {
+            keys = {};
+            window.location.href = '@Url.Action("UserRights", "User")';
+        }
+        if (html == '657683') {
+            keys = {};
+            window.location.href = '@Url.Action("AddLevel", "AccountsLevel")';
+        }
+        if (html == '656877') {
+            keys = {};
+            window.location.href = '@Url.Action("DeleteCoding", "Accounts")';
+        }
+        @*if (html == '17') {
+            keys = {};
+            window.location.href = '@Url.Action("Add", "ControlAccounts")';
+        }*@
+        //system end
+    }
+</script>
+               

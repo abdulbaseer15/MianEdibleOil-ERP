@@ -1,0 +1,1087 @@
+﻿<script src="~/Content/js/jquery.min.js"></script>
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+       alert("@TempData["message"]");
+    </script>
+}
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>User Rights</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="SaveUserRights" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <div class="control-group">
+                                    <label class="control-label">Select User</label>
+                                    <div class="controls main_input_box">
+                                        <select id="ddlTitle">
+                                            <option value="0">Select User</option>
+                                            @foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                <option value="@Acc.Code">@Acc.Title</option>
+                                            }
+                                        </select>
+                                        <input type="button" id="btnselectall" value="Check All" class="btn btn-primary">
+                                        <input type="button" id="btnclearall" value="Clear All" class="btn btn-default">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Coding</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="1" />
+                                                Accounts Coding
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="2" />
+                                                Accounts Opening Balances
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="3" />
+                                                Client Credit Limit
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="4" />
+                                                Party Registeration Info
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="5" />
+                                                Product Group
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="6" />
+                                                Product Type
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="7" />
+                                                Product Coding
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="8" />
+                                                Opening Stocks
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="9" />
+                                                Physical Stock Taking
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="10" />
+                                                Plant Coding
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="11" />
+                                                Store Coding
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="12" />
+                                                Vehicle Type Coding
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="13" />
+                                                Party Farm
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="14" />
+                                                City Coding
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Purchase</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="15" />
+                                                Purchase Order
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="16" />
+                                                Inward Gate Pass
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="17" />
+                                                Good Receive Note
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="18" />
+                                                Purchase Invoice
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="19" />
+                                                Purchase Return
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="20" />
+                                                Purchase Invoice GST
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="21" />
+                                                Purchase Return GST
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Production</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="22" />
+                                                Individual Formula - [Finished Goods]
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="23" />
+                                                Individual Formula - [Adjustment]
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="24" />
+                                                Production Reports
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Sale</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="25" />
+                                                Sale Order
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="26" />
+                                                Delivery Challan
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="27" />
+                                                Sale Invoice New
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="28" />
+                                                Sale Return
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="29" />
+                                                Sale Invoice GST
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="30" />
+                                                Sale Return GST
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Bardana</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="31" />
+                                                Bardana Types Coding
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="32" />
+                                                Bardana Issued/Received
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="33" />
+                                                Bardana Reports
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Accounts</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CV" id="CV" value="34" />
+                                                Cash Receipt Voucher
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="DV" id="DV" value="35" />
+                                                Cash Payment Voucher
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="JV" id="JV" value="36" />
+                                                Journal Voucher
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="BCV" id="BCV" value="37" />
+                                                Bank Receipt Voucher
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="BDV" id="BDV" value="38" />
+                                                Bank Payment Voucher
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Accounts Reports</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="39" />
+                                                Chart of Accounts
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="40" />
+                                                Account Ledger
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="41" />
+                                                Account Reconciliation
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="42" />
+                                                Party Ledger
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="43" />
+                                                Party Ledger Summary
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="44" />
+                                                Trial Balances
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="45" />
+                                                Cash Book
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="46" />
+                                                Day Book
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="47" />
+                                                DayBook Invoice Detail
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="48" />
+                                                Day Book Recovered
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="49" />
+                                                Journal Book
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="50" />
+                                                Aging Report
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="51" />
+                                                Balance Sheet
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="52" />
+                                                Receiveable and Payable
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="53" />
+                                                Profit and Loss
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Inventory Reports</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="54" />
+                                                Gst Register
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="55" />
+                                                Stock Ledger
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="56" />
+                                                Stock Ledger Final Weight
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="57" />
+                                                Stock Ledger without issue
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="58" />
+                                                Stock in hand Detail
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="59" />
+                                                Stock in hand
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="60" />
+                                                Stock in hand Value
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="61" />
+                                                Stock in hand Avg Rate
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="62" />
+                                                Stock in hand Avg - Final
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="63" />
+                                                Stock in hand by Group
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="64" />
+                                                Stock in hand by Store
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="65" />
+                                                Product Reports
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="66" />
+                                                Party Reports
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="67" />
+                                                Purchase Ledger Invoice Voice
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="68" />
+                                                Purchase Order Report
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="69" />
+                                                Sale Order Report
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="70" />
+                                                Sale Ledger Invoice Wise
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="71" />
+                                                Product List
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="72" />
+                                                Product List Group Wise
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="73" />
+                                                Customer Over Limit
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Gate Pass</label>
+                                    <div class="controls">
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="74" />
+                                                Product Coding for Gate pass
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="75" />
+                                                Employee Coding
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="ACC" id="ACC" value="76" />
+                                                Gate pass Parties
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AOB" id="AOB" value="77" />
+                                                Inward Gate pass Raw Material
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="78" />
+                                                Inward Gate pass Mixed
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="79" />
+                                                Outward Gate pass Finished
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="80" />
+                                                Outward Gate pass Mixed
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="81" />
+                                                Returnable Outward
+                                            </label>
+                                        </div>
+                                        <div class="span4">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="82" />
+                                                Returnable Inward
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="83" />
+                                                Employee Gate pass
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="84" />
+                                                Guest Gate pass
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CC" id="CC" value="85" />
+                                                Gate Pass Reports
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">System</label>
+                                    <div class="controls">
+                                        <div class="span6">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CU" id="CU" value="86" />
+                                                Create User
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="UR" id="UR" value="87" />
+                                                User Rights
+                                            </label>
+                                        </div>
+                                        <div class="span6">
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="AMD" id="AMD" value="88" />
+                                                Accounts Master Deletion
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CTRLA" id="CTRLA" value="89" />
+                                                Control Accounts
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="checkbox" name="CTRLA" id="CTRLA" value="90" />
+                                                Transfer Account
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <center style="margin-top:4px;margin-bottom:4px">
+                                    <input type="button" id="btnsave" value="Save" class="btn btn-success" onclick='SaveRole();'>
+                                    <input type="button" value="Search" id="btnSearch" class="btn btn-default" onclick='SearchRole();' />
+                                </center>
+                                @*  <div class="form-actions">
+                                      <input type="button" id="btnsave" value="Save" class="btn btn-success" onclick='SaveRole();'>
+                                        <input type="button" value="Search" id="btnSearch" class="btn btn-default" onclick='SearchRole();'/>
+                                    </div>*@
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <b>User Rights</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="SaveUserRights" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="form-group">
+                                        <label>Select User</label>
+                                        <select id="ddlTitle" class="form-control form-control-sm">
+                                            <option value="0">Select User</option>
+                                            @foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                <option value="@Acc.Code">@Acc.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-8 align-content-end">
+                                    <div class="form-group">
+                                        <input type="button" id="btnselectall" value="Check All" class="btn btn-sm btn-primary">
+                                        <input type="button" id="btnclearall" value="Clear All" class="btn btn-sm btn-default">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Coding</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="1">
+                                        <label class="form-check-label">Accounts Coding</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="2">
+                                        <label class="form-check-label">Accounts Opening Balances</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="3">
+                                        <label class="form-check-label">Client Credit Limit</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="4">
+                                        <label class="form-check-label">Party Registeration Info</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="2">
+                                        <label class="form-check-label">Product Group</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="6">
+                                        <label class="form-check-label">Product Type</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="7">
+                                        <label class="form-check-label">Product Coding</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="8">
+                                        <label class="form-check-label">Opening Stocks</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="9">
+                                        <label class="form-check-label">Physical Stock Taking</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="10">
+                                        <label class="form-check-label">Plant Coding</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="11">
+                                        <label class="form-check-label">Store Coding</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="12">
+                                        <label class="form-check-label">Vehicle Type Coding</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="13">
+                                        <label class="form-check-label">Party Farm</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="14">
+                                        <label class="form-check-label">City Coding</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>Purchase</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="15">
+                                        <label class="form-check-label">Purchase Order</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="16">
+                                        <label class="form-check-label">Inward Gate Pass</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="17">
+                                        <label class="form-check-label">Good Receive Note</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="18">
+                                        <label class="form-check-label">Purchase Invoice</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="19">
+                                        <label class="form-check-label">Purchase Return</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="20">
+                                        <label class="form-check-label">Purchase Invoice GST</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="21">
+                                        <label class="form-check-label">Purchase Return GST</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>Production</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="22">
+                                        <label class="form-check-label">Individual Formula - [Finished Goods]</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="23">
+                                        <label class="form-check-label">Individual Formula - [Adjustment]</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="24">
+                                        <label class="form-check-label">Production Reports</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>Sale</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="25">
+                                        <label class="form-check-label">Sale Order</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="26">
+                                        <label class="form-check-label">Delivery Challan</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="27">
+                                        <label class="form-check-label">Sale Invoice New</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="28">
+                                        <label class="form-check-label">Sale Return</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="29">
+                                        <label class="form-check-label">Sale Invoice GST</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="30">
+                                        <label class="form-check-label">Sale Return GST</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>Bardana</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="31">
+                                        <label class="form-check-label">Bardana Types Coding</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="32">
+                                        <label class="form-check-label">Bardana Issued/Received</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="33">
+                                        <label class="form-check-label">Bardana Reports</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>Accounts</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CV" id="CV" value="34">
+                                        <label class="form-check-label">Cash Receipt Voucher</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="JV" id="JV" value="35">
+                                        <label class="form-check-label">Cash Payment Voucher</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="DV" id="DV" value="36">
+                                        <label class="form-check-label">Journal Voucher</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="BCV" id="BCV" value="37">
+                                        <label class="form-check-label">Bank Receipt Voucher</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="BDV" id="BDV" value="38">
+                                        <label class="form-check-label">Bank Payment Voucher</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>Accounts Reports</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="39">
+                                        <label class="form-check-label">Chart of Accounts</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="40">
+                                        <label class="form-check-label">Account Ledger</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="41">
+                                        <label class="form-check-label">Account Reconciliation</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="42">
+                                        <label class="form-check-label">Party Ledger</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="43">
+                                        <label class="form-check-label">Party Ledger Summary</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="44">
+                                        <label class="form-check-label">Trial Balances</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="45">
+                                        <label class="form-check-label">Cash Book</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="46">
+                                        <label class="form-check-label">Day Book</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="47">
+                                        <label class="form-check-label">DayBook Invoice Detail</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="48">
+                                        <label class="form-check-label">Day Book Recovered</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="49">
+                                        <label class="form-check-label">Journal Book</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="50">
+                                        <label class="form-check-label">Aging Report</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="51">
+                                        <label class="form-check-label">Balance Sheet</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="52">
+                                        <label class="form-check-label">Receiveable and Payable</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="53">
+                                        <label class="form-check-label">Profit and Loss</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>Inventory Reports</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="54">
+                                        <label class="form-check-label">Gst Register</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="55">
+                                        <label class="form-check-label">Stock Ledger</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="56">
+                                        <label class="form-check-label">Stock Ledger Final Weight</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="57">
+                                        <label class="form-check-label">Stock Ledger without issue</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="58">
+                                        <label class="form-check-label">Stock in hand Detail</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="59">
+                                        <label class="form-check-label">Stock in hand</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="60">
+                                        <label class="form-check-label">Stock in hand Value</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="61">
+                                        <label class="form-check-label">Stock in hand Avg Rate</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="62">
+                                        <label class="form-check-label">Stock in hand Avg - Final</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="63">
+                                        <label class="form-check-label">Stock in hand by Group</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="64">
+                                        <label class="form-check-label">Stock in hand by Store</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="65">
+                                        <label class="form-check-label">Product Reports</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="66">
+                                        <label class="form-check-label">Party Reports</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="67">
+                                        <label class="form-check-label">Purchase Ledger Invoice Voice</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="68">
+                                        <label class="form-check-label">Purchase Order Report</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="69">
+                                        <label class="form-check-label">Sale Order Report</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="70">
+                                        <label class="form-check-label">Sale Ledger Invoice Wise</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="71">
+                                        <label class="form-check-label">Product List</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="72">
+                                        <label class="form-check-label">Product List Group Wise</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="73">
+                                        <label class="form-check-label">Customer Over Limit</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>Gate Pass</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="74">
+                                        <label class="form-check-label">Product Coding for Gate pass</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="75">
+                                        <label class="form-check-label">Employee Coding</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="ACC" id="ACC" value="76">
+                                        <label class="form-check-label">Gate pass Parties</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AOB" id="AOB" value="77">
+                                        <label class="form-check-label">Inward Gate pass Raw Material</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="78">
+                                        <label class="form-check-label">Inward Gate pass Mixed</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="79">
+                                        <label class="form-check-label">Outward Gate pass Finished</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="80">
+                                        <label class="form-check-label">Outward Gate pass Mixed</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="81">
+                                        <label class="form-check-label">Returnable Outward</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="82">
+                                        <label class="form-check-label">Returnable Inward</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="83">
+                                        <label class="form-check-label">Employee Gate pass</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="84">
+                                        <label class="form-check-label">Guest Gate pass</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CC" id="CC" value="85">
+                                        <label class="form-check-label">Gate Pass Reports</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label>System</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CU" id="CU" value="86">
+                                        <label class="form-check-label">Create User</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="UR" id="UR" value="87">
+                                        <label class="form-check-label">User Rights</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="AMD" id="AMD" value="88">
+                                        <label class="form-check-label">Accounts Master Deletion</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CTRLA" id="CTRLA" value="89">
+                                        <label class="form-check-label">Control Accounts</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="CTRLA" id="CTRLA" value="90">
+                                        <label class="form-check-label">Transfer Account</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <input type="button" id="btnsave" value="Save" class="btn btn-sm btn-success" onclick='SaveRole();' />
+                                    <input type="button" id="btnSearch" value="Search" class="btn btn-sm btn-primary" onclick='SearchRole();' />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    function SearchRole() {
+        if ($('#ddlTitle').val() == "0") {
+            alert("Please select user");
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: "/User/SearchRole",
+                data: { userid: $('#ddlTitle').val() },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        $.each(result, function (i, item) {
+                            $("input[value='" + item.Selected + "']").prop('checked', true);
+                        });
+                    }
+                    else {
+                        alert("No record found");
+                        window.location.reload();
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    }
+    function SaveRole() {
+        if ($('#ddlTitle').val() == "0") {
+            alert("Please select user");
+        }
+        else {
+            var detail = [];
+            $("input:checked").each(function () {
+                detail.push($(this).val());
+            });
+            var model = {
+                userid: $('#ddlTitle').val(),
+                detail: detail
+            };
+            $.ajax({
+                url: "/User/SaveUserRights",
+                type: "POST",
+                data: JSON.stringify({ model: model }),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success) {
+                        alert(response.responseText);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    }
+    //$("#btnselectall").click(function () {
+    //    $('.checkbox').each(function () {
+    //        this.checked = true;
+    //    });
+    //});
+    //$("#btnclearall").click(function () {
+    //    $('.checkbox').each(function () {
+    //        this.checked = false;
+    //    });
+    //});
+    $("#btnselectall").click(function () {
+        $('.form-check-input').each(function () {
+            this.checked = true;
+        });
+    });
+    $("#btnclearall").click(function () {
+        $('.form-check-input').each(function () {
+            this.checked = false;
+        });
+    });
+</script>

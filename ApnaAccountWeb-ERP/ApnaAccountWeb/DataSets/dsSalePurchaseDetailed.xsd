@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsSalePurchaseDetailed" targetNamespace="http://tempuri.org/dsSalePurchaseDetailed.xsd" xmlns:mstns="http://tempuri.org/dsSalePurchaseDetailed.xsd" xmlns="http://tempuri.org/dsSalePurchaseDetailed.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection ConnectionStringObject="Data Source=DESKTOP-5H1OH9M\WEBSERVER;Initial Catalog=ApnaAccount_IK;Integrated Security=True" IsAppSettingsProperty="false" Modifier="Assembly" Name="desktop-5h1oh9m\webserver.ApnaAccount_IK.dbo1" ParameterPrefix="@" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsSalePurchaseDetailed" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsSalePurchaseDetailed" msprop:Generator_UserDSName="dsSalePurchaseDetailed">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ado" msprop:Generator_TableClassName="adoDataTable" msprop:Generator_TableVarName="tableado" msprop:Generator_TablePropName="ado" msprop:Generator_RowDeletingName="adoRowDeleting" msprop:Generator_RowChangingName="adoRowChanging" msprop:Generator_RowEvHandlerName="adoRowChangeEventHandler" msprop:Generator_RowDeletedName="adoRowDeleted" msprop:Generator_UserTableName="ado" msprop:Generator_RowChangedName="adoRowChanged" msprop:Generator_RowEvArgName="adoRowChangeEvent" msprop:Generator_RowClassName="adoRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="InvID" msprop:Generator_ColumnVarNameInTable="columnInvID" msprop:Generator_ColumnPropNameInRow="InvID" msprop:Generator_ColumnPropNameInTable="InvIDColumn" msprop:Generator_UserColumnName="InvID" type="xs:string" minOccurs="0" />
+              <xs:element name="InvDate" msprop:Generator_ColumnVarNameInTable="columnInvDate" msprop:Generator_ColumnPropNameInRow="InvDate" msprop:Generator_ColumnPropNameInTable="InvDateColumn" msprop:Generator_UserColumnName="InvDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" msprop:Generator_UserColumnName="AccountId" type="xs:string" minOccurs="0" />
+              <xs:element name="AccountTitle" msprop:Generator_ColumnVarNameInTable="columnAccountTitle" msprop:Generator_ColumnPropNameInRow="AccountTitle" msprop:Generator_ColumnPropNameInTable="AccountTitleColumn" msprop:Generator_UserColumnName="AccountTitle" type="xs:string" minOccurs="0" />
+              <xs:element name="ProductID" msprop:Generator_ColumnVarNameInTable="columnProductID" msprop:Generator_ColumnPropNameInRow="ProductID" msprop:Generator_ColumnPropNameInTable="ProductIDColumn" msprop:Generator_UserColumnName="ProductID" type="xs:int" minOccurs="0" />
+              <xs:element name="ProductTitle" msprop:Generator_ColumnVarNameInTable="columnProductTitle" msprop:Generator_ColumnPropNameInRow="ProductTitle" msprop:Generator_ColumnPropNameInTable="ProductTitleColumn" msprop:Generator_UserColumnName="ProductTitle" type="xs:string" minOccurs="0" />
+              <xs:element name="SalesTaxAmt" msprop:Generator_ColumnVarNameInTable="columnSalesTaxAmt" msprop:Generator_ColumnPropNameInRow="SalesTaxAmt" msprop:Generator_ColumnPropNameInTable="SalesTaxAmtColumn" msprop:Generator_UserColumnName="SalesTaxAmt" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Freight" msprop:Generator_ColumnVarNameInTable="columnFreight" msprop:Generator_ColumnPropNameInRow="Freight" msprop:Generator_ColumnPropNameInTable="FreightColumn" msprop:Generator_UserColumnName="Freight" type="xs:decimal" minOccurs="0" />
+              <xs:element name="MktComete" msprop:Generator_ColumnVarNameInTable="columnMktComete" msprop:Generator_ColumnPropNameInRow="MktComete" msprop:Generator_ColumnPropNameInTable="MktCometeColumn" msprop:Generator_UserColumnName="MktComete" type="xs:decimal" minOccurs="0" />
+              <xs:element name="LabourAmount" msprop:Generator_ColumnVarNameInTable="columnLabourAmount" msprop:Generator_ColumnPropNameInRow="LabourAmount" msprop:Generator_ColumnPropNameInTable="LabourAmountColumn" msprop:Generator_UserColumnName="LabourAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="BrokeryAmount" msprop:Generator_ColumnVarNameInTable="columnBrokeryAmount" msprop:Generator_ColumnPropNameInRow="BrokeryAmount" msprop:Generator_ColumnPropNameInTable="BrokeryAmountColumn" msprop:Generator_UserColumnName="BrokeryAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="BagAmount" msprop:Generator_ColumnVarNameInTable="columnBagAmount" msprop:Generator_ColumnPropNameInRow="BagAmount" msprop:Generator_ColumnPropNameInTable="BagAmountColumn" msprop:Generator_UserColumnName="BagAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="QtyDr" msprop:Generator_ColumnVarNameInTable="columnQtyDr" msprop:Generator_ColumnPropNameInRow="QtyDr" msprop:Generator_ColumnPropNameInTable="QtyDrColumn" msprop:Generator_UserColumnName="QtyDr" type="xs:decimal" minOccurs="0" />
+              <xs:element name="WtDr" msprop:Generator_ColumnVarNameInTable="columnWtDr" msprop:Generator_ColumnPropNameInRow="WtDr" msprop:Generator_ColumnPropNameInTable="WtDrColumn" msprop:Generator_UserColumnName="WtDr" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Rate" msprop:Generator_ColumnVarNameInTable="columnRate" msprop:Generator_ColumnPropNameInRow="Rate" msprop:Generator_ColumnPropNameInTable="RateColumn" msprop:Generator_UserColumnName="Rate" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Amount" msprop:Generator_ColumnVarNameInTable="columnAmount" msprop:Generator_ColumnPropNameInRow="Amount" msprop:Generator_ColumnPropNameInTable="AmountColumn" msprop:Generator_UserColumnName="Amount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Disc" msprop:Generator_ColumnVarNameInTable="columnDisc" msprop:Generator_ColumnPropNameInRow="Disc" msprop:Generator_ColumnPropNameInTable="DiscColumn" msprop:Generator_UserColumnName="Disc" type="xs:decimal" minOccurs="0" />
+              <xs:element name="NetAmount" msprop:Generator_ColumnVarNameInTable="columnNetAmount" msprop:Generator_ColumnPropNameInRow="NetAmount" msprop:Generator_ColumnPropNameInTable="NetAmountColumn" msprop:Generator_UserColumnName="NetAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="groupby1" msprop:Generator_ColumnVarNameInTable="columngroupby1" msprop:Generator_ColumnPropNameInRow="groupby1" msprop:Generator_ColumnPropNameInTable="groupby1Column" msprop:Generator_UserColumnName="groupby1" type="xs:string" minOccurs="0" />
+              <xs:element name="GateNo" msprop:Generator_ColumnVarNameInTable="columnGateNo" msprop:Generator_ColumnPropNameInRow="GateNo" msprop:Generator_ColumnPropNameInTable="GateNoColumn" msprop:Generator_UserColumnName="GateNo" type="xs:string" minOccurs="0" />
+              <xs:element name="VehNo" msprop:Generator_ColumnVarNameInTable="columnVehNo" msprop:Generator_ColumnPropNameInRow="VehNo" msprop:Generator_ColumnPropNameInTable="VehNoColumn" msprop:Generator_UserColumnName="VehNo" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

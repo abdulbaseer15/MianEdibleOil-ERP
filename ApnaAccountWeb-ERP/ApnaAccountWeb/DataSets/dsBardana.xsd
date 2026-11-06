@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsBardana" targetNamespace="http://tempuri.org/dsBardana.xsd" xmlns:mstns="http://tempuri.org/dsBardana.xsd" xmlns="http://tempuri.org/dsBardana.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsBardana" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsBardana" msprop:Generator_UserDSName="dsBardana">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dtBardana" msprop:Generator_TableClassName="dtBardanaDataTable" msprop:Generator_TableVarName="tabledtBardana" msprop:Generator_TablePropName="dtBardana" msprop:Generator_RowDeletingName="dtBardanaRowDeleting" msprop:Generator_RowChangingName="dtBardanaRowChanging" msprop:Generator_RowEvHandlerName="dtBardanaRowChangeEventHandler" msprop:Generator_RowDeletedName="dtBardanaRowDeleted" msprop:Generator_UserTableName="dtBardana" msprop:Generator_RowChangedName="dtBardanaRowChanged" msprop:Generator_RowEvArgName="dtBardanaRowChangeEvent" msprop:Generator_RowClassName="dtBardanaRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="BardanaID" msprop:Generator_ColumnVarNameInTable="columnBardanaID" msprop:Generator_ColumnPropNameInRow="BardanaID" msprop:Generator_ColumnPropNameInTable="BardanaIDColumn" msprop:Generator_UserColumnName="BardanaID" type="xs:string" minOccurs="0" />
+              <xs:element name="Bdate" msprop:Generator_ColumnVarNameInTable="columnBdate" msprop:Generator_ColumnPropNameInRow="Bdate" msprop:Generator_ColumnPropNameInTable="BdateColumn" msprop:Generator_UserColumnName="Bdate" type="xs:string" minOccurs="0" />
+              <xs:element name="AccountID" msprop:Generator_ColumnVarNameInTable="columnAccountID" msprop:Generator_ColumnPropNameInRow="AccountID" msprop:Generator_ColumnPropNameInTable="AccountIDColumn" msprop:Generator_UserColumnName="AccountID" type="xs:string" minOccurs="0" />
+              <xs:element name="Party" msprop:Generator_ColumnVarNameInTable="columnParty" msprop:Generator_ColumnPropNameInRow="Party" msprop:Generator_ColumnPropNameInTable="PartyColumn" msprop:Generator_UserColumnName="Party" type="xs:string" minOccurs="0" />
+              <xs:element name="BTypeID" msprop:Generator_ColumnVarNameInTable="columnBTypeID" msprop:Generator_ColumnPropNameInRow="BTypeID" msprop:Generator_ColumnPropNameInTable="BTypeIDColumn" msprop:Generator_UserColumnName="BTypeID" type="xs:string" minOccurs="0" />
+              <xs:element name="BType" msprop:Generator_ColumnVarNameInTable="columnBType" msprop:Generator_ColumnPropNameInRow="BType" msprop:Generator_ColumnPropNameInTable="BTypeColumn" msprop:Generator_UserColumnName="BType" type="xs:string" minOccurs="0" />
+              <xs:element name="QtyDr" msprop:Generator_ColumnVarNameInTable="columnQtyDr" msprop:Generator_ColumnPropNameInRow="QtyDr" msprop:Generator_ColumnPropNameInTable="QtyDrColumn" msprop:Generator_UserColumnName="QtyDr" type="xs:string" minOccurs="0" />
+              <xs:element name="QtyCr" msprop:Generator_ColumnVarNameInTable="columnQtyCr" msprop:Generator_ColumnPropNameInRow="QtyCr" msprop:Generator_ColumnPropNameInTable="QtyCrColumn" msprop:Generator_UserColumnName="QtyCr" type="xs:string" minOccurs="0" />
+              <xs:element name="WtDr" msprop:Generator_ColumnVarNameInTable="columnWtDr" msprop:Generator_ColumnPropNameInRow="WtDr" msprop:Generator_ColumnPropNameInTable="WtDrColumn" msprop:Generator_UserColumnName="WtDr" type="xs:string" minOccurs="0" />
+              <xs:element name="WtCr" msprop:Generator_ColumnVarNameInTable="columnWtCr" msprop:Generator_ColumnPropNameInRow="WtCr" msprop:Generator_ColumnPropNameInTable="WtCrColumn" msprop:Generator_UserColumnName="WtCr" type="xs:string" minOccurs="0" />
+              <xs:element name="Remarks" msprop:Generator_ColumnVarNameInTable="columnRemarks" msprop:Generator_ColumnPropNameInRow="Remarks" msprop:Generator_ColumnPropNameInTable="RemarksColumn" msprop:Generator_UserColumnName="Remarks" type="xs:string" minOccurs="0" />
+              <xs:element name="GateNo" msprop:Generator_ColumnVarNameInTable="columnGateNo" msprop:Generator_ColumnPropNameInRow="GateNo" msprop:Generator_ColumnPropNameInTable="GateNoColumn" msprop:Generator_UserColumnName="GateNo" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

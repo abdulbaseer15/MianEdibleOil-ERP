@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsCoa" targetNamespace="http://tempuri.org/dsCoa.xsd" xmlns:mstns="http://tempuri.org/dsCoa.xsd" xmlns="http://tempuri.org/dsCoa.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsCoa" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsCoa" msprop:Generator_UserDSName="dsCoa">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dtCoa" msprop:Generator_TableClassName="dtCoaDataTable" msprop:Generator_TableVarName="tabledtCoa" msprop:Generator_TablePropName="dtCoa" msprop:Generator_RowDeletingName="dtCoaRowDeleting" msprop:Generator_RowChangingName="dtCoaRowChanging" msprop:Generator_RowEvHandlerName="dtCoaRowChangeEventHandler" msprop:Generator_RowDeletedName="dtCoaRowDeleted" msprop:Generator_UserTableName="dtCoa" msprop:Generator_RowChangedName="dtCoaRowChanged" msprop:Generator_RowEvArgName="dtCoaRowChangeEvent" msprop:Generator_RowClassName="dtCoaRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" msprop:Generator_UserColumnName="AccountId" type="xs:string" minOccurs="0" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" type="xs:string" minOccurs="0" />
+              <xs:element name="Nature" msprop:Generator_ColumnVarNameInTable="columnNature" msprop:Generator_ColumnPropNameInRow="Nature" msprop:Generator_ColumnPropNameInTable="NatureColumn" msprop:Generator_UserColumnName="Nature" type="xs:string" minOccurs="0" />
+              <xs:element name="AccType" msprop:Generator_ColumnVarNameInTable="columnAccType" msprop:Generator_ColumnPropNameInRow="AccType" msprop:Generator_ColumnPropNameInTable="AccTypeColumn" msprop:Generator_UserColumnName="AccType" type="xs:string" minOccurs="0" />
+              <xs:element name="LevelKey" msprop:Generator_ColumnVarNameInTable="columnLevelKey" msprop:Generator_ColumnPropNameInRow="LevelKey" msprop:Generator_ColumnPropNameInTable="LevelKeyColumn" msprop:Generator_UserColumnName="LevelKey" type="xs:short" minOccurs="0" />
+              <xs:element name="Parent" msprop:Generator_ColumnVarNameInTable="columnParent" msprop:Generator_ColumnPropNameInRow="Parent" msprop:Generator_ColumnPropNameInTable="ParentColumn" msprop:Generator_UserColumnName="Parent" type="xs:string" minOccurs="0" />
+              <xs:element name="ParentId" msprop:Generator_ColumnVarNameInTable="columnParentId" msprop:Generator_ColumnPropNameInRow="ParentId" msprop:Generator_ColumnPropNameInTable="ParentIdColumn" msprop:Generator_UserColumnName="ParentId" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

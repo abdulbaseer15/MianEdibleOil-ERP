@@ -1,0 +1,160 @@
+﻿@model ApnaAccountWeb.Models.PartiesGatePass
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Create Gate Pass Parties</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="RegisterGPParties" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <table class="table table-bordered data-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>Name<input type="text" class="span11" id="Title" required name="Title" /></td>
+                                            <td>Father Name<input type="text" class="span11" id="So" required name="So" /></td>
+                                            <td>Id Card<input type="text" class="span11" id="IDcard" required name="IDcard" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Designation<input type="text" class="span11" id="Designation" required name="Designation" /></td>
+                                            <td>Mobile No<input type="text" class="span11" id="MobNo" required name="MobNo" /></td>
+                                            <td>Hom Mob No<input type="text" class="span11" id="HomeMobNo" required name="HomeMobNo" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address<input type="text" class="span11" id="Remarks" required name="Remarks" /></td>
+                                            <td>Joining Date<input type="date" class="span11" id="JDate" required name="JDate" /></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-actions">
+                                    <a href="@Url.Action("ViewGPParties", "GPParties")" style="padding-right:2em;">View GatePass Parties</a>
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Create Gate Pass Parties</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="RegisterGPParties" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control form-control-sm" id="Title" required name="Title" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Father Name</label>
+                                        <input type="text" class="form-control form-control-sm" id="So" required name="So" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Id Card</label>
+                                        <input type="text" class="form-control form-control-sm" id="IDcard" required name="IDcard" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Designation</label>
+                                        <input type="text" class="form-control form-control-sm" id="Designation" required name="Designation" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Mobile No</label>
+                                        <input type="text" class="form-control form-control-sm" id="MobNo" required name="MobNo" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Hom Mob No</label>
+                                        <input type="text" class="form-control form-control-sm" id="HomeMobNo" required name="HomeMobNo" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Joining Date</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="JDate" name="JDate" />
+                                            <div class="input-group-append" id="JDateIcon" data-target="#JDate" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control form-control-sm" id="Remarks" required name="Remarks" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-2">
+                                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-10">
+                                    <div class="text-right">
+                                        <a class="btn btn-sm btn-default" href="@Url.Action("ViewGPParties", "GPParties")">View GatePass Parties</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script src="~/Content/js/jquery.min.js"></script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#JDate').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#JDateIcon').click(function () {
+                $('#JDate').datepicker('show');
+            });
+        });
+    </script>
+}   

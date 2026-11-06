@@ -1,0 +1,1047 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    var isCheck = 0;
+    var visibleArrayLength = 0;
+    var counter = 0;
+    var arrVisible = new Array();
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $('#txtAccCode').focus();
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        //$('#dtpDatefrom').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDatefrom').datepicker('setDate', 'now');
+        //$('#dtpDateto').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#dtpDateto').datepicker('setDate', 'now');
+        $('#ddlTitle').change(function () {
+            var selectedVal = $('#ddlTitle option:selected').attr('value');
+            $('#txtAccCode').val(selectedVal);
+            var e = document.getElementById("ddlTitle");
+            var title = e.options[e.selectedIndex].text;
+            $('#title').val(title);
+        });
+        $('#txtAccCode').keyup(function (e) {
+            if (e.which == 27) {
+                $('#txtDiscount').focus();
+            }
+        });
+        $('#txtAccCode').keypress(function (e) {
+            debugger;
+            if (e.which == 13) {
+                $('#myModal').modal('show');
+                $('#myInput').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    debugger;
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        debugger;
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup tr').click(function () {
+                    debugger;
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtAccCode').val($tds[0].innerText);
+                    $('#ddlTitle').val($tds[0].innerText);
+                    //$('#txtrate').val(parseFloat($tds[2].innerText));
+                    //$('#txtunit').val($tds[3].innerText);
+                    //$('#piecesperbox').val($tds[4].innerText);
+                    //$('#ddltitlesupbardana').focus();
+                    $('#myModal').modal('hide');
+                    $('#myInput').val("");
+                    $('#txtProAccCode').focus();
+                });
+            }
+        });
+        $("#txtAccCode").focusout(function () {
+            debugger;
+            if ($('#txtAccCode').val() != "" || $('#txtAccCode').val() != null) {
+                var code = $('#txtAccCode').val();
+                $('#tblPopup tbody tr').each(function () {
+                    debugger;
+                    var $row = $(this), $tds = $row.find("td");
+                    if ($tds[0].innerText == code) {
+                        $('#txtAccCode').val($tds[0].innerText);
+                        $('#ddlTitle').val($tds[0].innerText);
+                        $('#txtProAccCode').focus();
+                        $('#myModal').modal('hide');
+                        $('#myInput').val("");
+                        return;
+                    }
+                });
+            }
+        });
+        $('#ddlTitleproduct').change(function () {
+            var selectedVal = $('#ddlTitleproduct option:selected').attr('value');
+            $('#txtProAccCode').val(selectedVal);
+            var e = document.getElementById("ddlTitleproduct");
+            var title = e.options[e.selectedIndex].text;
+            $('#title').val(title);
+        });
+        $('#txtProAccCode').keyup(function (e) {
+            if (e.which == 27) {
+                $('#txtDiscount').focus();
+            }
+        });
+        $('#txtProAccCode').keypress(function (e) {
+            debugger;
+            if (e.which == 13) {
+                $('#myModalpro').modal('show');
+                $('#myInput3').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    debugger;
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        debugger;
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup3 tr').click(function () {
+                    debugger;
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtProAccCode').val($tds[0].innerText);
+                    $('#ddlTitleproduct').val($tds[0].innerText);
+                    //$('#txtrate').val(parseFloat($tds[2].innerText));
+                    //$('#txtunit').val($tds[3].innerText);
+                    //$('#piecesperbox').val($tds[4].innerText);
+                    //$('#ddltitlesupbardana').focus();
+                    $('#myModalpro').modal('hide');
+                    $('#myInput3').val("");
+                    $('#txtDebit').focus();
+                });
+            }
+        });
+        $("#txtProAccCode").focusout(function () {
+            debugger;
+            if ($('#txtProAccCode').val() != "" || $('#txtProAccCode').val() != null) {
+                var code = $('#txtProAccCode').val();
+                $('#tblPopup3 tbody tr').each(function () {
+                    debugger;
+                    var $row = $(this), $tds = $row.find("td");
+                    if ($tds[0].innerText == code) {
+                        $('#txtProAccCode').val($tds[0].innerText);
+                        $('#ddlTitleproduct').val($tds[0].innerText);
+                        $('#txtDebit').focus();
+                        $('#myModalpro').modal('hide');
+                        $('#myInput3').val("");
+                        return;
+                    }
+                });
+            }
+        });
+    });
+    function ViewClicked() {
+        var excel = "No";
+        var dtpDateto = $('#dtpDateto').val();
+        var dtpDatefrom = $('#dtpDatefrom').val();
+        var txtAccCode = $('#txtAccCode').val();
+        txtAccCode = txtAccCode.replace(/\s/g, '');
+        //var title = $('#title').val();
+        var product = $('#ddlTitleproduct').val();
+        var type = $('#ddlTitletype').val();
+        var group = $('#ddlTitlegroup').val();
+        var e = document.getElementById("ddlTitle");
+        var title = e.options[e.selectedIndex].text;
+        var rtype = $('#rtype').val();
+        var string = "rtype=" + rtype + "&dtpDatefrom=" + dtpDatefrom + "&dtpDateto=" + dtpDateto + "&txtAccCode=" + txtAccCode + "&excel=" + excel + "&title=" + title + "&product=" + product + "&type=" + type + "&group=" + group + "";
+        var url = '@(Url.Action("Report", "IReports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+    function ExportExcel() {
+        var excel = "Yes";
+        var dtpDateto = $('#dtpDateto').val();
+        var dtpDatefrom = $('#dtpDatefrom').val();
+        var txtAccCode = $('#txtAccCode').val();
+        txtAccCode = txtAccCode.replace(/\s/g, '');
+        //var title = $('#title').val();
+        var product = $('#ddlTitleproduct').val();
+        var type = $('#ddlTitletype').val();
+        var group = $('#ddlTitlegroup').val();
+        var e = document.getElementById("ddlTitle");
+        var title = e.options[e.selectedIndex].text;
+        var rtype = $('#rtype').val();
+       var string = "rtype=" + rtype + "&dtpDatefrom=" + dtpDatefrom + "&dtpDateto=" + dtpDateto + "&txtAccCode=" + txtAccCode + "&excel=" + excel + "&title=" + title + "&product=" + product + "&type=" + type + "&group=" + group + "";
+        var url = '@(Url.Action("Report", "IReports", null, Request.Url.Scheme))?' + string
+        window.open(url, "_blank");
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                </div>
+                <div class="span5">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Sale Purchase Detailed Report</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <input type="hidden" id="rtype" name="rtype" value="rptSalePurchaseDetailed" />
+                                <input type="hidden" id="title" name="title" />
+                                <div class="control-group">
+                                    <label class="control-label">Code:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" id="txtAccCode" name="txtAccCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Title:</label>
+                                    <div class="controls">
+                                        @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                AccCodelist.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Acc.AccountId,
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitle", Name = "ddlTitle", @class = "span11 ddl" })
+                                    </div>
+                                </div>
+                                @*New Added*@
+                                <div class="control-group">
+                                    <label class="control-label">Product Code:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" id="txtProAccCode" name="txtProAccCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Product:</label>
+                                    <div class="controls">
+                                        @{List<SelectListItem> AccCodelistproduct = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetails2)
+                                            {
+                                                AccCodelistproduct.Add(new SelectListItem
+                                                {
+                                                    Text = Convert.ToString(Acc.Title),
+                                                    Value = Convert.ToString(Acc.Code),
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelistproduct, "-- Select Product --", new { id = "ddlTitleproduct", Name = "ddlTitleproduct", @class = "span11 ddl" })
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Type:</label>
+                                    <div class="controls">
+                                        @{List<SelectListItem> AccCodelisttype = new List<SelectListItem>();
+                                            AccCodelisttype.Add(new SelectListItem
+                                            {
+                                                Text = "Purchase",
+                                                Value = "Purchase",
+                                            });
+                                            AccCodelisttype.Add(new SelectListItem
+                                            {
+                                                Text = "PurchaseReturn",
+                                                Value = "PurchaseReturn",
+                                            });
+                                            AccCodelisttype.Add(new SelectListItem
+                                            {
+                                                Text = "Sale",
+                                                Value = "Sale",
+                                            });
+                                            AccCodelisttype.Add(new SelectListItem
+                                            {
+                                                Text = "SaleReturn",
+                                                Value = "SaleReturn",
+                                            });
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelisttype, "-- Select Account --", new { id = "ddlTitletype", Name = "ddlTitletype", @class = "span11 ddl" })
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Group:</label>
+                                    <div class="controls">
+                                        @{List<SelectListItem> AccCodelistgroup = new List<SelectListItem>();
+                                            AccCodelistgroup.Add(new SelectListItem
+                                            {
+                                                Text = "Party",
+                                                Value = "Party",
+                                            });
+                                            AccCodelistgroup.Add(new SelectListItem
+                                            {
+                                                Text = "Product",
+                                                Value = "Product",
+                                            });
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelistgroup, "-- Select Account --", new { id = "ddlTitlegroup", Name = "ddlTitlegroup", @class = "span11 ddl" })
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">From:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDatefrom" name="dtpDatefrom" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">To:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11 datepicker" id="dtpDateto" name="dtpDateto" />
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <input type="button" value="View" id="btnSearch" class="btn btn-success" onclick='ViewClicked();' />
+                                    <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-success" style="background-color: #062f70" onclick='ExportExcel();'>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Sale Purchase Detailed Report</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="Report" id="frmSave" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <input type="hidden" id="rtype" name="rtype" value="rptSalePurchaseDetailed" />
+                            <input type="hidden" id="title" name="title" />
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Code:</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtAccCode" name="txtAccCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Title:</label>
+                                        @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetails)
+                                            {
+                                                AccCodelist.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Acc.AccountId,
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitle", Name = "ddlTitle", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Product Code:</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtProAccCode" name="txtAccCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Product:</label>
+                                        @{List<SelectListItem> AccCodelistproduct = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetails2)
+                                            {
+                                                AccCodelistproduct.Add(new SelectListItem
+                                                {
+                                                    Text = Convert.ToString(Acc.Title),
+                                                    Value = Convert.ToString(Acc.Code),
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelistproduct, "-- Select Product --", new { id = "ddlTitleproduct", Name = "ddlTitleproduct", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Type:</label>
+                                        @{List<SelectListItem> AccCodelisttype = new List<SelectListItem>();
+                                            AccCodelisttype.Add(new SelectListItem
+                                            {
+                                                Text = "Purchase",
+                                                Value = "Purchase",
+                                            });
+                                            AccCodelisttype.Add(new SelectListItem
+                                            {
+                                                Text = "PurchaseReturn",
+                                                Value = "PurchaseReturn",
+                                            });
+                                            AccCodelisttype.Add(new SelectListItem
+                                            {
+                                                Text = "Sale",
+                                                Value = "Sale",
+                                            });
+                                            AccCodelisttype.Add(new SelectListItem
+                                            {
+                                                Text = "SaleReturn",
+                                                Value = "SaleReturn",
+                                            });
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelisttype, "-- Select Account --", new { id = "ddlTitletype", Name = "ddlTitletype", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Group:</label>
+                                        @{List<SelectListItem> AccCodelistgroup = new List<SelectListItem>();
+                                            AccCodelistgroup.Add(new SelectListItem
+                                            {
+                                                Text = "Party",
+                                                Value = "Party",
+                                            });
+                                            AccCodelistgroup.Add(new SelectListItem
+                                            {
+                                                Text = "Product",
+                                                Value = "Product",
+                                            });
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelistgroup, "-- Select Account --", new { id = "ddlTitlegroup", Name = "ddlTitlegroup", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>From:</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDatefrom" name="dtpDatefrom" />
+                                            <div class="input-group-append" id="dtpDatefromIcon" data-target="#dtpDatefrom" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>To:</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="dtpDateto" name="dtpDateto" />
+                                            <div class="input-group-append" id="dtpDatetoIcon" data-target="#dtpDateto" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6 col-sm-6 col-2">
+                                    <input type="button" value="View" id="btnSearch" class="btn btn-sm btn-success" onclick='ViewClicked();' />
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-10">
+                                    <div class="text-right">
+                                        <input type="button" id="btnPrint1" value="Export into Excel" class="btn btn-sm btn-primary" onclick='ExportExcel();'>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@*<div id="myModal" class="modal hide">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h3>Search Account</h3>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="widget-box">
+                            <div class="widget-title">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <h5>Accounts List</h5>
+                                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for title.." style="float:right;">
+                            </div>
+                            <div class="widget-content nopadding">
+                                <table id="tblPopup" class="table table-bordered data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>AccountCode</th>
+                                            <th>Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var Acc in ViewBag.AccCodeDetails)
+                                        {
+                                            <tr>
+                                                <td>@Acc.AccountId</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+@*Code Field Modal*@
+<div id="myModal" class="modal hide fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search Account</h5>
+                <button data-dismiss="modal" class="close" type="button">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <b>Accounts List</b>
+                                <input type="text" class="form-control form-control-sm" id="myInput" onkeyup="myFunction()" placeholder="Search for product.." style="float:right;">
+                            </div>
+                            <div class="card-body">
+                                <table id="tblPopup" class="table table-bordered" tabindex="-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Account Code</th>
+                                            <th>Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var Acc in ViewBag.AccCodeDetails)
+                                        {
+                                            <tr>
+                                                <td>@Acc.AccountId</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*Code Field Modal End*@
+
+@*<div id="myModalpro" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search product</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Products List</h5>
+                            <input type="text" id="myInput3" onkeyup="myFunctioninv()" placeholder="Search for product.." style="float:right;">
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopup3" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>Product Code</th>
+                                        <th>Product Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var Acc in ViewBag.AccCodeDetails2)
+                                    {
+                                        <tr>
+                                            <td>@Acc.Code</td>
+                                            <td>@Acc.Title</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@*Code Field Modal*@
+<div id="myModalpro" class="modal hide fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search Product</h5>
+                <button data-dismiss="modal" class="close" type="button">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <b>Products List</b>
+                                <input type="text" class="form-control form-control-sm" id="myInput3" onkeyup="myFunctioninv()" placeholder="Search for product.." style="float:right;">
+                            </div>
+                            <div class="card-body">
+                                <table id="tblPopup3" class="table table-bordered" tabindex="-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Code</th>
+                                            <th>Product Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var Acc in ViewBag.AccCodeDetails2)
+                                        {
+                                            <tr>
+                                                <td>@Acc.Code</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*Code Field Modal End*@
+<script>
+    var searchRowNum = -1;
+    var searchRowNum1 = -1;
+    function forOrder1() {
+        debugger;
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+        var i = 0;
+        visibleArrayLength = arrVisible.length;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+        function highlightRow(gethighlight) {
+            debugger;
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+            if (visibleArrayLength == (trows.length) - 1) {
+                while (--t > -1) {
+                    trow = trows[t];
+                    if (gethighlight && trow.className === 'highlighted') { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+                        trow.className = 'normal';
+                    }
+                }
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+                    return;
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+        function movehighlight(way, e) {
+            debugger;
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            debugger;
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup').focus();
+                    //counter--;
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup').focus();
+                    //alert();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row2 = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row2.find("td");
+                                $('#txtAccCode').val($tds[0].innerText);
+                                var str = $('#txtAccCode').val();
+                                str = str.replace(/\s/g, '');
+                                $('#txtAccCode').val(str)
+                                $('#ddlTitle').val(str);
+                                $('#myModal').modal('hide');
+                                $('#myInput').val("");
+                                isCheck = 1;
+                                $('#txtDebit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup)
+                                $tds = row.find("td");
+                                $('#txtAccCode').val($tds[0].innerText);
+                                var str = $('#txtAccCode').val();
+                                str = str.replace(/\s/g, '');
+                                $('#txtAccCode').val(str)
+                                $('#ddlTitle').val(str);
+                                $('#ddlTitle').focus();
+                                $('#myModal').modal('hide');
+                                $('#myInput').val("");
+                                isCheck = 1;
+                                $('#txtDebit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        document.onkeydown = processkey;
+    }
+    function myFunction() {
+        debugger;
+        var myInput, filter, table, tr, td, i;
+        myInput = document.getElementById("myInput");
+        filter = myInput.value.toUpperCase();
+        table = document.getElementById("tblPopup");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    searchRowNum1 = i;
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        forOrder1();
+    }
+    function forOrder2() {
+        debugger;
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblPopup3').rows, t = trows.length, trow;
+        var i = 0;
+        visibleArrayLength = arrVisible.length;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+        function highlightRow(gethighlight) {
+            debugger;
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            if (counter == visibleArrayLength) {
+                trow = trows[arrVisible[counter - 1]];
+                trow.className = 'normal';
+                counter = 0;
+            }
+            if (visibleArrayLength == (trows.length) - 1) {
+                while (--t > -1) {
+                    trow = trows[t];
+                    if (gethighlight && trow.className === 'highlighted') { countrow = t; return t; }
+                    else if (!gethighlight && trow !== this) {
+                        trow.className = 'normal';
+                    }
+                }
+            }
+            else {
+                if (visibleArrayLength > 0 && counter <= visibleArrayLength) {
+                    if (counter > 0) {
+                        trow = trows[arrVisible[counter - 1]];
+                        trow.className = 'normal';
+                    }
+                    trow = trows[arrVisible[counter]];
+                    trow.className = 'highlighted';
+                    countrow = arrVisible[counter];
+                    counter++;
+                    searched = true;
+                    t = -1;
+                    return;
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+        function movehighlight(way, e) {
+            debugger;
+            if (visibleArrayLength == (trows.length) - 1) {
+                var idx = highlightRow(true), nextrow;
+            }
+            else {
+                var idx = null;
+            }
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            debugger;
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup3').focus();
+                    //counter--;
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup3').focus();
+                    //alert();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup3").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row1 = $("tr:eq(" + countrow + ")", tblPopup3)
+                                $tds = row1.find("td");
+                                $('#txtProAccCode').val($tds[0].innerText);
+                                var str = $('#txtProAccCode').val();
+                                str = str.replace(/\s/g, '');
+                                $('#txtProAccCode').val(str)
+                                $('#ddlTitleproduct').val(str);
+                                $('#myModalpro').modal('hide');
+                                $('#myInput3').val("");
+                                isCheck = 1;
+                                $('#txtDebit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup3)
+                                $tds = row.find("td");
+                                $('#txtProAccCode').val($tds[0].innerText);
+                                var str = $('#txtProAccCode').val();
+                                str = str.replace(/\s/g, '');
+                                $('#txtProAccCode').val(str)
+                                $('#ddlTitleproduct').val(str);
+                                $('#ddlTitleproduct').focus();
+                                $('#myModalpro').modal('hide');
+                                $('#myInput3').val("");
+                                isCheck = 1;
+                                $('#txtDebit').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function myFunctioninv() {
+        debugger;
+        var input3, filter, table, tr, td, i;
+        input3 = document.getElementById("myInput3");
+        filter = input3.value.toUpperCase();
+        table = document.getElementById("tblPopup3");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    searchRowNum = i;
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        forOrder2();
+    }
+</script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#dtpDatefrom').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDateto').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#dtpDatefromIcon').click(function () {
+                $('#dtpDatefrom').datepicker('show');
+            });
+            $('#dtpDatetoIcon').click(function () {
+                $('#dtpDateto').datepicker('show');
+            });
+            $('#dtpDatefrom').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDatefrom').datepicker('setDate', 'now');
+
+            $('#dtpDateto').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#dtpDateto').datepicker('setDate', 'now');
+        });
+    </script>
+}   

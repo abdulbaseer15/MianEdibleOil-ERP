@@ -1,0 +1,161 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLTELayout.cshtml";
+    //Line Chart Data
+    var LineLabels = new[] { "18th", "20th", "22nd", "24th", "26th", "28th", "30th" };
+    var LineDataThisWeek = new[] { 100, 120, 170, 167, 180, 177, 160 };
+    var LineDataLastWeek = new[] { 60, 80, 70, 67, 80, 77, 100 };
+    //Bar Chart Data
+    var BarLabels = new[] { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+    var BarDataThisYear = new[] { 500, 600, 700, 800, 900, 1000, 2000, 3000, 2500, 2700, 2500, 3000 };
+    var BarDataLastYear = new[] { 200, 300, 400, 500, 600, 700, 1700, 2700, 2000, 1800, 1500, 2000 };
+}
+<!-- Small boxes -->
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>150</h3>
+                <p>New Orders</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-bag"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <p>Bounce Rate</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>44</h3>
+                <p>User Registrations</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person-add"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>65</h3>
+                <p>Unique Visitors</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
+@*Graphs / Charts*@
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Online Store Visitors</h3>
+                    <a href="javascript:void(0);">View Report</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="d-flex flex-column">
+                        <span class="text-bold text-lg">820</span>
+                        <span>Visitors Over Time</span>
+                    </p>
+                    <p class="ml-auto d-flex flex-column text-right">
+                        <span class="text-success">
+                            <i class="fas fa-arrow-up"></i> 12.5%
+                        </span>
+                        <span class="text-muted">Since last week</span>
+                    </p>
+                </div>
+                <!-- /.d-flex -->
+                <div class="position-relative mb-4">
+                    <canvas id="visitors-chart" height="200"></canvas>
+                </div>
+                <div class="d-flex flex-row justify-content-end">
+                    <span class="mr-2">
+                        <i class="fas fa-square text-primary"></i> This Week
+                    </span>
+                    <span>
+                        <i class="fas fa-square text-gray"></i> Last Week
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Sales</h3>
+                    <a href="javascript:void(0);">View Report</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="d-flex flex-column">
+                        <span class="text-bold text-lg">$18,230.00</span>
+                        <span>Sales Over Time</span>
+                    </p>
+                    <p class="ml-auto d-flex flex-column text-right">
+                        <span class="text-success">
+                            <i class="fas fa-arrow-up"></i> 33.1%
+                        </span>
+                        <span class="text-muted">Since last month</span>
+                    </p>
+                </div>
+                <!-- /.d-flex -->
+                <div class="position-relative mb-4">
+                    <canvas id="sales-chart" height="200"></canvas>
+                </div>
+                <div class="d-flex flex-row justify-content-end">
+                    <span class="mr-2">
+                        <i class="fas fa-square text-primary"></i> This year
+                    </span>
+                    <span>
+                        <i class="fas fa-square text-gray"></i> Last year
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Embed Line data into JavaScript variables
+    var LineLabels = @Html.Raw(Json.Encode(LineLabels));
+    var LineDataThisWeek = @Html.Raw(Json.Encode(LineDataThisWeek));
+    var LineDataLastWeek = @Html.Raw(Json.Encode(LineDataLastWeek));
+
+    // Embed Bar Chart data into JavaScript variables
+    var BarLabels = @Html.Raw(Json.Encode(BarLabels));
+    var BarDataThisYear = @Html.Raw(Json.Encode(BarDataThisYear));
+    var BarDataLastYear = @Html.Raw(Json.Encode(BarDataLastYear));
+</script>
+@section Scripts {
+    <script src="~/Content/plugins/chart.js/Chart.min.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="~/Content/dist/js/pages/dashboard3.js"></script>
+}

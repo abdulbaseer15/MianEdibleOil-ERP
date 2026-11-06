@@ -1,0 +1,64 @@
+﻿             @model ApnaAccountWeb.Models.City 
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+@*<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+         <div class="span6">
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Create City</h5>
+          </div>
+          <div class="widget-content nopadding">
+             <form action="RegisterCity" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                 <div class="control-group">
+                <label class="control-label">Name:</label>
+                <div class="controls">
+                  <input type="text" id="CityName" name="CityName" required  placeholder="Name" />
+                </div>
+              </div>
+              <div class="form-actions">
+                 <a href="@Url.Action("ViewCity", "City")" style="padding-right:2em;">View Cities</a>
+                <button type="submit" class="btn btn-success">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><hr>
+  </div>
+</div>*@
+<div id="content">
+    <div class="row">
+        <div class="col-md-6">
+            <form action="RegisterCity" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Create City</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control form-control-sm" id="CityName" name="CityName" required placeholder="Name" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-2">
+                                <button type="submit" class="btn btn-sm btn-success">Save</button>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-10">
+                                <div class="text-right">
+                                    <a class="btn btn-sm btn-default" href="@Url.Action("ViewCity", "City")">View Cities</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+               

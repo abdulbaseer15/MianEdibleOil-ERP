@@ -1,0 +1,31 @@
+﻿.login-page {
+    height: calc(100vh - 44px);
+}
+.login-footer {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    color: darkgray;
+}
+.fixed-thead {
+    outline: 1px solid #DADADA;
+    background: white;
+    position: sticky;
+    top: -1px;
+    z-index: 10;
+}
+.fixed-tfoot {
+    outline: 1px solid #DADADA;
+    background: white;
+    position: sticky;
+    bottom: -1px;
+    z-index: 10;
+}
+.modal-body {
+    position: relative;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+    background-color: #f9f9f9;
+}

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ApnaAccountWeb.Models.Farm>
+<link rel="stylesheet" href="~/Content/css/uniform.css" />
+<link rel="stylesheet" href="~/Content/css/select2.css" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+       alert("@TempData["message"]");
+    </script>
+}
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+          <a href="@Url.Action("RegisterPartyFarm", "PartyFarm", new { @class = "btn btn-primary" })" style="float:right">Add Party Farm</a>
+        <div class="widget-box">
+          <div class="widget-title">
+             <span class="icon"><i class="icon-th"></i></span> 
+            <h5>Party Farms</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered data-table" @*style="width:100%"*@>
+              <thead>
+                <tr>
+                  <th>Serial</th>
+                  <th>Name</th>
+                  <th>Account Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                  @{
+                  int i=1;
+                  string dbcon = Convert.ToString(Session["con"]);
+            ApnaAccountWeb.ViewModels.DbConection obj = new ApnaAccountWeb.ViewModels.DbConection();
+            string condb = obj.Connect(dbcon);
+            ApnaAccountWeb.Models.ApnaAccountEntities db = new ApnaAccountWeb.Models.ApnaAccountEntities(condb);
+            var d = from farm in db.Farms
+                    join acc in db.Accounts on farm.AccountID equals acc.AccountId
+                    select new
+                    {
+Farmid=farm.FarmID,
+FarmName=farm.Title,
+AccountName=acc.Title
+                    };
+            }
+                @foreach (var item in d) {
+                    //var title = (from s in db.Accounts1 where s.AccountID == item.AccountID select s.Title).FirstOrDefault();
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.FarmName</td>
+                                            <td>@item.AccountName</td>
+                                            <td>@Html.ActionLink("Edit", "Edit", new { id = @item.Farmid }) |@Html.ActionLink("Delete", "Delete", new { id = @item.Farmid })</td>
+                                        </tr>
+                    i++;
+                                        }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="~/Content/js/jquery.min.js"></script> 
+<script src="~/Content/js/jquery.ui.custom.js"></script>
+<script src="~/Content/js/jquery.uniform.js"></script> 
+<script src="~/Content/js/select2.min.js"></script> 
+<script src="~/Content/js/jquery.dataTables.min.js"></script> 
+<script src="~/Content/js/maruti.js"></script>
+<script src="~/Content/js/maruti.tables.js"></script>

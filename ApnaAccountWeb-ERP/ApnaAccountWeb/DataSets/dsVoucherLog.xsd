@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsVoucherLog" targetNamespace="http://tempuri.org/dsVoucherLog.xsd" xmlns:mstns="http://tempuri.org/dsVoucherLog.xsd" xmlns="http://tempuri.org/dsVoucherLog.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsVoucherLog" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsVoucherLog" msprop:Generator_UserDSName="dsVoucherLog">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ado" msprop:Generator_TableClassName="adoDataTable" msprop:Generator_TableVarName="tableado" msprop:Generator_TablePropName="ado" msprop:Generator_RowDeletingName="adoRowDeleting" msprop:Generator_RowChangingName="adoRowChanging" msprop:Generator_RowEvHandlerName="adoRowChangeEventHandler" msprop:Generator_RowDeletedName="adoRowDeleted" msprop:Generator_UserTableName="ado" msprop:Generator_RowChangedName="adoRowChanged" msprop:Generator_RowEvArgName="adoRowChangeEvent" msprop:Generator_RowClassName="adoRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="vDate" msprop:Generator_ColumnVarNameInTable="columnvDate" msprop:Generator_ColumnPropNameInRow="vDate" msprop:Generator_ColumnPropNameInTable="vDateColumn" msprop:Generator_UserColumnName="vDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="voucherNo" msprop:Generator_ColumnVarNameInTable="columnvoucherNo" msprop:Generator_ColumnPropNameInRow="voucherNo" msprop:Generator_ColumnPropNameInTable="voucherNoColumn" msprop:Generator_UserColumnName="voucherNo" type="xs:string" minOccurs="0" />
+              <xs:element name="AccountID" msprop:Generator_ColumnVarNameInTable="columnAccountID" msprop:Generator_ColumnPropNameInRow="AccountID" msprop:Generator_ColumnPropNameInTable="AccountIDColumn" msprop:Generator_UserColumnName="AccountID" type="xs:string" minOccurs="0" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" type="xs:string" minOccurs="0" />
+              <xs:element name="narration" msprop:Generator_ColumnVarNameInTable="columnnarration" msprop:Generator_ColumnPropNameInRow="narration" msprop:Generator_ColumnPropNameInTable="narrationColumn" msprop:Generator_UserColumnName="narration" type="xs:string" minOccurs="0" />
+              <xs:element name="debit" msprop:Generator_ColumnVarNameInTable="columndebit" msprop:Generator_ColumnPropNameInRow="debit" msprop:Generator_ColumnPropNameInTable="debitColumn" msprop:Generator_UserColumnName="debit" type="xs:decimal" minOccurs="0" />
+              <xs:element name="credit" msprop:Generator_ColumnVarNameInTable="columncredit" msprop:Generator_ColumnPropNameInRow="credit" msprop:Generator_ColumnPropNameInTable="creditColumn" msprop:Generator_UserColumnName="credit" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TransAt" msprop:Generator_ColumnVarNameInTable="columnTransAt" msprop:Generator_ColumnPropNameInRow="TransAt" msprop:Generator_ColumnPropNameInTable="TransAtColumn" msprop:Generator_UserColumnName="TransAt" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="TransBy" msprop:Generator_ColumnVarNameInTable="columnTransBy" msprop:Generator_ColumnPropNameInRow="TransBy" msprop:Generator_ColumnPropNameInTable="TransByColumn" msprop:Generator_UserColumnName="TransBy" type="xs:string" minOccurs="0" />
+              <xs:element name="TransType" msprop:Generator_ColumnVarNameInTable="columnTransType" msprop:Generator_ColumnPropNameInRow="TransType" msprop:Generator_ColumnPropNameInTable="TransTypeColumn" msprop:Generator_UserColumnName="TransType" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

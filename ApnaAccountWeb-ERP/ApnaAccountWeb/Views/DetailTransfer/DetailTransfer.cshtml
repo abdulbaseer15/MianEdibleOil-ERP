@@ -1,0 +1,157 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+
+    tr.highlighted td {
+        color: white;
+        background-color: red;
+    }
+
+    tr.active {
+        background-color: red;
+    }
+</style>
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    var IsCheck = 0;
+    var visibleArrayLength = 0;
+    var counter = 0;
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+    });
+    function ClearClicked() {
+        window.location.href = '@Url.Action("DetailTransfer", "DetailTransfer")';
+    }
+    function SaveDVoucher() {
+        var supid = $('#txtsupCode').val();
+        var purid = $('#txtpurCode').val();
+            if ((supid == "" || supid == null) || (purid == "" || purid == null))
+            {
+                alert("Both Accounts can not be empty or null");
+                $('#txtpurCode').focus();
+            }
+        else{
+            var answer = confirm("Do You really want to Save this?");
+            if (answer) {
+                $('#btnSave').disable(true);
+                $.ajax({
+                    url: "/DetailTransfer/UpdateAccount",
+                    type: "POST",
+                    data: JSON.stringify({ From: supid, To: purid }),
+                    dataType: 'text json',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response != null && response.success) {
+                            alert(response.responseText);
+                            window.location.reload();
+                        }
+                        else {
+                            alert(response.responseText);
+                        }
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+                $('#btnSave').disable(false);
+                    }
+                }
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Head Transfer or Detail Accounts</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="#" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <table class="table table-bordered data-table">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2">From Code<input type="text" class="span11" id="txtsupCode" name="txtsupCode" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                            <td colspan="2">New Account Code<input type="text" class="span11" id="txtpurCode" name="txtpurCode" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-actions">
+                                    <input type="button" value="Update" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                                    <input type="button" id="btnClose" value="Clear" class="btn btn-warning" onclick='ClearClicked();'>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Head Transfer or Detail Accounts</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="#" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>From Code</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtsupCode" name="txtsupCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>New Account Code</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtpurCode" name="txtpurCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <input type="button" value="Update" id="btnSave" class="btn btn-sm btn-success" onclick='SaveDVoucher();'>
+                                    <input type="button" value="Clear" id="btnClose" class="btn btn-sm btn-warning" onclick='ClearClicked();'>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

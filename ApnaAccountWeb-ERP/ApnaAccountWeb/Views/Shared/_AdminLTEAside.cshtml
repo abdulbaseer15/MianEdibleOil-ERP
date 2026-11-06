@@ -1,0 +1,1480 @@
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="@Url.Action("Index", "Home")" class="brand-link">
+        <img src="~/Content/dist/img/AdminLTELogo.png" alt="apna account" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">APNA ACCOUNT</span>
+    </a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user (optional) -->
+        @*<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="~/Content/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">Alexander Pierce</a>
+                </div>
+            </div>*@
+        <!-- SidebarSearch Form -->
+        <div class="form-inline mt-2">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-compact text-sm" data-widget="treeview" role="menu" data-accordion="false">
+                @{
+                    string dbcon = Convert.ToString(Session["con"]);
+                    ApnaAccountWeb.ViewModels.DbConection obj = new ApnaAccountWeb.ViewModels.DbConection();
+                    string condb = obj.Connect(dbcon);
+                    ApnaAccountWeb.Models.ApnaAccountEntities db = new ApnaAccountWeb.Models.ApnaAccountEntities(condb);
+                    short userid = Convert.ToInt16(Session["userid"]);
+                    //int userid = Convert.ToInt32(Session["userid"]);
+                    List<int> list = new List<int>();
+                    var lstuserrole = db.UserRights.Where(x => x.Userid == userid);
+                    if (lstuserrole != null)
+                    {
+                        foreach (var item in lstuserrole)
+                        {
+                            list.Add(item.Selected);
+                        }
+                    }
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-circle-plus"></i>
+                            <p>
+                                Coding
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(1))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("AccountCoding", "Accounts")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Accounts Coding</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(2))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("OpeningBalances", "Accounts")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Accounts Opening Balances</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(3))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("CreditLimit", "Accounts")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Client Credit Limit</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(4))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("AccountCoding", "PartyRegisteration")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Party Registeration Info</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(5))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterProductGroup", "ProductGroup")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Product Group</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(6))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterProductSubGroup", "ProductSubGroup")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Product Type</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(7))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterProduct", "Product")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Product Coding</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(8))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("OpeningStock", "ProductsOpening")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Opening Stocks</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(9))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("#", "#")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Physical Stock Taking</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(10))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterPlant", "Plant")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Plant Coding</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(11))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterStore", "Store")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Store Coding</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(12))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterVehicleType", "VehicleType")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Vehicle Type Coding</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(13))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterPartyFarm", "PartyFarm")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Party Farm</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(14))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterCity", "City")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>City Coding</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-basket-shopping"></i>
+                            <p>
+                                Purchase
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(15))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PurchaseOrder", "PurchaseOrder")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Purchase Order</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(16))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("InwardGatePassRM", "InwardGatePassRM")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Inward Gate Pass</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(17))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("GRN", "GRN")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Good Receive Note</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(18))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PurchaseInvoice", "PurchaseInvoice")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Purchase Invoice</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(19))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PurchaseRInvoice", "PurchaseRInvoice")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Purchase Return</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(20))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PurchaseGSTInvoice", "PurchaseGSTInvoice")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Purchase Invoice GST</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(21))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PurchaseReturnGST", "PurchaseReturnGST")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Purchase Return GST</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(17))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("GRNBetweenDate", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>IGP Report Between Date</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(17))
+                            {
+                                <li class="nav-item">
+                                    <a href="~/IReports/PendingPOReport" class=" nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pending Purchase Order</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(17))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Report", "Reports", new { rtype = "PendingGRN" })" class="nav-link" target="_blank">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pending GRN Report</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-p"></i>
+                            <p>
+                                Production
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(22))
+                            {
+                                <!--Commented by Mutlib For Shafi Feed-->
+                                @*<li class="nav-item">
+                                        <a href="@Url.Action("IndividualFormulaFG", "IndividualFormulaFG")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Individual Formula - [Finished Goods]</p>
+                                        </a>
+                                    </li>*@
+                                <li class="nav-item">
+                                    <a href="~/IssueInvoice/IssueInvoice" class=" nav-link">
+                                        <i class="fa fa-arrow-right nav-icon"></i>
+                                        <p>Issue For Production</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(23))
+                            {
+                                @*<li class="nav-item">
+                                        <a href="@Url.Action("IndividualFormulaAdjustment", "IndividualFormulaAdjustment")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Individual Formula - [Adjustment]</p>
+                                        </a>
+                                    </li>*@
+                                <li class="nav-item">
+                                    <a href="~/Receive/ReceiveInvoice" class="nav-link">
+                                        <i class="fa fa-arrow-right nav-icon"></i>
+                                        <p>Receive From Production</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(24))
+                            {
+                                @*<li class="nav-item">
+                                        <a href="@Url.Action("DailyProduction", "IReports")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Production Reports</p>
+                                        </a>
+                                    </li>*@
+                                <li class="nav-item">
+                                    <a href="~/IReports/DailyProcess" class="nav-link">
+                                        <i class="fa fa-arrow-right nav-icon"></i>
+                                        <p>Production Reports</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-scale-balanced"></i>
+                            <p>
+                                Sale
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(25))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SaleOrder", "SaleOrder")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sale Order</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(26))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("DeliveryChallan", "DeliveryChallan")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Delivery Challan</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(27))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SaleInvoice", "SaleInvoice")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sale Invoice New</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(28))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SaleReturn", "SaleReturn")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sale Return</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(29))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SaleGSTInvoice", "SaleGSTInvoice")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sale Invoice GST</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(30))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SaleReturnGST", "SaleReturnGST")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sale Return GST</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(17))
+{
+    <li class="nav-item">
+        <a href="~/IReports/PendingSOReport" class=" nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Pending Sale Order</p>
+        </a>
+    </li>
+}
+                            @if (list.Contains(17))
+                            {
+                                <li class="nav-item">
+                                    <a href="~/IReports/PendingDCReport" class=" nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pending Delivery Challan</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-get-pocket"></i>
+                            <p>
+                                Bardana
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(31))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RegisterBardanaType", "BardanaType")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Bardana Types Coding</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(32))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("BardanaIssueReceived", "BardanaIssueReceived")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Bardana Issued/Received</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(33))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("#", "#")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Report</p>
+                                        <i class="right fas fa-angle-left"></i>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("BardanaDailyRegister", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Bardana Daily Register</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("BardanaPartyLedger", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Bardana Party Ledger</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("BardanaPartyStatus", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Bardana Party Status</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("BardanaPartyStatus2", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Bardana Status (BetweenDates)</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("BardanaLedger", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Bardana Ledger</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-laptop"></i>
+                            <p>
+                                Accounts
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(34))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("DVoucher", "DVoucher")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>HO Cash Payment / Debit Voucher</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("FODVoucher", "FODVoucher")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>FO Cash Payment / Debit Voucher</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(35))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("CVoucher", "CVoucher")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>HO Cash Receipt / Credit Voucher</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("FOCVoucher", "FOCVoucher")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>FO Cash Receipt / Credit Voucher</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(36))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("JVoucher", "JVoucher")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>HO Journal Voucher</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("FOJVoucher", "FOJVoucher")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>FO Journal Voucher</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(37))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("BankCJVoucher", "BankCJVoucher")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Bank Receipt Voucher</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(38))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("BankDJVoucher", "BankDJVoucher")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Bank Payment Voucher</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(36))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("VoucherVerify", "VouchersVerification")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Search Voucher By Narration</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-receipt"></i>
+                            <p>
+                                Accounts Reports
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(39))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Report", "Reports", new { rtype = "ChartofAccount" })" class="nav-link" target="_blank">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Chart of Accounts</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(40))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("AccountLedger", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Account Ledger</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(41))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("AccountReconciliation", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Account Reconciliation</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(42))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PartyLedger", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Party Ledger</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(43))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PartyLedgerSummary", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Party Ledger Summary</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(44))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("#", "#")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Trial Balances</p>
+                                        <i class="right fas fa-angle-left"></i>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("TrialBalance", "Reports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Short Trial Balance</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("TrialBalanceBetweenDates", "Reports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Trial Balance Between Dates</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("DetailTrial", "Reports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Detail Trial</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("GroupTrial", "Reports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Group Trial</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("SixColumnTrial", "Reports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Six Column Trial</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (list.Contains(45))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Cashbook", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cash Book</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(46))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Daybook", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Day Book</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(47))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("DayBookInvoiceDetail", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>DayBook Invoice Detail</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(48))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("DayBookRecovered", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Day Book Recovered</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(49))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Journalbook", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Journal Book</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(50))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("GroupTrial_WA", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Aging Group Report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Aging", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Aging Report New</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(51))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("BalanceSheet", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Balance Sheet</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(52))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Receivable", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Receiveable and Payable</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(53))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ProfitLoss", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Profit and Loss</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-warehouse"></i>
+                            <p>
+                                Inventory Reports
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(54))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("GstRegister", "IReports")" class="nav-link" target="_blank">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Gst Register</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(55))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockLedger", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock Ledger</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(56))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockLedgerFinalWeight", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock Ledger Final Weight</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(57))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockLedgerWithOutIssue", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock Ledger without issue</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(58))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockInHandDetail", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock in hand Detail</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(59))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockInHand", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock in hand</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(60))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockInHandValue", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock in hand Value</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(61))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockInHandValueAvgRate", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock in hand Avg Rate</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(62))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockInHandValueAvgRateFW", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock in hand Avg - Final</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(63))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockInHandByGroup", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock in hand by Group</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(64))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StockInHandByStore", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock in hand by Store</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(65))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("#", "#")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Product Reports</p>
+                                        <i class="right fas fa-angle-left"></i>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("ProductPurchase", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Product Purchase</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("PurchaseRate", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Purchase rate product wise</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("ProductSale", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Product Sale</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("ProductPosition", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Product Position</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (list.Contains(66))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("#", "#")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Party Reports</p>
+                                        <i class="right fas fa-angle-left"></i>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("PartyWisePurchaseOverall", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Purchase Overall</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("PartyWisePurchase", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Purchase Selected</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("PartyWiseSaleOverall", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Sale Overall</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("PartyWiseSale", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Sale Selected</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("PartyWiseSaleRecovery", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Sale Recovery Report</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("SalePurchaseGeneral", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Sale/Purchase General</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("SalePurchaseDetailed", "IReports")" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Sale/Purchase Detailed</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (list.Contains(67))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PurchaseLedgerInvoiceWise", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Purchase Ledger Invoice Voice</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(68))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PurchaseOrderReport", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Purchase Order Report</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(69))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SaleOrderReport", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sale Order Report</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(70))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SaleLedgerInvoiceWise", "IReports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sale Ledger Invoice Wise</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(71))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Report", "IReports", new { rtype = "ProductList" })" class="nav-link" target="_blank">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Product List</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(72))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Report", "IReports", new { rtype = "ProductListGroupWise" })" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Product List Group Wise</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(73))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Report", "IReports", new { rtype = "CustomerLimit" })" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Customer Over Limit</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item d-none">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Reports
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @if (list.Contains(12))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Report", "Reports", new { rtype = "ChartofAccount" })" class="nav-link" target="_blank">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Chart of Accounts</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(13))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("AccountLedger", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Account Ledger</p>
+                                    </a>
+                                </li>
+                            }
+                            @if (list.Contains(14))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Cashbook", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cash Book</p>
+                                    </a>
+                                </li>
+                            }
+                            @*@if (list.Contains(19))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("CashFlow", "Reports")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Cash Flow</p>
+                                        </a>
+                                    </li>
+                                }*@
+                            @if (list.Contains(15))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("TrialBalance", "Reports")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Short Trial Balance</p>
+                                    </a>
+                                </li>
+                            }
+                            @*@if (list.Contains(25))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("TrialBalanceBetweenDates", "Reports")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Trial Balance Between Dates</p>
+                                        </a>
+                                    </li>
+                                }*@
+                                @*@if (list.Contains(16))
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("DetailTrial", "Reports")" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Detail Trial</p>
+                                            </a>
+                                        </li>
+                                    }*@
+                                @if (list.Contains(17))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("GroupTrial", "Reports")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Group Trial</p>
+                                        </a>
+                                    </li>
+                                }
+                                @*@if (list.Contains(18))
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("SixColumnTrial", "Reports")" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Six Column Trial</p>
+                                            </a>
+                                        </li>
+                                    }*@
+                            </ul>
+                        </li>
+                        <li class="nav-item" hidden>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-dungeon"></i>
+                                <p>
+                                    Gate Pass
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @if (list.Contains(74))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("RegisterGatePass", "PCGatePass")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Product Coding for Gate pass</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(75))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("RegisterPCEmployee", "PCEmployee")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Employee Coding</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(76))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("RegisterGPParties", "GPParties")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Gate pass Parties</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(77))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("InwardGatePassRM", "InwardGatePassRM")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Inward Gate pass Raw Material</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(78))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("InwardGatePassMix", "InwardGatePassMix")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Inward Gate pass Mixed</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(79))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("OutwardGatePassFG", "OutwardGatePassFG")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Outward Gate pass Finished</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(80))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("OutwardGatePassMix", "OutwardGatePassMix")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Outward Gate pass Mixed</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(81))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("ReturnableOutward", "ReturnableOutward")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Returnable Outward</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(82))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("ReturnableInward", "ReturnableInward")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Returnable Inward</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(83))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("EmployGatePass", "EmployGatePass")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Employee Gate pass</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(84))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("GuestGatePass", "GuestGatePass")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Guest Gate pass</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(85))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("#", "#")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Report</p>
+                                            <i class="right fas fa-angle-left"></i>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("GPRMPartyProduct", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>Overall Report</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("GatePassRawMaterialPartyWise", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>IGPRM party wise</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("GatePassRawMaterialProductWise", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>IGPRM product wise</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("GPRMPartyProduct", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>IGPRM Party/Product</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("GatePassMixMaterialPartyWise", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>IGPMM party wise</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("GatePassMixMaterialProductWise", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>IGPMM product wise</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("OutwardGatePassFGPartyWise", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>OGPFG party wise</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("OutwardGatePassFGProductWise", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>OGPFG product wise</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("OutwardGatePassMixPartyWise", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>OGPM party wise</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("OutwardGatePassMixProductWise", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>OGPM product wise</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("InOut", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>Returnable Gate pass</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("EmployGatePass", "IReports")" class="nav-link">
+                                                    <i class="far fa-dot-circle nav-icon"></i>
+                                                    <p>Employee Gate pass</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-wrench"></i>
+                                <p>
+                                    System
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @*<li class="nav-item">
+                                        <a href="@Url.Action("#", "#")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Replicate</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("#", "#")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Update Arrivals</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("#", "#")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Company Info</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("#", "#")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Database backup</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("#", "#")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Sale Resave</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("#", "#")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Shift Account Record</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("#", "#")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Delete Party Record</p>
+                                        </a>
+                                    </li>*@
+                                @if (list.Contains(86))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("RegisterUser", "User")" class="nav-link" target="_blank">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Create User</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(87))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("UserRights", "User")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>User Rights</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(88))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("AddLevel", "AccountsLevel")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Create Account Level</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(88))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("DeleteCoding", "Accounts")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Accounts Master Deletion</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(89))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Add", "ControlAccounts")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Control Accounts</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(90))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("DetailTransfer", "DetailTransfer")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Transfer Account</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(90))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("DbBackup", "dbBackup")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Backup Database</p>
+                                        </a>
+                                    </li>
+                                }
+                                @if (list.Contains(90))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Log", "Reports")" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Log Report</p>
+                                        </a>
+                                    </li>
+                                }
+                                @*@if (Convert.ToString(Session["LoggedUserID"]) == "1")
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("RequestList", "Request")" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Request List</p>
+                                            </a>
+                                        </li>
+                                    }*@
+                            </ul>
+                        </li>
+                }
+                @*My Navbar End*@
+                @*<li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-circle nav-icon"></i>
+                            <p>Level 1</p>
+                        </a>
+                    </li>*@
+                @*<li class="nav-header">LABELS</li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon far fa-circle text-danger"></i>
+                            <p class="text">Important</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon far fa-circle text-warning"></i>
+                            <p>Warning</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon far fa-circle text-info"></i>
+                            <p>Informational</p>
+                        </a>
+                    </li>*@
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

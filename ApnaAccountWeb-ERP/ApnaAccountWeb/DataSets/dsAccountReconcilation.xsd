@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsAccountReconcilation" targetNamespace="http://tempuri.org/dsAccountReconcilation.xsd" xmlns:mstns="http://tempuri.org/dsAccountReconcilation.xsd" xmlns="http://tempuri.org/dsAccountReconcilation.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsAccountReconcilation" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsAccountReconcilation" msprop:Generator_UserDSName="dsAccountReconcilation">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ado" msprop:Generator_TableClassName="adoDataTable" msprop:Generator_TableVarName="tableado" msprop:Generator_RowChangedName="adoRowChanged" msprop:Generator_TablePropName="ado" msprop:Generator_RowDeletingName="adoRowDeleting" msprop:Generator_RowChangingName="adoRowChanging" msprop:Generator_RowEvHandlerName="adoRowChangeEventHandler" msprop:Generator_RowDeletedName="adoRowDeleted" msprop:Generator_RowClassName="adoRow" msprop:Generator_UserTableName="ado" msprop:Generator_RowEvArgName="adoRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Date1" msprop:Generator_ColumnVarNameInTable="columnDate1" msprop:Generator_ColumnPropNameInRow="Date1" msprop:Generator_ColumnPropNameInTable="Date1Column" msprop:Generator_UserColumnName="Date1" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Ref" msprop:Generator_ColumnVarNameInTable="columnRef" msprop:Generator_ColumnPropNameInRow="Ref" msprop:Generator_ColumnPropNameInTable="RefColumn" msprop:Generator_UserColumnName="Ref" type="xs:string" minOccurs="0" />
+              <xs:element name="ChqNo" msprop:Generator_ColumnVarNameInTable="columnChqNo" msprop:Generator_ColumnPropNameInRow="ChqNo" msprop:Generator_ColumnPropNameInTable="ChqNoColumn" msprop:Generator_UserColumnName="ChqNo" type="xs:string" minOccurs="0" />
+              <xs:element name="chqAmount" msprop:Generator_ColumnVarNameInTable="columnchqAmount" msprop:Generator_ColumnPropNameInRow="chqAmount" msprop:Generator_ColumnPropNameInTable="chqAmountColumn" msprop:Generator_UserColumnName="chqAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="ChqStatus" msprop:Generator_ColumnVarNameInTable="columnChqStatus" msprop:Generator_ColumnPropNameInRow="ChqStatus" msprop:Generator_ColumnPropNameInTable="ChqStatusColumn" msprop:Generator_UserColumnName="ChqStatus" type="xs:string" minOccurs="0" />
+              <xs:element name="nar" msprop:Generator_ColumnVarNameInTable="columnnar" msprop:Generator_ColumnPropNameInRow="nar" msprop:Generator_ColumnPropNameInTable="narColumn" msprop:Generator_UserColumnName="nar" type="xs:string" minOccurs="0" />
+              <xs:element name="debit" msprop:Generator_ColumnVarNameInTable="columndebit" msprop:Generator_ColumnPropNameInRow="debit" msprop:Generator_ColumnPropNameInTable="debitColumn" msprop:Generator_UserColumnName="debit" type="xs:decimal" minOccurs="0" />
+              <xs:element name="credit" msprop:Generator_ColumnVarNameInTable="columncredit" msprop:Generator_ColumnPropNameInRow="credit" msprop:Generator_ColumnPropNameInTable="creditColumn" msprop:Generator_UserColumnName="credit" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

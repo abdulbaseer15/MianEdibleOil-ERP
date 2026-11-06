@@ -1,0 +1,596 @@
+@model ApnaAccountWeb.Models.Accounts1
+<script src="~/Content/js/jquery.min.js"></script>
+<script type="text/javascript">
+    var ParentId;
+    var Nature;
+    var newUrl = '@Url.Action("AccountCoding", "PartyRegisteration")';
+    var isNew = false;
+    var isUpdating = false;
+    $(document).ready(function () {
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function ()
+                {
+                    this.disabled = state;
+                });
+            }
+        });
+        $('#btnDelete').disable(true);
+        $('#ddlAType').disable(true);
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+        $('#APC').change(function () {
+            var selectedVal = $('#APC option:selected').attr('value');
+            $('#txtsupCode').val(selectedVal);
+            var selectedText = $("#APC option:selected").text();
+            NewClicked();
+            //SelectedAccount(selectedVal, selectedText, 'Group')
+            NewAccount(selectedVal, 5, selectedText)
+        });
+        $('#SPC').change(function () {
+            var selectedVal = $('#SPC option:selected').attr('value');
+            $('#txtpurCode').val(selectedVal);
+            var selectedText = $("#APC option:selected").text();
+            NewClicked();
+          //SelectedAccount(selectedVal, selectedText, 'Group')
+            NewAccount(selectedVal, 5, selectedText)
+        });
+    });
+    function NewClicked()
+    {
+        isNew = true;
+        isUpdating = false;
+        $('#IsUpdate').val('0');
+        //$('#btnSave').show();
+        //$('#btnNew').disable(true);
+        $('#btnGo').hide();
+        $('#btnNew').disable(true);
+    }
+    function ClearClicked() {
+        window.location.href = '@Url.Action("AccountCoding", "PartyRegisteration")';
+    }
+    function SelectedAccount(id,title,Type)
+    {
+        if (!isNew) {
+            $('#AccountId').val(id);
+            SearchAccount();
+        }
+        if (!isNew && !isUpdating)
+        {
+            $('#Nature').val(id + " " + title);
+           // alert("ok");
+            //if (isNew = false)
+            //{
+             //   alert("ok2");
+                //$('#AccountId').val(id);
+                //SearchAccount();
+           // }
+        }
+    }
+    function NewAccount(id,name,title)
+    {
+        if (!isUpdating)
+        {
+            $('#Nature').val(id + " " + title);
+        }
+        if (isNew)
+        {
+            var Level = +name + +1;
+            ParentId = id;
+            Nature = id.substring(0, 1);
+            if (Level >= 4) {
+                $('#ddlAType').disable(false);
+            }
+            else
+            {
+                $('#ddlAType').disable(true);
+            }
+      $.ajax({
+          url: "/PartyRegisteration/NewAccount",
+          type: "POST",
+          data: JSON.stringify({ strAccountId: id }),
+          dataType: 'text json',
+          async: false,
+          contentType: 'application/json; charset=utf-8',
+          success: function (response) {
+              if (response != null && response.success) {
+                  if (response.id == "02") {
+                      alert(response.responseText.toString());
+                 }
+                  else {
+                      $('#AccountId').val(response.accountid.toString());
+                      $('#LevelKey').val(response.lvl.toString());
+                      $('#AccType').val(response.type.toString());
+                      $("#Title").focus();
+                      $('#btnSave').show();
+                      $('#btnSearch').hide();
+                      //$('#AccType').disable(true);
+                  }
+              }
+              else {
+                  alert(response.responseText);
+              }
+          },
+          error: function (response) {
+              alert(response.responseText);
+          }
+      });
+     }
+    }
+    //---------------------SaveAccount-----------------------------//
+    function SaveAccount()
+    {
+        $("#frmSave").submit()
+        //debugger
+        //var party=false;
+        //if ($('#cbxIsParty').is(':checked'))
+        //{
+        //    party = true;
+        //}
+        //var Account = {
+        //    AccountId: $('#AccountId').val(),
+        //    Title: $('#Title').val(),
+        //    AccType: $('#ddlAType').val(),
+        //    ParentId: ParentId,
+        //    LevelKey: $('#LevelKey').val(),
+        //    Address: $('#Address').val(),
+        //    PhoneNo: $('#PhoneNo').val(),
+        //    ContactPerson: $('#ContactPerson').val(),
+        //    SalesTaxNo: $('#SalesTaxNo').val(),
+        //    FaxNo: $('#txtFaxNo').val(),
+        //    CityId: $('#ddlCity').val(),
+        //    IsParty: party,
+        //    Nature: Nature
+        //};
+        //$.ajax({
+        //    url: "/Account/Account",
+        //    type: "POST",
+        //    data: JSON.stringify(Account),
+        //    dataType: 'text json',
+        //    async: false,
+        //    contentType: 'application/json; charset=utf-8',
+        //    success: function (response) {
+        //        debugger
+        //        if (response != null && response.success)
+        //        {
+        //            isNew = false;
+        //            alert(response.responseText);
+        //            window.location.href = newUrl;
+        //        }
+        //        else
+        //        {
+        //            alert(response.responseText);
+        //        }
+        //    },
+        //    error: function (response) {
+        //        alert("Failed!");
+        //    }
+        //});
+    }
+    function SearchAccount()
+    {
+        isNew = false;
+        isUpdating = true;
+        $('#IsUpdate').val('1');
+        $.ajax({
+            url: "/PartyRegisteration/SearchAccount",
+            type: "POST",
+            data: JSON.stringify({ strAccountId: $('#AccountId').val()}),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response != null)
+                {
+                    $('#btnSave').show();
+                    $('#btnGo').hide();
+                    $('#AccountId').prop('readonly', true);
+                    $('#btnDelete').disable(false);
+                    if (response.IsParty.toString() == "true") {
+                       // alert(response.IsParty.toString())
+                        $('input[name=IsParty]').prop('checked', true);
+                        //$('#IsParty').attr('checked', true);
+                    }
+                    else {
+                       // alert(response.IsParty.toString())
+                        $('input[name=IsParty]').prop('checked', false);
+                        //$('#IsParty').attr('checked', false);
+                    }
+                    $('#AccountId').val(response.AccountID.toString().trim());
+                    $('#Title').val(response.Title.toString().trim());
+                    $('#AccType').val(response.Type.toString().trim());
+                    $('#Nature').val(response.ParentID.toString().trim());
+                    $('#LevelKey').val(response.ALevel.toString().trim());
+                    //if (response.ALevel >= 4)
+                    //{
+                    //    $('#ddlAType').disable(false);
+                    //}
+                    $('#Address').val(response.Address.toString().trim());
+                    $('#PhoneNo').val(response.PhoneNO.toString().trim());
+                    $('#ContactPerson').val(response.ContactPerson.toString().trim());
+                    $('#SalesTaxNo').val(response.SalesTaxNo.toString().trim());
+                    $('#txtFaxNo').val(response.FaxNo.toString().trim());
+                    //$('#ddlCity').val(response.CityId.toString().trim());
+                }
+                else
+                {
+                    alert("!No Record Found");
+                }
+            },
+            error: function (response)
+            {
+                alert(response.responseText);
+            }
+        });
+    }
+    function SearchClicked()
+    {
+        $('#btnGo').show();
+        $('#btnSearch').hide();
+        $('#AccountId').prop('readonly', false);
+        $("#AccountId").focus();
+        $('#btnNew').disable(true);
+        isNew = false;
+        isUpdating = true;
+        $('#IsUpdate').val('1');
+    }
+    function DeleteClicked()
+    {
+        var answer = confirm("Are you sure you want to delete this account?");
+        if (answer)
+        {
+            $.ajax({
+                url: "/PartyRegisteration/DeleteAccount",
+                type: "POST",
+                data: JSON.stringify({ strAccountId: $('#AccountId').val()}),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success)
+                    {
+                        window.location.href = newUrl;
+                    } else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response)
+                {
+                    alert(response.responseText);
+                }
+            });
+        }
+    }
+</script>
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<!--<div id="content">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span6" style="overflow-y: auto; height:400px;">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"> <i class="icon-align-justify"></i> </span>
+                        <h5>Select Group</h5>
+                    </div>
+                    <div class="widget-content nopadding">
+                        <table class="table table-bordered data-table">
+                            <tbody>
+                                <tr>
+                                    <td>Arrival Party Code<input type="text" class="span11" id="txtsupCode" name="txtsupCode" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                    <td>
+                                        Title
+                                        <select id="APC" name="APC">
+                                            @{
+                                                <option>Select Account</option>
+                                                foreach (var city in ViewBag.AccCodelist)
+                                                {
+                                                    <option value="@city.AccountID">@city.Title</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sale Party Code<input type="text" class="span11" id="txtpurCode" name="txtpurCode" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                    <td>
+                                        Title
+                                        <select id="SPC" name="SPC">
+                                            @{
+                                                <option>Select Account</option>
+                                                foreach (var city in ViewBag.AccCodelist2)
+                                                {
+                                                    <option value="@city.AccountID">@city.Title</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>-->
+<!--@*Already Commented*@-->
+@*@{ Html.RenderAction("_AccountTree", "Accounts"); }*@
+<!--@*Already Commented*@-->
+<!--</div>
+    </div>
+</div>
+<div class="span6">
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Account Detail</h5>
+        </div>
+        <div class="widget-content nopadding">
+            <form id="frmSave" action="AccountCoding" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                <input type="hidden" name="IsUpdate" id="IsUpdate" value="" />
+                <table class="table table-bordered data-table">
+                    <tbody>
+                        <tr>
+                            <td>Selected Code<input type="text" class="span11" id="Nature" name="Nature" readonly="true" placeholder="Selected Code" /></td>
+                            <td>Account Code<input type="number" class="span11" id="AccountId" name="AccountId" readonly="true" placeholder="Account Code" /></td>
+                            <td>Level<input type="text" class="span11" id="LevelKey" name="LevelKey" readonly="true" placeholder="Level" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="control-group">
+                    <label class="control-label">Title:</label>
+                    <div class="controls">
+                        <input type="text" class="span11" id="Title" name="Title" placeholder="Title" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Type:</label>
+                    <div class="controls">
+                        <select id="AccType" name="AccType">
+                            <option>Group</option>
+                            <option>Detail</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Is Party:</label>
+                    <div class="controls">
+                        <input type="checkbox" class="span11" id="IsParty" name="IsParty" value="True">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Address:</label>
+                    <div class="controls">
+                        <input type="text" class="span11" id="Address" name="Address" placeholder="Adress" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Contact Person:</label>
+                    <div class="controls">
+                        <input type="text" class="span11" id="ContactPerson" name="ContactPerson" placeholder="Contact Person" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Sales Tax#:</label>
+                    <div class="controls">
+                        <input type="text" class="span11" id="SalesTaxNo" name="SalesTaxNo" placeholder="Sales Tax" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Phone #:</label>
+                    <div class="controls">
+                        <input type="text" class="span11" id="PhoneNo" name="PhoneNo" placeholder="Phone" />
+                    </div>
+                </div>-->
+<!--@*Already Commented*@-->
+@*<div class="control-group">
+      <label class="control-label">City</label>
+      <div class="controls">
+           @{List<SelectListItem> Cities = new List<SelectListItem>();
+          foreach (var city in  ViewBag.Cities)
+          {
+              Cities.Add(new SelectListItem
+              {
+                  Text = city.CityName,
+                  Value = Convert.ToString(city.CityId)
+              });
+          }
+          }
+        @Html.DropDownListFor(u => u., Cities, new { id = "ddlCity", @class = "ddl" })
+      </div>
+    </div>*@
+<!--@*Already Commented*@-->
+<!--<div class="form-actions">
+                                <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();'>New</button>
+                                <button type="submit" id="btnSave" class="btn btn-success" onclick='SaveAccount();'>Save</button>
+                                <input type="button" id="btnDelete" value="Delete" class="btn btn-danger" onclick='DeleteClicked();'>
+                                <input type="button" value="Search" id="btnSearch" class="btn btn-default" onclick='SearchClicked();' />
+                                <input type="button" id="btnGo" value="Go" class="btn btn-success" onclick='SearchAccount();'>
+                                <input type="button" id="btnClose" value="Clear" class="btn btn-success" onclick='ClearClicked();'>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>-->
+<div id="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <b>Select Group</b>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Arrival Party Code</label>
+                                <input type="text" class="form-control form-control-sm" id="txtsupCode" name="txtsupCode" data-toggle="tooltip" title="Press enter and select account code" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <select class="form-control form-control-sm" id="APC" name="APC">
+                                    @{
+                                        <option>Select Account</option>
+                                        foreach (var city in ViewBag.AccCodelist)
+                                        {
+                                            <option value="@city.AccountID">@city.Title</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Sale Party Code</label>
+                                <input type="text" class="form-control form-control-sm" id="txtpurCode" name="txtpurCode" data-toggle="tooltip" title="Press enter and select account code" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <select class="form-control form-control-sm" id="SPC" name="SPC">
+                                    @{
+                                        <option>Select Account</option>
+                                        foreach (var city in ViewBag.AccCodelist2)
+                                        {
+                                            <option value="@city.AccountID">@city.Title</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    @*@{ Html.RenderAction("_AccountTree", "Accounts"); }*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form id="frmSave" action="AccountCoding" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Account Detail</b>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" name="IsUpdate" id="IsUpdate" value="" />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Selected Code</label>
+                                    <input type="text" class="form-control form-control-sm" id="Nature" name="Nature" readonly="true" placeholder="Selected Code" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Account Code</label>
+                                    <input type="number" class="form-control form-control-sm" id="AccountId" name="AccountId" readonly="true" placeholder="Account Code" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Level</label>
+                                    <input type="text" class="form-control form-control-sm" id="LevelKey" name="LevelKey" readonly="true" placeholder="Level" />
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" class="form-control form-control-sm" id="Title" name="Title" placeholder="Title" />
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    <select class="form-control form-control-sm" id="AccType" name="AccType">
+                                        <option>Group</option>
+                                        <option>Detail</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 align-content-end">
+                                <div class="form-group">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="IsParty" checked="" name="IsParty">
+                                        <label for="IsParty">Is Party</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control form-control-sm" id="Address" name="Address" placeholder="Adress" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Contact Person</label>
+                                    <input type="text" class="form-control form-control-sm" id="ContactPerson" name="ContactPerson" placeholder="Contact Person" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Sales Tax#</label>
+                                    <input type="text" class="form-control form-control-sm" id="SalesTaxNo" name="SalesTaxNo" placeholder="Sales Tax" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Phone #</label>
+                                    <input type="text" class="form-control form-control-sm" id="PhoneNo" name="PhoneNo" placeholder="Phone" />
+                                </div>
+                            </div>
+                            @*<div class="control-group">
+                                    <label class="control-label">City</label>
+                                    <div class="controls">
+                                        @{List<SelectListItem> Cities = new List<SelectListItem>();
+                                        foreach (var city in  ViewBag.Cities)
+                                        {
+                                            Cities.Add(new SelectListItem
+                                            {
+                                                Text = city.CityName,
+                                                Value = Convert.ToString(city.CityId)
+                                            });
+                                        }
+                                        }
+                                    @Html.DropDownListFor(u => u., Cities, new { id = "ddlCity", @class = "ddl" })
+                                    </div>
+                                </div>*@
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-3 col-6">
+                                        <button type="submit" id="btnNew" class="btn btn-sm w-100 btn-primary" onclick='NewClicked();'>New</button>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-6">
+                                        <button type="submit" id="btnSave" class="btn btn-sm w-100 btn-success" onclick='SaveAccount();'>Save</button>
+                                        <input type="button" id="btnDelete" value="Delete" class="btn btn-sm w-100 btn-danger" onclick='DeleteClicked();'>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-6">
+                                        <input type="button" value="Search" id="btnSearch" class="btn btn-sm w-100 btn-default" onclick='SearchClicked();' />
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-6">
+                                        <input type="button" id="btnGo" value="Go" class="btn btn-sm w-100 btn-success" onclick='SearchAccount();'>
+                                        <input type="button" id="btnClose" value="Clear" class="btn btn-sm w-100 btn-success" onclick='ClearClicked();'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

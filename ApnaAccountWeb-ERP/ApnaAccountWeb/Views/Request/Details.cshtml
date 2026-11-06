@@ -1,0 +1,32 @@
+﻿@model ApnaAccountWeb.Models.Contact
+<div id="content">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+           <a href="@Url.Action("RequestList", "Request", new {@class="btn btn-primary" })" style="float:right">Back to request list</a>
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Request Detail</h5>
+          </div>
+          <div class="widget-content" style="padding-bottom:2em">
+             <div class="span6">
+                <label ><h5 style="display:inline;">Business Name:</h5> @Model.Name</label>
+                <label ><h5 style="display:inline;">Address:</h5> @Model.Address</label>
+                <label ><h5 style="display:inline;">Phone:</h5> @Model.Phone</label>
+                <label ><h5 style="display:inline;">Cell:</h5> @Model.Cell</label>
+                <label ><h5 style="display:inline;">Country:</h5> @Model.Country</label>
+                <label ><h5 style="display:inline;">City:</h5> @Model.City</label>
+                <label ><h5 style="display:inline;">Maximum User Requirement:</h5> @Model.Mur</label>
+                </div>
+                <label ><h5 style="display:inline;">NTN:</h5> @Model.NTN</label>
+                <label ><h5 style="display:inline;">STN:</h5> @Model.STN</label>
+                <label ><h5 style="display:inline;">Email:</h5> @Model.Email</label>
+                <label ><h5 style="display:inline;">Website:</h5> @Model.URL</label>
+                <label ><h5 style="display:inline;">Contact Person:</h5> @Model.ContactPerson</label>
+                <label ><h5 style="display:inline;">Contact Person Cell:</h5> @Model.ContactPersonCell</label>
+        </div>
+          </div>
+        </div>
+  </div>
+      </div>
+    </div>

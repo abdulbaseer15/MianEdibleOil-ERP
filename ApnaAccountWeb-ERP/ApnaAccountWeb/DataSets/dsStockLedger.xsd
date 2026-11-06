@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsStockLedger" targetNamespace="http://tempuri.org/dsStockLedger.xsd" xmlns:mstns="http://tempuri.org/dsStockLedger.xsd" xmlns="http://tempuri.org/dsStockLedger.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="ApnaAccount_IKConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ApnaAccount_IKConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.ApnaAccount_IKConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsStockLedger" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsStockLedger" msprop:Generator_UserDSName="dsStockLedger">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ado" msprop:Generator_TableClassName="adoDataTable" msprop:Generator_TableVarName="tableado" msprop:Generator_RowChangedName="adoRowChanged" msprop:Generator_TablePropName="ado" msprop:Generator_RowDeletingName="adoRowDeleting" msprop:Generator_RowChangingName="adoRowChanging" msprop:Generator_RowEvHandlerName="adoRowChangeEventHandler" msprop:Generator_RowDeletedName="adoRowDeleted" msprop:Generator_RowClassName="adoRow" msprop:Generator_UserTableName="ado" msprop:Generator_RowEvArgName="adoRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="InvID" msprop:Generator_ColumnVarNameInTable="columnInvID" msprop:Generator_ColumnPropNameInRow="InvID" msprop:Generator_ColumnPropNameInTable="InvIDColumn" msprop:Generator_UserColumnName="InvID" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="InvDate" msprop:Generator_ColumnVarNameInTable="columnInvDate" msprop:Generator_ColumnPropNameInRow="InvDate" msprop:Generator_ColumnPropNameInTable="InvDateColumn" msprop:Generator_UserColumnName="InvDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="ProductTitle" msprop:Generator_ColumnVarNameInTable="columnProductTitle" msprop:Generator_ColumnPropNameInRow="ProductTitle" msprop:Generator_ColumnPropNameInTable="ProductTitleColumn" msprop:Generator_UserColumnName="ProductTitle" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="QtyDr" msprop:Generator_ColumnVarNameInTable="columnQtyDr" msprop:Generator_ColumnPropNameInRow="QtyDr" msprop:Generator_ColumnPropNameInTable="QtyDrColumn" msprop:Generator_UserColumnName="QtyDr" type="xs:decimal" minOccurs="0" />
+              <xs:element name="QtyCr" msprop:Generator_ColumnVarNameInTable="columnQtyCr" msprop:Generator_ColumnPropNameInRow="QtyCr" msprop:Generator_ColumnPropNameInTable="QtyCrColumn" msprop:Generator_UserColumnName="QtyCr" type="xs:decimal" minOccurs="0" />
+              <xs:element name="WtDr" msprop:Generator_ColumnVarNameInTable="columnWtDr" msprop:Generator_ColumnPropNameInRow="WtDr" msprop:Generator_ColumnPropNameInTable="WtDrColumn" msprop:Generator_UserColumnName="WtDr" type="xs:decimal" minOccurs="0" />
+              <xs:element name="WtCr" msprop:Generator_ColumnVarNameInTable="columnWtCr" msprop:Generator_ColumnPropNameInRow="WtCr" msprop:Generator_ColumnPropNameInTable="WtCrColumn" msprop:Generator_UserColumnName="WtCr" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

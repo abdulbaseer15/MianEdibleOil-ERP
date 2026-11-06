@@ -1,0 +1,2151 @@
+﻿@model ApnaAccountWeb.ViewModels.VViewModel
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/Datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/Datepicker/datepicker.css" rel="stylesheet" />
+@if (null != TempData["message"])
+{
+    <script type="text/javascript">
+        alert("@TempData["message"]");
+    </script>
+}
+<style>
+    tr.normal td {
+        color: black;
+        background-color: white;
+    }
+    tr.highlighted td {
+        color: white;
+        background-color: red;
+    }
+</style>
+<script>
+    var IsUpdate = false;
+    var dvcid;
+    var IsPrintJV = false;
+    var RowNo;
+    var isTrue = 0;
+    var visibleArrayLength = 0;
+    var counter = 0;
+    var arrVisible = new Array();
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $.fn.extend({
+            disable: function (state) {
+                return this.each(function () {
+                    this.disabled = state;
+                });
+            }
+        });
+        //start discount
+        $("#discount").change(function () {
+            var dis = parseFloat($('#discount').val());
+            var tamount = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1amount = parseFloat($tds[6].innerText);
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+                }
+                tamount = tamount + t1amount;
+            });
+            var stamt = parseFloat($('#stamt').val());
+            if (isNaN(stamt)) {
+                stamt = 0;
+            }
+            var framt = parseFloat($('#frtamt').val());
+            if (isNaN(framt)) {
+                framt = 0;
+            }
+            var discountamount = (tamount) * (dis/100);
+            $('#disamt').val(discountamount.toFixed(2));
+            $('#nettotal').val(((tamount + (stamt + framt)) - (discountamount)).toFixed(2));
+        });
+        $("#disamt").change(function () {
+            var dis = parseFloat($('#disamt').val());
+            var tamount =0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1amount = parseFloat($tds[6].innerText);
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+                }
+                tamount = tamount + t1amount;
+            });
+            var stamt = parseFloat($('#stamt').val());
+            if (isNaN(stamt)) {
+                stamt = 0;
+            }
+            var framt = parseFloat($('#frtamt').val());
+            if (isNaN(framt)) {
+                framt = 0;
+            }
+            var discountper = (100 * dis) / (tamount);
+            $('#discount').val(discountper.toFixed(2));
+            $('#nettotal').val(((tamount + (stamt + framt)) - (dis)).toFixed(2));
+        });
+        //end discount
+        //start sales tax
+        $("#stpercent").change(function () {
+            var dis = parseFloat($('#stpercent').val());
+            var tamount = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1amount = parseFloat($tds[6].innerText);
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+                }
+                tamount = tamount + t1amount;
+            });
+            var stamt = parseFloat($('#disamt').val());
+            if (isNaN(stamt)) {
+                stamt = 0;
+            }
+            var framt = parseFloat($('#frtamt').val());
+            if (isNaN(framt)) {
+                framt = 0;
+            }
+            var discountamount = (tamount ) * (dis / 100);
+            $('#stamt').val(discountamount.toFixed(2));
+            $('#nettotal').val(((tamount + (stamt + framt)) - (discountamount)).toFixed(2));
+        });
+        $("#stamt").change(function () {
+            var dis = parseFloat($('#stamt').val());
+            var tamount = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1amount = parseFloat($tds[6].innerText);
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+                }
+                tamount = tamount + t1amount;
+            });
+            var stamt = parseFloat($('#disamt').val());
+            if (isNaN(stamt)) {
+                stamt = 0;
+            }
+            var framt = parseFloat($('#frtamt').val());
+            if (isNaN(framt)) {
+                framt = 0;
+            }
+            var discountper = (100 * dis) / (tamount );
+            $('#stpercent').val(discountper.toFixed(2));
+            $('#nettotal').val(((tamount + (stamt + framt)) - (dis)).toFixed(2));
+        });
+        //end sales tax
+        //start freight tax
+        $("#frtpercent").change(function () {
+            var dis = parseFloat($('#frtpercent').val());
+            var tamount = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1amount = parseFloat($tds[6].innerText);
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+                }
+                tamount = tamount + t1amount;
+            });
+            var stamt = parseFloat($('#disamt').val());
+            if (isNaN(stamt)) {
+                stamt = 0;
+            }
+            var framt = parseFloat($('#stamt').val());
+            if (isNaN(framt)) {
+                framt = 0;
+            }
+            var discountamount = (tamount) * (dis / 100);
+            $('#frtamt').val(discountamount.toFixed(2));
+            $('#nettotal').val(((tamount + (discountamount + framt)) - (stamt)).toFixed(2));
+        });
+        $("#frtamt").change(function () {
+            var dis = parseFloat($('#frtamt').val());
+            var tamount = 0;
+            $('#mytable tbody tr').each(function () {
+                var $row = $(this), $tds = $row.find("td");
+                var t1amount = parseFloat($tds[6].innerText);
+                if (isNaN(t1amount)) {
+                    t1amount = 0;
+                }
+                tamount = tamount + t1amount;
+            });
+            var stamt = parseFloat($('#disamt').val());
+            if (isNaN(stamt)) {
+                stamt = 0;
+            }
+            var framt = parseFloat($('#stamt').val());
+            if (isNaN(framt)) {
+                framt = 0;
+            }
+            var discountper = (100 * dis) / (tamount);
+            $('#frtpercent').val(discountper.toFixed(2));
+            $('#nettotal').val(((tamount + dis + framt) - (stamt)).toFixed(2));
+        });
+        //end freight tax
+        $('#nettotal').disable(true);
+        $('#txtproCode').disable(true);
+        $('#txtsupCode').disable(true);
+        $('#txtpurCode').disable(true);
+        $('#ddlTitlesup').disable(true);
+        $('#ddlTitlepur').disable(true);
+        $('#ddlTitlepro').disable(true);
+        $('#txtSO').disable(true);
+        $('#Address').disable(true);
+        $('#txtStore').disable(true);
+                   $('#txtunit').disable(true);
+                   $('#txtbox').disable(true);
+                   $('#txtPiece').disable(true);
+                   $('#ddlTitleinv').hide();
+        $('#txtquan').disable(true);
+        $('#txtrate').disable(true);
+        $('#txtamount').disable(true);
+        //$('#comDate').disable(true);
+        $('#compno').disable(true);
+        $('#youDate').disable(true);
+        $('#invono').disable(true);
+        $('#btnDelete').disable(true);
+        $('#btnSave').hide();
+        $('#btnGo').hide();
+        $("#divSelectDis").hide();
+        $("#tempdata").hide();
+        //$('#comDate').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#comDate').datepicker('setDate', 'now');
+        //$('#youDate').datepicker({
+        //    "format": "dd/mm/yyyy",
+        //    "todayHighlight": true,
+        //    "autoclose": true
+        //});
+        //$('#youDate').datepicker('setDate', 'now');
+        var i = 0;
+        currentRow = null;
+        $('#txtamount').keypress(function (e) {
+            if (e.which == 13) {
+                var accCode = $('#txtproCode').val();
+                var product = $('#ddlTitlepro').val();
+                var piece = parseFloat($('#txtPiece').val());
+                if (isNaN(piece))
+                    piece = 0;
+                var amount = $('#txtamount').val();
+                if ($('#txtproCode').val() == "" || $('#txtproCode').val() == null || $("#ddlTitlepro option:selected").text() == "-- Select Account --") {
+                    alert("Cant Save You Must Select Account Code");
+                    $('#txtproCode').focus();
+                }
+                else {
+                    if ((amount == "" || amount == null || amount == 0 || amount < 0)) {
+                        alert("piece or box or amount or rate Cannot Empty or Zero")
+                        $('#txtbox').focus();
+                    }
+                    else {
+                        i++;
+                        var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + accCode + "</td><td class='title'>" + product + "</td><td class='piece'>" +piece + "</td><td class='naration'>" + amount + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                        if (currentRow) {
+                            $('#mytable').find($(currentRow)).replaceWith(new_row);
+                            currentRow = null;
+                        }
+                        else {
+                            $('#mytable').append(new_row);
+                        }
+                        $("#tempdata").show();
+                        IntiateFields();
+                        $('#txtproCode').focus();
+                    }
+                }
+            }
+        });
+        $(document).on('click', 'span.deleterow', function () {
+            $(this).parents('tr').remove();
+            return false;
+        });
+        $(document).on('click', 'span.editrow', function () {
+            currentRow = $(this).parents('tr');
+            $("#txtproCode").val($(this).closest('tr').find('td.accCode').text());
+            $("#ddlTitlepro").val($(this).closest('tr').find('td.title').text());
+            $("#txtunit").val($(this).closest('tr').find('td.unitid').text());
+            $("#txtbox").val($(this).closest('tr').find('td.box').text());
+            $("#txtPiece").val($(this).closest('tr').find('td.piece').text());
+            $("#txtrate").val($(this).closest('tr').find('td.rate').text());
+            $("#txtamount").val($(this).closest('tr').find('td.naration').text());
+            $("#piecesperbox").val($(this).closest('tr').find('td.pbox').text());
+        });
+        $('#ddlTitlesup').click(function () {
+            var selectedVal = $('#ddlTitlesup option:selected').attr('value');
+            $('#txtsupCode').val(selectedVal);
+        });
+        $('#ddlTitlepur').click(function () {
+            var selectedVal = $('#ddlTitlepur option:selected').attr('value');
+            $('#txtpurCode').val(selectedVal);
+        });
+        //$('#ddlTitlepro').change(function () {
+        //    var selectedVal = $('#ddlTitlepro option:selected').attr('value');
+        //    $('#txtproCode').val(selectedVal);
+        //    $('#txtquan').focus();
+        //    var code = selectedVal;
+        //    $.ajax({
+        //        url: "/PurchaseInvoice/GetProductRate",
+        //        type: "Post",
+        //        data: JSON.stringify({ code: code }),
+        //        dataType: 'text json',
+        //        async: false,
+        //        contentType: 'application/json; charset=utf-8',
+        //        success: function (response) {
+        //            if (response != null) {
+        //                $('#txtrate').val(response.responseText.toString());
+        //            }
+        //        },
+        //        error: function (response) {
+        //            alert(response.responseText);
+        //        }
+        //    });
+        //});
+        $('#Address').keypress(function (e) {
+            if (e.which == 13) {
+                if (isTrue == 1) {
+                    $('#Address').focus();
+                    isTrue = 0;
+                    return;
+                }
+                else {
+                    $('#txtproCode').focus();
+                }
+            }
+        });
+        $('#cbxPrintJV').change(function () {
+            if (this.checked) {
+                IsPrintJV = true;
+            }
+            else {
+                IsPrintJV = false;
+            }
+        });
+        $('#txtStore').click(function () {
+            $('#txtproCode').focus();
+            isTrue = 0;
+            return;
+        });
+        $('#txtproCode').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 0) {
+                // debugger;
+                isTrue == 1;
+                forOrder();
+                $('#myModalpro').modal('show');
+                // Wait until the modal is fully displayed to set focus
+                $('#myModalpro').on('shown.bs.modal', function () {
+                    $('#myInput3').focus(); // Set focus once the modal is fully visible
+                });
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup3 tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup3 tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtproCode').val($tds[0].innerText);
+                    $('#ddlTitlepro').val($tds[1].innerText);
+                    $('#txtPiece').focus();
+                    $('#myModalpro').modal('hide');
+                    $('#myInput3').val("");
+                    //$.ajax({
+                    //    url: "/SaleInvoice/GetProductRate",
+                    //    type: "Post",
+                    //    data: JSON.stringify({ code: $tds[0].innerText }),
+                    //    dataType: 'text json',
+                    //    async: false,
+                    //    contentType: 'application/json; charset=utf-8',
+                    //    success: function (response) {
+                    //        if (response != null) {
+                    //            $('#txtstockb').val(response.stockbox.toString());
+                    //            $('#txtstockp').val(response.stockpiece.toString());
+                    //        }
+                    //    },
+                    //    error: function (response) {
+                    //        alert(response.responseText);
+                    //    }
+                    //});
+                });
+            }
+        });
+        $('#compno').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder2();
+                $('#myModalinvoices').modal('show');
+                $('#myInputinv').focus();
+                $('.textboxSearch').focus();
+                var $rows = $('#tblPopupinv tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopupinv tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#compno').val($tds[0].innerText);
+                    $('#comDate').val($tds[1].innerText);
+                    $('#myModalinvoices').modal('hide');
+                    $('#comDate').disable(true);
+                    $('#compno').disable(true);
+                });
+            }
+        });
+        $('#invono').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1)
+            {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue==0) {
+                $('#youDate').focus();
+            }
+        });
+        $('#youDate').keypress(function (e) {
+            if (e.which == 13) {
+                $('#txtsupCode').focus();
+            }
+        });
+        $('#txtunit').click(function (e) {
+                $('#txtbox').focus();
+        });
+        $('#txtbox').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1)
+            {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue==0) {
+                $('#txtPiece').focus();
+            }
+        });
+        $('#txtPiece').keypress(function (e) {
+            debugger;
+            if (e.which == 13 && isTrue == 0) {
+                debugger;
+                isTrue = 1;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 1) {
+                $('#txtamount').focus();
+            }
+        });
+        $('#txtquan').keypress(function (e) {
+            if (e.which == 13) {
+                $('#txtrate').focus();
+            }
+        });
+        $('#txtrate').keypress(function (e) {
+            if (e.which == 13) {
+                $('#txtamount').focus();
+            }
+        });
+        $('#txtsupCode').keypress(function (e) {
+            if (e.which == 13) {
+                forOrder3();
+                $('#myModalsup').modal('show');
+                $('#myModalsup').on('shown.bs.modal', function () {
+                    $('#myInput').focus(); // Set focus once the modal is fully visible
+                });
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtsupCode').val($tds[0].innerText);
+                    $('#ddlTitlesup').val($tds[0].innerText);
+                    $('#ddlTitlesup').focus();
+                    $('#myModalsup').modal('hide');
+                    $('#myInput').val("");
+                    $('#txtSO').focus();
+                    SearchSaleOrder();
+                    //$.ajax({
+                    //    url: "/PurchaseInvoice/GetCustomerBalance",
+                    //    type: "Post",
+                    //    data: JSON.stringify({ code: $tds[0].innerText }),
+                    //    dataType: 'text json',
+                    //    async: false,
+                    //    contentType: 'application/json; charset=utf-8',
+                    //    success: function (response) {
+                    //        if (response != null) {
+                    //            $('#custBal').val(response.responseText.toString());
+                    //        }
+                    //    },
+                    //    error: function (response) {
+                    //        alert(response.responseText);
+                    //    }
+                    //});
+                });
+            }
+        });
+        $('#txtSO').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+            if (e.which == 13) {
+                forSaleOrder();
+                $('#myModalSaleOrder').modal('show');
+                $('#myInputSaleOrder').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblSaleOrder tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblSaleOrder tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtSO').val($tds[0].innerText);
+                    fillPurchaseOrder();
+                    $('#ddlTitlesupStore').focus();
+                    $('#myModalSaleOrder').modal('hide');
+                    $('#myInputSaleOrder').val("");
+                });
+            }
+        });
+        $('#txtpurCode').keypress(function (e) {
+            if (e.which == 13 && isTrue == 1) {
+                isTrue = 0;
+                return;
+            }
+            else if (e.which == 13 && isTrue == 0) {
+                forOrder4();
+                $('#myModalpur').modal('show');
+                $('#myInput2').focus();
+                $('.textboxSearch').focus()
+                var $rows = $('#tblPopup2 tr');
+                $('.textboxSearch').keyup(function (e) {
+                    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+                    $rows.show().filter(function () {
+                        text = $(this).text().replace(/\s+/g, ' ');
+                        return !reg.test(text);
+                        $(this).select();
+                    }).hide();
+                });
+                if (e.keyCode == 27) {
+                    $.modal.close();
+                }
+                $('#tblPopup2 tr').click(function () {
+                    var $row = $(this).closest("tr"),
+                    $tds = $row.find("td");
+                    $('#txtpurCode').val($tds[0].innerText);
+                    $('#ddlTitlepur').val($tds[0].innerText);
+                    $('#Address').focus();
+                    $('#myModalpur').modal('hide');
+                    $('#myInput2').val("");
+                });
+            }
+        });
+    });
+    function forSaleOrder() {
+     
+        var flag = true;
+        var searched = false;
+        var trows = document.getElementById('tblSaleOrder').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblSaleOrder').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblSaleOrder').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblSaleOrder").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 0) {
+                            if (flag == true) {
+                                if (searched == false) {
+                                    countrow = countrow + 1;
+                                    if (countrow > visibleArrayLength) {
+                                        countrow = countrow - visibleArrayLength;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblSaleOrder)
+                                $tds = row.find("td");
+                                $('#txtSO').val($tds[0].innerText);
+                                fillPurchaseOrder();
+                                $('#myInputSaleOrder').val("");
+                                $('#myModalSaleOrder').modal('hide');
+                                isTrue = 1;
+                                $('#ddlTitlesupStore').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                if (searched == false) {
+                                    if (countrow == 0) {
+                                        countrow = visibleArrayLength;
+                                    }
+                                    else {
+                                        countrow = countrow - 1;
+                                    }
+                                    if (countrow < 0) {
+                                        countrow = 1;
+                                    }
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblSaleOrder)
+                                $tds = row.find("td");
+                                $('#txtSO').val($tds[0].innerText);
+                                fillPurchaseOrder();
+                                $('#myInputSaleOrder').val("");
+                                $('#myModalSaleOrder').modal('hide');
+                                isTrue = 1;
+                                $('#ddlTitlesupStore').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder4() {
+        var flag = true;
+        var trows = document.getElementById('tblPopup2').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopup2').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopup2').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopup2").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopup2)
+                                $tds = row.find("td");
+                                $('#txtpurCode').val($tds[0].innerText);
+                                $('#ddlTitlepur').val($tds[0].innerText);
+                                $('#myInput2').val("");
+                                $('#myModalpur').modal('hide');
+                                //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#Address').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopup2)
+                                $tds = row.find("td");
+                                $('#txtpurCode').val($tds[0].innerText);
+                                $('#ddlTitlepur').val($tds[0].innerText);
+                                $('#myInput2').val("");
+                                $('#myModalpur').modal('hide');
+                                //$('#txtbox').focus();
+                               isTrue = 1;
+                               $('#Address').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopup2)
+                            $tds = row.find("td");
+                            $('#txtpurCode').val($tds[0].innerText);
+                            $('#ddlTitlepur').val($tds[0].innerText);
+                            $('#myInput2').val("");
+                            $('#myModalpur').modal('hide');
+                            //$('#txtbox').focus();
+                                isTrue = 1;
+                                $('#Address').focus();
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function forOrder3() {
+        // debugger;
+        var flag = true;
+        var trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+        var countrow = -1; // Initialize countrow to -1, as no rows are selected initially
+
+        // Initialize the table rows and set up onclick event
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+
+        function highlightRow(gethighlight) {
+            //debugger;
+            gethighlight = gethighlight === true;
+            trows = document.getElementById('tblPopup').rows, t = trows.length, trow;
+
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted') {
+                    countrow = t; // Change this to set countrow to the exact index
+                    return t;
+                } else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+
+        function movehighlight(way, e) {
+            //  debugger;
+            var idx = highlightRow(true), nextrow;
+            var filteredCount = 0; // Count of visible rows
+            var startIndex = way > 0 ? idx + 1 : idx - 1; // Start from next or previous index
+
+            for (var i = startIndex; i >= 0 && i < trows.length; i += way) {
+                if (trows[i].style.display !== 'none') { // Only consider visible rows
+                    filteredCount++; // Increment visible row count
+                    if (filteredCount === 1) {
+                        countrow = i; // Update countrow to the current row index
+                        return highlightRow.apply(trows[i]); // Highlight the first visible row found
+                    }
+                }
+            }
+
+            // If no visible rows found, cycle to the first or last displayed row
+            for (var j = way > 0 ? 0 : trows.length - 1; (way > 0 ? j < trows.length : j >= 0) ; j += (way > 0 ? 1 : -1)) {
+                if (trows[j].style.display !== 'none') {
+                    countrow = j; // Update countrow to the current row index
+                    return highlightRow.apply(trows[j]); // Highlight the first found visible row
+                }
+            }
+        }
+
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: { // Up Arrow
+                    // debugger;
+                    $('#tblPopup').focus();
+                    flag = false;
+                    countrow--; // Decrease countrow on keyup
+                    return movehighlight(-1, e);
+                }
+                case 40: { // Down Arrow
+                    //debugger;
+                    $('#tblPopup').focus();
+                    flag = true;
+                    countrow++; // Increase countrow on keydown
+                    return movehighlight(1, e); // Move highlight to displayed records
+                }
+                case 13: { // Enter Key
+                    if ($("#tblPopup").is(":focus")) {
+                        if (countrow >= 0) { // Ensure countrow is not negative
+                            var selectedRow = trows[countrow]; // Select the highlighted row directly using countrow
+                            var $tds = $(selectedRow).find("td");
+
+                            // Fetch values from the selected row
+                            $('#txtsupCode').val($tds[0].innerText); // Assuming the first column contains the code
+                            $('#ddlTitlesup').val($tds[0].innerText); // Populate another field with the same value
+                            $('#myInput').val(""); // Clear the input if needed
+                            $('#myModalsup').modal('hide'); // Hide the modal
+                            $('#txtSO').focus(); // Set focus to another input if needed
+                            SearchSaleOrder();
+                            countrow = -1; // Reset countrow
+                            return;
+                        }
+                    }
+                    break; // Exit the switch
+                }
+                default: {
+                    return true; // Allow other keys to function normally
+                }
+            }
+        }
+
+        document.onkeydown = processkey; // Set the keydown event handler
+    }
+    function SearchSaleOrder() {
+        // $('#ddlTitleinv').show();
+        //var dvid = $('#ddlTitleinv').val();
+        var dvid = $('#txtsupCode').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or Customer id can not be null");
+        }
+        else {
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/DeliveryChallan/SearchSaleOrder",
+                data: { Date: date, AccountId: dvid },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        var new_row;
+                        $('#tblSaleOrder tbody tr').remove();
+                        $.each(result, function (i, item) {
+                            new_row += "<tr id='row" + i + "' ><td class='accCode'>" + item.SO_No + "</td><td class='title'>" + item.ItemDetail + "</td><td class='unitid'>" + item.QtyCr + "</td><td class='unitid'>" + item.WtCr + "</td><td hidden class='title'>" + item.ProductID + "</td></tr>";
+                        });
+                        $('#tblSaleOrder tbody').append(new_row);
+                    }
+                    else {
+                    }
+                },
+                error: function (response) {
+                }
+            });
+        }
+    }
+    function forOrder2() {
+        var flag = true;
+        var trows = document.getElementById('tblPopupinv').rows, t = trows.length, trow;
+        var countrow = 0;
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }//end while
+        function highlightRow(gethighlight) {
+            gethighlight = gethighlight === true;
+            var t = trows.length, hrow;
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted')
+                { countrow = t + 1; return t; }
+                else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }//end while
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }//end function
+        function movehighlight(way, e) {
+            //e.preventDefault && e.preventDefault();
+            //e.returnValue = false;
+            var idx = highlightRow(true), nextrow;
+            if (typeof idx === 'number') {
+                idx += way;
+                if (idx && (nextrow = trows[idx])) { return highlightRow.apply(nextrow); }
+                else if (idx) { return highlightRow.apply(trows[1]); }
+                return highlightRow.apply(trows[trows.length - 1]);
+            }
+            return highlightRow.apply(trows[way > 0 ? 1 : trows.length - 1]);
+        }
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: {
+                    $('#tblPopupinv').focus();
+                    flag = false;
+                    return movehighlight(-1, e)
+                }
+                case 40: {
+                    $('#tblPopupinv').focus();
+                    flag = true;
+                    return movehighlight(1, e);
+                }
+                case 13: {
+                    //if ($("#tblPopupinv").is(":focus"))
+                    if ($("#tblPopupinv").is(":focus")) {
+                        //if (countrow == 0) {
+                        //    countrow = countrow + 1;
+                        //}
+                        if (countrow >= 1) {
+                            if (flag == true) {
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#compno').val($tds[0].innerText);
+                                $('#comDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#comDate').disable(true);
+                                $('#compno').disable(true);
+                                $('#myModalinvoices').modal('hide');
+                                isTrue = 1;
+                               // $('#invono').focus();
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                return;
+                            }
+                            if (flag == false) {
+                                countrow = countrow - 2;
+                                if (countrow < 0) {
+                                    countrow = 1;
+                                }
+                                var row = $("tr:eq(" + countrow + ")", tblPopupinv)
+                                $tds = row.find("td");
+                                $('#compno').val($tds[0].innerText);
+                                $('#comDate').val($tds[1].innerText);
+                                $('#myModalinvoices').modal('hide');
+                                $('#comDate').disable(true);
+                                $('#compno').disable(true);
+                                $('#myModalinvoices').modal('hide');
+                                isTrue = 1;
+                                //$('#invono').focus();
+                                $('#btnGo').focus();
+                                countrow = -1;
+                                return;
+                            }
+                        }
+                        else if (countrow == 0) {
+                            var row = $("tr:eq(1)", tblPopupinv)
+                            $tds = row.find("td");
+                            $('#compno').val($tds[0].innerText);
+                            $('#comDate').val($tds[1].innerText);
+                            $('#myModalinvoices').modal('hide');
+                            $('#comDate').disable(true);
+                            $('#compno').disable(true);
+                            $('#myModalinvoices').modal('hide');
+                            isTrue = 1;
+                            //$('#invono').focus();
+                            $('#btnGo').focus();
+                            countrow = -1;
+                            return;
+                        }
+                    }
+                }
+                default: {
+                    return true;
+                }
+            }
+        }
+        //  row = table.find('tr').eq(index);
+        document.onkeydown = processkey;
+    }
+    function fillPurchaseOrder() {
+        var dvid = $('#txtsupCode').val();
+        var po = $('#txtSO').val();
+        if (dvid == "" || dvid == null) {
+            alert("Suplier id can not be null");
+        }
+        else {
+            $('#mytable tbody tr').remove();
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/DeliveryChallan/SearchSaleOrder2",
+                data: { AccountId: dvid, PO: po },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        $.each(result, function (i, item) {
+                            $('#txtproCode').val(item.ProductID);
+                            $('#ddlTitlepro').val(item.ItemDetail);
+                            // $('#txtPiece').val(50);
+                            $('#txtPiece').val(item.WtCr / item.QtyCr);
+                            $('#txtamount').val(item.QtyCr);
+                            $('#ddlTitlepur').val(item.FarmId);
+                            $('#txtpurCode').val(item.FarmId);
+                            AddGridClicked();
+                        });
+                    }
+                    else {
+                    }
+                },
+                error: function (response) {
+                }
+            });
+        }
+    }
+    function forOrder() {
+        // debugger;
+        var flag = true;
+        var trows = document.getElementById('tblPopup3').rows, t = trows.length, trow;
+        var countrow = -1; // Initialize countrow to -1, as no rows are selected initially
+
+        // Initialize the table rows and set up onclick event
+        while (--t > -1) {
+            trow = trows[t];
+            trow.className = 'normal';
+            trow.onclick = highlightRow;
+        }
+
+        function highlightRow(gethighlight) {
+            // debugger;
+            gethighlight = gethighlight === true;
+            trows = document.getElementById('tblPopup3').rows, t = trows.length, trow;
+
+            while (--t > -1) {
+                trow = trows[t];
+                if (gethighlight && trow.className === 'highlighted') {
+                    countrow = t; // Change this to set countrow to the exact index
+                    return t;
+                } else if (!gethighlight && trow !== this) {
+                    trow.className = 'normal';
+                }
+            }
+            return gethighlight ? null : this.className = this.className === 'highlighted' ? 'normal' : 'highlighted';
+        }
+
+        function movehighlight(way) {
+            // debugger;
+            var idx = highlightRow(true), nextrow;
+            var filteredCount = 0; // Count of visible rows
+            var startIndex = way > 0 ? idx + 1 : idx - 1; // Start from next or previous index
+
+            for (var i = startIndex; i >= 0 && i < trows.length; i += way) {
+                if (trows[i].style.display !== 'none') { // Only consider visible rows
+                    filteredCount++; // Increment visible row count
+                    if (filteredCount === 1) {
+                        countrow = i; // Update countrow to the current row index
+                        return highlightRow.apply(trows[i]); // Highlight the first visible row found
+                    }
+                }
+            }
+
+            // If no visible rows found, cycle to the first or last displayed row
+            for (var j = way > 0 ? 0 : trows.length - 1; (way > 0 ? j < trows.length : j >= 0) ; j += (way > 0 ? 1 : -1)) {
+                if (trows[j].style.display !== 'none') {
+                    countrow = j; // Update countrow to the current row index
+                    return highlightRow.apply(trows[j]); // Highlight the first found visible row
+                }
+            }
+        }
+
+        function processkey(e) {
+            e = e || event;
+            switch (e.keyCode) {
+                case 38: { // Up Arrow
+                    $('#tblPopup3').focus();
+                    flag = false;
+                    return movehighlight(-1);
+                }
+                case 40: { // Down Arrow
+                    $('#tblPopup3').focus();
+                    flag = true;
+                    return movehighlight(1); // Move highlight to displayed records
+                }
+                case 13: { // Enter Key
+                    if ($("#tblPopup3").is(":focus")) {
+                        if (countrow >= 0) { // Ensure countrow is not negative
+                            var selectedRow = trows[countrow]; // Select the highlighted row directly using countrow
+                            var $tds = $(selectedRow).find("td");
+                            debugger;
+                            // Fetch values from the selected row
+                            $('#txtproCode').val($tds[0].innerText);
+                            $('#ddlTitlepro').val($tds[1].innerText);
+
+                            $('#myInput3').val(""); // Clear the input if needed
+                            $('#myModalpro').modal('hide'); // Hide the modal
+                            $('#txtPiece').focus();
+                            countrow = -1; // Reset countrow
+                            isTrue == 1;
+                            $('#txtPiece').focus();
+                            return;
+                        }
+                    }
+                    break; // Exit the switch
+                }
+                default: {
+                    return true; // Allow other keys to function normally
+                }
+            }
+        }
+
+        document.onkeydown = processkey; // Set the keydown event handler
+    }
+    function ClearClicked() {
+        window.location.href = '@Url.Action("DeliveryChallan", "DeliveryChallan")';
+     }
+    function NewClicked() {
+        var date = $('#comDate').val();
+        //if (date == "" || date == null) {
+        //    alert("Date can not be null");
+        //}
+        //else {
+            $('#btnNew').disable(true);
+            $.ajax({
+                url: "/DeliveryChallan/GetInvoiceID",
+                type: "POST",
+                data: JSON.stringify({ date: date }),
+                dataType: 'text json',
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response != null && response.success) {
+                        $('#compno').val(response.responseText.toString());
+                        $('#txtproCode').disable(false);
+                        $('#txtsupCode').disable(false);
+                        $('#txtpurCode').disable(false);
+                        $('#ddlTitlesup').disable(false);
+                        $('#ddlTitlepur').disable(false);
+                        $('#ddlTitlepro').disable(false);
+                        $('#Address').disable(false);
+                        $('#txtquan').disable(false);
+                        $('#txtrate').disable(false);
+                        $('#txtamount').disable(false);
+                        $('#txtStore').disable(false);
+                        //$('#txtunit').disable(false);
+                        $('#txtbox').disable(false);
+                        $('#txtPiece').disable(false);
+                        $('#txtSO').disable(false);
+                        $('#invono').disable(false);
+                        $('#txtsupCode').focus();
+                        //$('#invono').focus();
+                        $('#btnSave').show();
+                        $('#btnSearch').hide();
+                    }
+                    else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    //}
+    function IntiateFields() {
+        $('#txtproCode').val("");
+        $('#ddlTitlepro').val("");
+        $('#txtquan').val("");
+        $('#txtrate').val("");
+        $('#txtamount').val("");
+       // $('#ddlTitlepro').focus();
+        $('#txtPiece').val("");
+        $('#txtbox').val("");
+        dvcid = null;
+        RowNo = null;
+    }
+    function SearchDV() {
+       // $('#ddlTitleinv').show();
+        //var dvid = $('#ddlTitleinv').val();
+        var dvid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null)
+        {
+            alert("Date or voucher id can not be null");
+        }
+        else {
+            $('#btnSave').show();
+            $('#btnGo').hide();
+            IsUpdate = true;
+            $.ajax({
+                type: "GET",       // make it get request instead //
+                url: "/DeliveryChallan/SearchInvoice",
+                data: { Date: date, VId: dvid },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.length > 0) {
+                        var new_row;
+                        $.each(result, function (i, item) {
+                            //new_row += "<tr id='row" + i + "' ><td class='accCode'>" + item.ItemId + "</td><td class='title'>" + item.ItemName + "</td><td class='unitid'>" + item.Unit + "</td><td class='unitname'>" + item.Title + "</td><td class='piece'>" + item.QtyDr + "</td><td class='rate'>" + item.Rate + "</td><td class='naration'>" + item.InvTotal + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                            new_row += "<tr id='row" + i + "' ><td class='accCode'>" + item.ItemId + "</td><td class='title'>" + item.ItemName + "</td><td class='piece'>" + item.Packing + "</td><td class='naration'>" + item.Quantity + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                            $('#txtsupCode').val(item.CustomerId);
+                            $('#txtpurCode').val(item.FarmId);
+                            $('#ddlTitlesup').val(item.CustomerId);
+                            $('#ddlTitlepur').val(item.FarmId);
+                            $('#Address').val(item.Address);
+                            $('#txtSO').val(item.SO);
+                        });
+                        $('#mytable tbody').append(new_row);
+                        $("#tempdata").show();
+                        $('#txtSO').disable(false);
+                    }
+                    else {
+                        alert("No record found");
+                        window.location.reload();
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+            @*var string = "Date=" + date + "&DVId=" + dvid + "";
+        $("#divPartial").load('@(Url.Action("SearchVoucher", "CVoucher", null, Request.Url.Scheme))?' + string);*@
+            $('#txtVochNo').disable(true);
+            $('#dtpDate').disable(true);
+            $('#btnDelete').disable(false);
+            $('#cbxPrintJV').disable(false);
+        }
+    }
+    function SearchClicked() {
+        $('#compno').disable(false);
+        $('#compno').focus();
+        $('#txtproCode').disable(false);
+        $('#txtsupCode').disable(false);
+        $('#txtpurCode').disable(false);
+        $('#ddlTitlesup').disable(false);
+        $('#ddlTitlepur').disable(false);
+        $('#ddlTitlepro').disable(false);
+        $('#txtquan').disable(false);
+        $('#txtrate').disable(false);
+        $('#txtamount').disable(false);
+        $('#txtbox').disable(false);
+        $('#txtPiece').disable(false);
+        $('#Address').disable(false);
+        //$('#ddlTitleinv').show();
+        //$('#compno').hide();
+        $('#youDate').disable(false);
+        $('#invono').disable(false);
+        $('#btnNew').disable(true);
+        $('#btnSearch').hide();
+        $('#btnGo').show();
+    }
+    var i = 0;
+    currentRow = null;
+    function AddGridClicked() {
+        var accCode = $('#txtproCode').val();
+        var product = $('#ddlTitlepro').val();
+        var piece = parseFloat($('#txtPiece').val());
+        if (isNaN(piece))
+            piece = 0;
+        var amount = $('#txtamount').val();
+        if ($('#txtproCode').val() == "" || $('#txtproCode').val() == null || $("#ddlTitlepro option:selected").text() == "-- Select Account --") {
+            alert("Cant Save You Must Select Account Code");
+            $('#txtproCode').focus();
+        }
+        else {
+            if ((amount == "" || amount == null || amount == 0 || amount < 0)) {
+                alert("Quantity or packing Cannot be Empty or Zero")
+                $('#txtbox').focus();
+            }
+            else {
+                i++;
+                var new_row = "<tr id='row" + i + "' ><td class='accCode'>" + accCode + "</td><td class='title'>" + product + "</td><td class='piece'>" + piece + "</td><td class='naration'>" + amount + "</td><td><span class='editrow'><a class='fa fa-edit' href='javascript: void(0);'>Edit</a></span>|<span class='deleterow'><a class='glyphicon glyphicon-trash' href=''>Delete</a></span></td></tr>";
+                if (currentRow) {
+                    $('#mytable').find($(currentRow)).replaceWith(new_row);
+                    currentRow = null;
+                }
+                else {
+                    $('#mytable').append(new_row);
+                }
+                $("#tempdata").show();
+                IntiateFields();
+                $('#txtproCode').focus();
+            }
+        }
+    }
+    function SaveDVoucher() {
+        var date = $('#comDate').val();
+        if (date == "" || date == null)
+        {
+            alert("Date can not be null");
+        }
+        else {
+            var supid= $('#ddlTitlesup').val();
+            var supname= $("#ddlTitlesup option:selected").text();
+            var purid= $('#ddlTitlepur').val();
+            var purname = $("#ddlTitlepur option:selected").text();
+            var Address = $('#Address').val();
+            if ((supid == "" || supid == null || supname == "" || supname == null) )
+            {
+                alert("Customer account can not be empty or null");
+            }
+        else{
+        var rowCount = $('#mytable tbody tr').length;
+        if (rowCount <= 0) {
+            alert("Must have rows to save.")
+        }
+        else {
+            var answer = confirm("Do You really want to Save this?");
+            if (answer) {
+                var date = $('#comDate').val();
+                var vid = $('#compno').val();
+                //if (vid == "" || vid == null) {
+                //    vid = $('#ddlTitleinv').val();
+                //}
+                var detail = [];
+                var totalquantity = 0;
+                $('#mytable tbody tr').each(function () {
+                    var $row = $(this), $tds = $row.find("td");
+                    totalquantity += parseFloat($tds[4].innerText);
+                    detail.push({
+                        accCode: $tds[0].innerText,
+                        title: $tds[1].innerText,
+                        unitid: 0,
+                        unit: 0,
+                        box: 0,
+                        piece: $tds[2].innerText,
+                        rate:0,
+                        amount: $tds[3].innerText
+                    });
+                });
+                var model = {
+                    vid: vid,
+                    comdate: date,
+                    yourinvoice:Address,
+                    yourdate: 0,
+                    supid: $('#ddlTitlesup').val(),
+                    supname: $("#ddlTitlesup option:selected").text(),
+                    purid: $('#ddlTitlepur').val(),
+                    purname: $("#ddlTitlepur option:selected").text(),
+                    discount: 0,
+                    nettotal: 0,
+                    store: $('#txtSO').val(),
+                    salestax:0,
+                    freight: 0,
+                    totalquantity:0,
+                    isupdate: IsUpdate,
+                    isprint: IsPrintJV,
+                    detail: detail
+                };
+                //  alert(JSON.stringify(model));
+                $.ajax({
+                    url: "/DeliveryChallan/SaveInvoice",
+                    type: "POST",
+                    data: JSON.stringify({ model: model }),
+                    dataType: 'text json',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response != null && response.success) {
+                            alert(response.responseText);
+                            //$('#txtVochNo').val(response.responseText.toString());
+                            //$('#txtAccCode').disable(false);
+                            //$('#ddlTitle').disable(false);
+                            //$('#txtDebit').disable(false);
+                            //$('#txtCredit').disable(false);
+                            //$('#txtNarration').disable(false);
+                            //$("#txtAccCode").focus();
+                            //$('#btnSave').show();
+                            //$('#btnSearch').hide();
+                            if (IsPrintJV) {
+                                //alert("hurrah");
+                                var string = "rtype=rptDeliveryChallan" + "&txtAccCode=" + vid + "";
+                                var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+                                window.open(url, "_blank");
+                            }
+                            window.location.reload();
+                        }
+                        else {
+                            alert(response.responseText);
+                        }
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+                @* var date = $('#dtpDate').val();
+            var vid = $('#txtVochNo').val();
+            var string = "Date=" + date + "&ISUpdate=" + IsUpdate + "&IsPrintDV=" + IsPrintJV + "&VID=" + vid + "";
+            var url = '@(Url.Action("SaveDVVoucher", "DVoucher", null, Request.Url.Scheme))?' + string
+            window.location.href = url;
+            IsUpdate = false;
+            IsPrintJV = false;*@
+                IsUpdate = false;
+                IsPrintJV = false;
+            }
+        }
+        }
+    }
+    }
+    function PrintReport() {
+        var vid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (vid == "" || vid == null || date == "" || date == null) {
+            alert("Date or invoice id can not be null");
+        }
+        else {
+            var string = "rtype=rptDeliveryChallan" + "&txtAccCode=" + vid + "";
+            var url = '@(Url.Action("Report", "Reports", null, Request.Url.Scheme))?' + string
+            window.open(url, "_blank");
+        }
+    }
+    function DeleteClicked() {
+        //var dvid = $('#ddlTitleinv').val();
+       var dvid = $('#compno').val();
+        var date = $('#comDate').val();
+        if (dvid == "" || dvid == null || date == "" || date == null) {
+            alert("Date or invoice id can not be null");
+        }
+        else {
+            var answer = confirm("Do You really want to Delete this?");
+            if (answer) {
+                $('#btnSave').show();
+                $('#btnGo').hide();
+                IsUpdate = true;
+                var string = "Date=" + date + "&DVId=" + dvid + "";
+                var url = '@(Url.Action("DeleteInvoice", "DeliveryChallan", null, Request.Url.Scheme))?' + string;
+                window.location.href = url;
+            }
+        }
+    }
+</script>
+@if (1 != 1)
+{
+    <div id="content">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Delivery Challan</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form action="#" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                                <table class="table table-bordered data-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Computer #
+                                                <input type="text" class="span11" id="compno" name="compno" />
+                                            </td>
+                                            <td>Date<br /><input type="text" class="span11 datepicker" id="comDate" name="comDate" /></td>
+                                            <td>Customer<input type="text" class="span11" id="txtsupCode" name="txtsupCode" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                            <td>
+                                                Customer Title<br />
+                                                @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                                    foreach (var Acc in ViewBag.AccCodeDetailsAccounts)
+                                                    {
+                                                        AccCodelist.Add(new SelectListItem
+                                                        {
+                                                            Text = Acc.Title,
+                                                            Value = Acc.AccountId
+                                                        });
+                                                    }
+                                                }
+                                                @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitlesup", @class = "span11 ddl" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>SO #<input type="text" class="span11" id="txtSO" name="txtSO" /></td>
+                                            <td>Farm<input type="text" class="span11" id="txtpurCode" name="txtpurCode" data-toggle="tooltip" title="Press enter and select account code" /></td>
+                                            <td>
+                                                Farm Title
+                                                @{List<SelectListItem> AccCodelist2 = new List<SelectListItem>();
+                                                    foreach (var Acc in ViewBag.AccCodeDetailsFarms)
+                                                    {
+                                                        AccCodelist2.Add(new SelectListItem
+                                                        {
+                                                            Text = Acc.Title,
+                                                            Value = Convert.ToString(Acc.Code)
+                                                        });
+                                                    }
+                                                }
+                                                @Html.DropDownListFor(u => u.AccTitle, AccCodelist2, "-- Select Account --", new { id = "ddlTitlepur", @class = "span11 ddl" })
+                                            </td>
+                                            <td colspan="5">
+                                                Address
+                                                <input type="text" class="span11" id="Address" name="Address" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Code<input type="text" class="span11" id="txtproCode" name="txtproCode" data-toggle="tooltip" title="Press enter and select product code" /></td>
+                                            <td>
+                                                Product Name
+                                                <input type="text" class="span11" id="ddlTitlepro" name="ddlTitlepro" />
+                                            </td>
+                                            @*<td>Box<input type="number" class="span11" id="txtbox" name="txtbox" /></td>*@
+                                            <td>Packing<input type="number" class="span11" id="txtPiece" name="txtPiece" /></td>
+                                            @*<td>Quantity<input type="number" class="span11" id="txtquan" name="txtquan" /></td>*@
+                                            @*<td>Rate<input type="number" class="span11" id="txtrate" name="txtrate" /></td>*@
+                                            <td>Quantity<input type="number" class="span11" id="txtamount" name="txtamount" data-toggle="tooltip" title="Press enter or add button to save" /></td>
+                                            <td><br /><input type="button" value="Add" id="btnaddgrid" class="btn btn-default" onclick='AddGridClicked();' />
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div id="tempdata">
+                                    <table class="table table-bordered data-table" id="mytable">
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>Product Name</th>
+                                                <th>Packing</th>
+                                                <th>Quantity</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div class="span12">
+                                    <input type="checkbox" style="float:left" id="cbxPrintJV" name="cbxPrintJV">Print Challan<br>
+                                </div>
+                                <div class="form-actions">
+                                    @* <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();' >New</button>*@
+                                    <input type="button" value="New" id="btnNew" class="btn btn-primary" onclick='NewClicked();'>
+                                    <input type="button" value="Save" id="btnSave" class="btn btn-success" onclick='SaveDVoucher();'>
+                                    <input type="button" id="btnDelete" class="btn btn-danger" value="Delete" onclick='DeleteClicked();'>
+                                    <input type="button" value="Search" id="btnSearch" class="btn btn-default" onclick='SearchClicked();' />
+                                    <input type="button" id="btnGo" value="Go" class="btn btn-success" onclick='SearchDV();'>
+                                    <input type="button" id="btnClose" value="Clear" class="btn btn-warning" onclick='ClearClicked();'>
+                                    <input type="button" id="btnPrint" value="Print Preview" class="btn btn-success" style="background-color: #f4429b" onclick='PrintReport();' hidden>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (1 == 1)
+{
+    <div id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Delivery Challan</b>
+                    </div>
+                    <div class="card-body">
+                        <form action="#" method="Post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Computer #</label>
+                                        <input type="text" class="form-control form-control-sm" id="compno" name="compno" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <div class="input-group date" data-target-input="nearest">
+                                            <input type="text" class="form-control form-control-sm" id="comDate" name="comDate" />
+                                            <div class="input-group-append" id="comDateIcon" data-target="#comDate" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Customer</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtsupCode" name="txtsupCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Customer Title</label>
+                                        @{List<SelectListItem> AccCodelist = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetailsAccounts)
+                                            {
+                                                AccCodelist.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Acc.AccountId
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelist, "-- Select Account --", new { id = "ddlTitlesup", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>SO #</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtSO" name="txtSO" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2" hidden>
+                                    <div class="form-group">
+                                        <label>Farm</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtpurCode" name="txtpurCode" data-toggle="tooltip" title="Press enter and select account code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4" hidden>
+                                    <div class="form-group">
+                                        <label>Farm Title</label>
+                                        @{List<SelectListItem> AccCodelist2 = new List<SelectListItem>();
+                                            foreach (var Acc in ViewBag.AccCodeDetailsFarms)
+                                            {
+                                                AccCodelist2.Add(new SelectListItem
+                                                {
+                                                    Text = Acc.Title,
+                                                    Value = Convert.ToString(Acc.Code)
+                                                });
+                                            }
+                                        }
+                                        @Html.DropDownListFor(u => u.AccTitle, AccCodelist2, "-- Select Account --", new { id = "ddlTitlepur", @class = "form-control form-control-sm ddl" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control form-control-sm" id="Address" name="Address" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Code</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtproCode" name="txtproCode" data-toggle="tooltip" title="Press enter and select product code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Product Name</label>
+                                        <input type="text" class="form-control form-control-sm" id="ddlTitlepro" name="ddlTitlepro" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Packing</label>
+                                        <input type="number" class="form-control form-control-sm" id="txtPiece" name="txtPiece" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Quantity</label>
+                                        <input type="number" class="form-control form-control-sm" id="txtamount" name="txtamount" data-toggle="tooltip" title="Press enter or add button to save" />
+                                    </div>
+                                </div>
+                                <div class="col-md-1 align-content-center">
+                                    <input type="button" value="Add" id="btnaddgrid" class="btn btn-sm btn-default mt-3" onclick='AddGridClicked();' />
+                                </div>
+                            </div>
+                            <div id="tempdata">
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered table-responsive" id="mytable">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 10%;">Code</th>
+                                                    <th style="width: 55%;">Product Name</th>
+                                                    <th style="width: 5%;">Packing</th>
+                                                    <th style="width: 5%;">Quantity</th>
+                                                    <th style="width: 15%;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="cbxPrintJV" name="cbxPrintJV">
+                                        <label for="cbxPrintJV" class="custom-control-label">Print Challan</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                            @* <button type="submit" id="btnNew" class="btn btn-primary" onclick='NewClicked();' >New</button>*@
+                                            <input type="button" value="New" id="btnNew" class="btn btn-sm w-100 btn-primary" onclick='NewClicked();'>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                            <input type="button" value="Save" id="btnSave" class="btn btn-sm w-100 btn-success" onclick='SaveDVoucher();'>
+                                            <input type="button" value="Search" id="btnSearch" class="btn btn-sm w-100 btn-default" onclick='SearchClicked();' />
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                            <input type="button" id="btnDelete" class="btn btn-sm w-100 btn-danger" value="Delete" onclick='DeleteClicked();'>
+                                            <input type="button" id="btnGo" value="Go" class="btn btn-sm w-100 btn-success" onclick='SearchDV();'>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-6">
+                                            <input type="button" id="btnClose" value="Clear" class="btn btn-sm w-100 btn-warning" onclick='ClearClicked();'>
+                                            <input type="button" id="btnPrint" value="Print Preview" class="btn btn-sm w-100 btn-success" style="background-color: #f4429b" onclick='PrintReport();' hidden>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@*SO# Field Modal*@
+<div id="myModalSaleOrder" class="modal hide fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search Orders</h5>
+                <button data-dismiss="modal" class="close" type="button">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <h5>Orders List</h5>
+                                <input type="text" class="form-control form-control-sm" id="myInputSaleOrder" onkeyup="myFunctionSaleOrder()" placeholder="Search for product.." style="float:right;">
+                            </div>
+                            <div class="card-body">
+                                <table id="tblSaleOrder" class="table table-bordered" tabindex="-1">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">So #</th>
+                                            <th width="70%">Product Name</th>
+                                            <th width="10%">Qty</th>
+                                            <th width="10%">Weight</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*SO# Field Modal End*@
+@*Customer Field Modal*@
+<div id="myModalsup" class="modal hide fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search Account</h5>
+                <button data-dismiss="modal" class="close" type="button">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <h5>Accounts List</h5>
+                                <input type="text" class="form-control form-control-sm" id="myInput" onkeyup="myFunction()" placeholder="Search for title.." style="float:right;">
+                            </div>
+                            <div class="card-body">
+                                <table id="tblPopup" class="table table-bordered" tabindex="-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Account Code</th>
+                                            <th>Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var Acc in ViewBag.AccCodeDetailsAccounts)
+                                        {
+                                            <tr>
+                                                <td>@Acc.AccountId</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*Customer Field Modal End*@
+@*Farm Field Modal*@
+<div id="myModalpur" class="modal hide fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search Account</h5>
+                <button data-dismiss="modal" class="close" type="button">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <b>Accounts List</b>
+                                <input type="text" class="form-control form-control-sm" id="myInput2" onkeyup="myFunction2()" placeholder="Search for title.." style="float:right;">
+                            </div>
+                            <div class="card-body">
+                                <table id="tblPopup2" class="table table-bordered" tabindex="-1">
+                                    <thead>
+                                        <tr>
+                                            <th>AccountCode</th>
+                                            <th>Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var Acc in ViewBag.AccCodeDetailsFarms)
+                                        {
+                                            <tr>
+                                                <td>@Acc.Code</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*Farm Field Modal End*@
+@*Code Field Modal*@
+<div id="myModalpro" class="modal hide fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search product</h5>
+                <button data-dismiss="modal" class="close" type="button">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <b>Products List</b>
+                                <input type="text" class="form-control form-control-sm" id="myInput3" onkeyup="myFunction3()" placeholder="Search for product.." style="float:right;">
+                            </div>
+                            <div class="card-body">
+                                <table id="tblPopup3" class="table table-bordered" tabindex="-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Code</th>
+                                            <th>Product Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var Acc in ViewBag.AccCodeDetailsProducts)
+                                        {
+                                            <tr>
+                                                <td>@Acc.Code</td>
+                                                <td>@Acc.Title</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*Code Field Modal End*@
+<div id="myModalinvoices" class="modal hide">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3>Search Challan</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>Challans List</h5>
+                            <input type="text" id="myInputinv" onkeyup="myFunctioninv()" placeholder="Search for title.." style="float:right;">
+                        </div>
+                        <div class="widget-content nopadding">
+                            <table id="tblPopupinv" class="table table-bordered data-table" tabindex="-1">
+                                <thead>
+                                    <tr>
+                                        <th>Inv No</th>
+                                        <th>Date</th>
+                                        <th>Party</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        string dbcon = Convert.ToString(Session["con"]);
+                                        ApnaAccountWeb.ViewModels.DbConection obj = new ApnaAccountWeb.ViewModels.DbConection();
+                                        string condb = obj.Connect(dbcon);
+                                        ApnaAccountWeb.Models.ApnaAccountEntities db = new ApnaAccountWeb.Models.ApnaAccountEntities(condb);
+                                        var lstDVChilds = (from t1 in db.InvoiceMasterDelivaryChallans select t1).OrderByDescending(x=>x.InvId).ToList();
+                                        foreach (var Acc in lstDVChilds)
+                                        {
+                                            <tr>
+                                                <td>@Convert.ToString(Acc.InvId)</td>
+                                                <td>@Acc.Idate.ToString("dd/MM/yyyy")</td>
+                                                <td>@Acc.Customer</td>
+                                                <td>@Acc.Farm</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                }
+                else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        //forOrder3();
+    }
+    function myFunction2() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup2");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunction3() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput3");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopup3");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        //forOrder();
+    }
+    function myFunctionSaleOrder() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputSaleOrder");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblSaleOrder");
+        tr = table.getElementsByTagName("tr");
+        arrVisible = [];
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    arrVisible.push(i);
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        //counter = 0;
+        //forSaleOrder();
+    }
+    function myFunctioninv() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputinv");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tblPopupinv");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#comDate').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#youDate').datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                showAnim: "slideDown",
+            });
+            $('#comDateIcon').click(function () {
+                $('#comDate').datepicker('show');
+            });
+            $('#youDateIcon').click(function () {
+                $('#youDate').datepicker('show');
+            });
+            $('#comDate').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#comDate').datepicker('setDate', 'now');
+            $('#youDate').datepicker({
+                "format": "dd/mm/yyyy",
+                "todayHighlight": true,
+                "autoclose": true
+            });
+            $('#youDate').datepicker('setDate', 'now');
+        });
+    </script>
+}
